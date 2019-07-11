@@ -2,12 +2,13 @@
 
 namespace QuizApp.Entities
 {
-    public class User : EntityBase
+    public class User
     {
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public virtual ICollection<Test> Tests { get; set; } = new List<Test>();
+        public ICollection<Test> Tests { get; set; } = new List<Test>();
     }
 }
