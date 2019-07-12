@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
@@ -7,7 +9,11 @@ namespace QuizApp.Entities
     {
         public int Id { get; set; }
         public int? NumberOfRuns { get; set; }
+        [Required]
+        [Column(TypeName = "datetime2")]
         public DateTime ValidFromTime { get; set; }
+        [Required]
+        [Column(TypeName = "datetime2")]
         public DateTime ValidUntilTime { get; set; }
         public string IntervieweeName { get; set; }
 
