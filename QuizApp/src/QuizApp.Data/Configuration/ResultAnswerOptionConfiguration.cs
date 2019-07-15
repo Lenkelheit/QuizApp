@@ -11,7 +11,7 @@ namespace QuizApp.Data.Configuration
         {
             builder.HasOne(raopt => raopt.Option).WithMany(tqopt => tqopt.ResultAnswerOptions).HasForeignKey(raopt => raopt.OptionId).OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(raopt => raopt.ResultAnswer).WithMany(ra => ra.ResultAnswerOptions);
+            builder.HasOne(raopt => raopt.ResultAnswer).WithMany(ra => ra.ResultAnswerOptions).HasForeignKey(raopt => raopt.ResultAnswerId);
         }
     }
 }

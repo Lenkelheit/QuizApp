@@ -15,7 +15,7 @@ namespace QuizApp.Data.Configuration
 
             builder.Property(u => u.Password).IsRequired();
 
-            builder.HasMany(u => u.Tests).WithOne(t => t.Author);
+            builder.HasMany(u => u.CreatedTests).WithOne(t => t.Author).HasForeignKey(t => t.AuthorId);
         }
     }
 }

@@ -15,9 +15,9 @@ namespace QuizApp.Data.Configuration
 
             builder.Property(tr => tr.PassingEndTime).IsRequired().HasColumnType("datetime2");
 
-            builder.HasOne(tr => tr.Url).WithMany(u => u.TestResults);
+            builder.HasOne(tr => tr.Url).WithMany(u => u.TestResults).HasForeignKey(tr => tr.UrlId);
 
-            builder.HasMany(tr => tr.ResultAnswers).WithOne(tr => tr.Result);
+            builder.HasMany(tr => tr.ResultAnswers).WithOne(ra => ra.Result).HasForeignKey(ra => ra.ResultId);
         }
     }
 }

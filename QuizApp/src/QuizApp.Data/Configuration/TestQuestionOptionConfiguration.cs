@@ -11,7 +11,7 @@ namespace QuizApp.Data.Configuration
         {
             builder.Property(tqopt => tqopt.Text).IsRequired();
 
-            builder.HasOne(tqopt => tqopt.Question).WithMany(q => q.TestQuestionOptions);
+            builder.HasOne(tqopt => tqopt.Question).WithMany(q => q.TestQuestionOptions).HasForeignKey(tqopt => tqopt.QuestionId);
 
             builder.HasMany(tqopt => tqopt.ResultAnswerOptions).WithOne(raopt => raopt.Option).HasForeignKey(raopt => raopt.OptionId).OnDelete(DeleteBehavior.SetNull);
         }
