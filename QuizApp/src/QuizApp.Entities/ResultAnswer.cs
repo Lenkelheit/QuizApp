@@ -14,7 +14,9 @@ namespace QuizApp.Entities
         public int? QuestionId { get; set; }
         public int ResultId { get; set; }
 
+        [ForeignKey(nameof(QuestionId))]
         public TestQuestion Question { get; set; }
+        [ForeignKey(nameof(ResultId))]
         public TestResult Result { get; set; }
         public ICollection<ResultAnswerOption> ResultAnswerOptions { get; set; } = new List<ResultAnswerOption>();
     }

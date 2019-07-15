@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
@@ -11,6 +12,7 @@ namespace QuizApp.Entities
         public bool IsRight { get; set; }
         public int QuestionId { get; set; }
 
+        [ForeignKey(nameof(QuestionId))]
         public TestQuestion Question { get; set; }
         public ICollection<ResultAnswerOption> ResultAnswerOptions { get; set; } = new List<ResultAnswerOption>();
     }

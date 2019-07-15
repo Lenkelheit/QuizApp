@@ -19,6 +19,7 @@ namespace QuizApp.Entities
         public DateTime LastModifiedDate { get; set; }
         public int AuthorId { get; set; }
 
+        [ForeignKey(nameof(AuthorId))]
         public User Author { get; set; }
         public ICollection<Url> Urls { get; set; } = new List<Url>();
         public ICollection<TestQuestion> TestQuestions { get; set; } = new List<TestQuestion>();

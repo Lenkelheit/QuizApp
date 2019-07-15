@@ -19,6 +19,7 @@ namespace QuizApp.Entities
         public int Score { get; set; }
         public int UrlId { get; set; }
 
+        [ForeignKey(nameof(UrlId))]
         public Url Url { get; set; }
         public ICollection<ResultAnswer> ResultAnswers { get; set; } = new List<ResultAnswer>();
     }
