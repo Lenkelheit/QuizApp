@@ -35,30 +35,30 @@ namespace QuizApp.Data
             modelBuilder.Entity<User>().Property(u => u.Username).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.Email).IsRequired();
             modelBuilder.Entity<User>().Property(u => u.Password).IsRequired();
-            modelBuilder.Entity<User>().HasMany(u => u.Tests).WithOne(t => t.Author);
+            modelBuilder.Entity<User>().HasMany(u => u.CreatedTests).WithOne(t => t.Author).HasForeignKey(t => t.AuthorId);
 
             // Configure Test
             modelBuilder.Entity<Test>().Property(t => t.Title).IsRequired();
             modelBuilder.Entity<Test>().Property(t => t.TimeLimitSeconds).IsRequired().HasColumnType("time");
             modelBuilder.Entity<Test>().Property(t => t.LastModifiedDate).IsRequired().HasColumnType("datetime2");
-            modelBuilder.Entity<Test>().HasMany(t => t.Urls).WithOne(u => u.Test);
-            modelBuilder.Entity<Test>().HasMany(t => t.TestQuestions).WithOne(q => q.Test);
+            modelBuilder.Entity<Test>().HasMany(t => t.Urls).WithOne(u => u.Test).HasForeignKey(u => u.TestId);
+            modelBuilder.Entity<Test>().HasMany(t => t.TestQuestions).WithOne(q => q.Test).HasForeignKey(q => q.TestId);
 
             // Configure Url
             modelBuilder.Entity<Url>().Property(u => u.ValidFromTime).IsRequired().HasColumnType("datetime2");
             modelBuilder.Entity<Url>().Property(u => u.ValidUntilTime).IsRequired().HasColumnType("datetime2");
-            modelBuilder.Entity<Url>().HasMany(u => u.TestResults).WithOne(tr => tr.Url);
+            modelBuilder.Entity<Url>().HasMany(u => u.TestResults).WithOne(tr => tr.Url).HasForeignKey(tr => tr.UrlId);
 
             // Configure TestResult
             modelBuilder.Entity<TestResult>().Property(tr => tr.IntervieweeName).IsRequired();
             modelBuilder.Entity<TestResult>().Property(tr => tr.PassingStartTime).IsRequired().HasColumnType("datetime2");
             modelBuilder.Entity<TestResult>().Property(tr => tr.PassingEndTime).IsRequired().HasColumnType("datetime2");
-            modelBuilder.Entity<TestResult>().HasMany(tr => tr.ResultAnswers).WithOne(tr => tr.Result);
+            modelBuilder.Entity<TestResult>().HasMany(tr => tr.ResultAnswers).WithOne(ra => ra.Result).HasForeignKey(ra => ra.ResultId);
 
             // Configure ResultAnswer
-            modelBuilder.Entity<ResultAnswer>().Property(ra => ra.TakeTimeSeconds).IsRequired().HasColumnType("time");
+            modelBuilder.Entity<ResultAnswer>().Property(ra => ra.TimeTakenSeconds).IsRequired().HasColumnType("time");
             modelBuilder.Entity<ResultAnswer>().HasOne(ra => ra.Question).WithMany(q => q.ResultAnswers).HasForeignKey(ra => ra.QuestionId).OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<ResultAnswer>().HasMany(ra => ra.ResultAnswerOptions).WithOne(raopt => raopt.ResultAnswer);
+            modelBuilder.Entity<ResultAnswer>().HasMany(ra => ra.ResultAnswerOptions).WithOne(raopt => raopt.ResultAnswer).HasForeignKey(raopt => raopt.ResultAnswerId);
 
             // Configure ResultAnswerOption
             modelBuilder.Entity<ResultAnswerOption>().HasOne(raopt => raopt.Option).WithMany(tqopt => tqopt.ResultAnswerOptions).HasForeignKey(raopt => raopt.OptionId).OnDelete(DeleteBehavior.SetNull);
@@ -66,7 +66,7 @@ namespace QuizApp.Data
             // Configure TestQuestion
             modelBuilder.Entity<TestQuestion>().Property(tq => tq.Text).IsRequired();
             modelBuilder.Entity<TestQuestion>().Property(tq => tq.TimeLimitSeconds).IsRequired().HasColumnType("time");
-            modelBuilder.Entity<TestQuestion>().HasMany(tq => tq.TestQuestionOptions).WithOne(tq => tq.Question);
+            modelBuilder.Entity<TestQuestion>().HasMany(tq => tq.TestQuestionOptions).WithOne(tqopt => tqopt.Question).HasForeignKey(tqopt => tqopt.QuestionId);
 
             // Configure TestQuestionOption
             modelBuilder.Entity<TestQuestionOption>().Property(tqopt => tqopt.Text).IsRequired();
