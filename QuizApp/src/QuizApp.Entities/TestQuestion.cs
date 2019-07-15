@@ -14,6 +14,7 @@ namespace QuizApp.Entities
         [Required]
         [Column(TypeName = "time")]
         public TimeSpan TimeLimitSeconds { get; set; }
+        public int TestId { get; set; }
 
         public Test Test { get; set; }
         public ICollection<TestQuestionOption> TestQuestionOptions { get; set; } = new List<TestQuestionOption>();

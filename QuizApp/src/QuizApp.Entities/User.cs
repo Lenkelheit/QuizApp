@@ -13,6 +13,6 @@ namespace QuizApp.Entities
         [Required]
         public string Password { get; set; }
 
-        public ICollection<Test> Tests { get; set; } = new List<Test>();
+        public ICollection<Test> CreatedTests { get; set; } = new List<Test>();
     }
 }

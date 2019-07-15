@@ -17,6 +17,7 @@ namespace QuizApp.Entities
         [Required]
         [Column(TypeName = "datetime2")]
         public DateTime LastModifiedDate { get; set; }
+        public int AuthorId { get; set; }
 
         public User Author { get; set; }
         public ICollection<Url> Urls { get; set; } = new List<Url>();

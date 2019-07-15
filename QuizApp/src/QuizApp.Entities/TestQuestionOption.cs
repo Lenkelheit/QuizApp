@@ -9,6 +9,7 @@ namespace QuizApp.Entities
         [Required]
         public string Text { get; set; }
         public bool IsRight { get; set; }
+        public int QuestionId { get; set; }
 
         public TestQuestion Question { get; set; }
         public ICollection<ResultAnswerOption> ResultAnswerOptions { get; set; } = new List<ResultAnswerOption>();
