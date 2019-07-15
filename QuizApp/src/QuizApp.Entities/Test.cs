@@ -10,6 +10,7 @@ namespace QuizApp.Entities
         public string Description { get; set; }
         public TimeSpan TimeLimitSeconds { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public int AuthorId { get; set; }
 
         public User Author { get; set; }
         public ICollection<Url> Urls { get; set; } = new List<Url>();

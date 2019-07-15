@@ -9,6 +9,7 @@ namespace QuizApp.Entities
         public string Text { get; set; }
         public string Hint { get; set; }
         public TimeSpan TimeLimitSeconds { get; set; }
+        public int TestId { get; set; }
 
         public Test Test { get; set; }
         public ICollection<TestQuestionOption> TestQuestionOptions { get; set; } = new List<TestQuestionOption>();
