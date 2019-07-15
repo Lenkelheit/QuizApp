@@ -9,7 +9,7 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<TestResult> builder)
         {
-            builder.Property(tr => tr.IntervieweeName).IsRequired();
+            builder.Property(tr => tr.IntervieweeName).IsRequired().HasMaxLength(EntitiesConstraints.INTERVIEWEE_NAME_MAX_LENGTH);
 
             builder.Property(tr => tr.PassingStartTime).IsRequired().HasColumnType("datetime2");
 

@@ -13,6 +13,8 @@ namespace QuizApp.Data.Configuration
 
             builder.Property(u => u.ValidUntilTime).IsRequired().HasColumnType("datetime2");
 
+            builder.Property(u => u.IntervieweeName).HasMaxLength(EntitiesConstraints.INTERVIEWEE_NAME_MAX_LENGTH);
+
             builder.HasOne(u => u.Test).WithMany(t => t.Urls).HasForeignKey(u => u.TestId);
 
             builder.HasMany(u => u.TestResults).WithOne(tr => tr.Url).HasForeignKey(tr => tr.UrlId);

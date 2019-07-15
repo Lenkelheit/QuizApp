@@ -9,7 +9,9 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Test> builder)
         {
-            builder.Property(t => t.Title).IsRequired();
+            builder.Property(t => t.Title).IsRequired().HasMaxLength(EntitiesConstraints.TITLE_MAX_LENGTH);
+
+            builder.Property(t => t.Description).HasMaxLength(EntitiesConstraints.DESCRIPTION_MAX_LENGTH);
 
             builder.Property(t => t.TimeLimitSeconds).IsRequired().HasColumnType("time");
 

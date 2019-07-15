@@ -9,7 +9,7 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<TestQuestionOption> builder)
         {
-            builder.Property(tqopt => tqopt.Text).IsRequired();
+            builder.Property(tqopt => tqopt.Text).IsRequired().HasMaxLength(EntitiesConstraints.TEXT_QUESTION_OPTION_MAX_LENGTH);
 
             builder.HasOne(tqopt => tqopt.Question).WithMany(q => q.TestQuestionOptions).HasForeignKey(tqopt => tqopt.QuestionId);
 
