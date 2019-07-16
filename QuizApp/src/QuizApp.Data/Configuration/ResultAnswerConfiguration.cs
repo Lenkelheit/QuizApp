@@ -9,7 +9,11 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<ResultAnswer> builder)
         {
-            builder.Property(ra => ra.TimeTakenSeconds).IsRequired().HasColumnType("time");
+            builder.ToTable(nameof(ResultAnswer));
+
+            builder.HasKey(ra => ra.Id);
+
+            builder.Property(ra => ra.TimeTakenSeconds).HasColumnType("time");
 
             builder.HasOne(ra => ra.Result).WithMany(tr => tr.ResultAnswers).HasForeignKey(ra => ra.ResultId);
 

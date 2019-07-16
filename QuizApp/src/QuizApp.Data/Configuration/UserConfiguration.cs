@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using QuizApp.Entities;
+using QuizApp.Data.EntitiesConstraints;
 
 namespace QuizApp.Data.Configuration
 {
@@ -9,11 +10,15 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(u => u.Username).IsRequired().HasMaxLength(EntitiesConstraints.USERNAME_MAX_LENGTH);
+            builder.ToTable(nameof(User));
 
-            builder.Property(u => u.Email).IsRequired().HasMaxLength(EntitiesConstraints.EMAIL_MAX_LENGTH);
+            builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.Password).IsRequired().HasMaxLength(EntitiesConstraints.PASSWORD_MAX_LENGTH);
+            builder.Property(u => u.Username).IsRequired().HasMaxLength(UserConstraints.UsernameMaxLength);
+
+            builder.Property(u => u.Email).IsRequired().HasMaxLength(UserConstraints.EmailMaxLength);
+
+            builder.Property(u => u.Password).IsRequired().HasMaxLength(UserConstraints.PasswordMaxLength);
 
             builder.HasMany(u => u.CreatedTests).WithOne(t => t.Author).HasForeignKey(t => t.AuthorId);
         }

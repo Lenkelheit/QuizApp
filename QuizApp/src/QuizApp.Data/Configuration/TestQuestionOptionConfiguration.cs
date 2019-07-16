@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using QuizApp.Entities;
+using QuizApp.Data.EntitiesConstraints;
 
 namespace QuizApp.Data.Configuration
 {
@@ -9,7 +10,11 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<TestQuestionOption> builder)
         {
-            builder.Property(tqopt => tqopt.Text).IsRequired().HasMaxLength(EntitiesConstraints.TEXT_QUESTION_OPTION_MAX_LENGTH);
+            builder.ToTable(nameof(TestQuestionOption));
+
+            builder.HasKey(tqopt => tqopt.Id);
+
+            builder.Property(tqopt => tqopt.Text).IsRequired().HasMaxLength(TestQuestionOptionConstraints.TextQuestionOptionMaxLength);
 
             builder.HasOne(tqopt => tqopt.Question).WithMany(q => q.TestQuestionOptions).HasForeignKey(tqopt => tqopt.QuestionId);
 

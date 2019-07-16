@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using QuizApp.Entities;
+using QuizApp.Data.EntitiesConstraints;
 
 namespace QuizApp.Data.Configuration
 {
@@ -9,11 +10,15 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<TestQuestion> builder)
         {
-            builder.Property(tq => tq.Text).IsRequired().HasMaxLength(EntitiesConstraints.TEXT_QUESTION_MAX_LENGTH);
+            builder.ToTable(nameof(TestQuestion));
 
-            builder.Property(tq => tq.Hint).HasMaxLength(EntitiesConstraints.HINT_MAX_LENGTH);
+            builder.HasKey(tq => tq.Id);
 
-            builder.Property(tq => tq.TimeLimitSeconds).IsRequired().HasColumnType("time");
+            builder.Property(tq => tq.Text).IsRequired().HasMaxLength(TestQuestionConstraints.TextQuestionMaxLength);
+
+            builder.Property(tq => tq.Hint).HasMaxLength(TestQuestionConstraints.HintMaxLength);
+
+            builder.Property(tq => tq.TimeLimitSeconds).HasColumnType("time");
 
             builder.HasOne(tq => tq.Test).WithMany(t => t.TestQuestions).HasForeignKey(tq => tq.TestId);
 
