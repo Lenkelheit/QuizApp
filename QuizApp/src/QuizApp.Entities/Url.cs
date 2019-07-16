@@ -5,21 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
+    [Table(nameof(Url))]
     public class Url
     {
+        public const int IntervieweeNameMaxLength = 128;
+
+        [Key]
         public int Id { get; set; }
 
         public int? NumberOfRuns { get; set; }
 
-        [Required]
         [Column(TypeName = "datetime2")]
         public DateTime ValidFromTime { get; set; }
 
-        [Required]
         [Column(TypeName = "datetime2")]
         public DateTime ValidUntilTime { get; set; }
 
-        [MaxLength(length: EntitiesConstraints.INTERVIEWEE_NAME_MAX_LENGTH)]
+        [MaxLength(length: IntervieweeNameMaxLength)]
         public string IntervieweeName { get; set; }
 
         public int TestId { get; set; }

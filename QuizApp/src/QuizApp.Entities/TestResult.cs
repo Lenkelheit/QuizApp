@@ -5,19 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
+    [Table(nameof(TestResult))]
     public class TestResult
     {
+        public const int IntervieweeNameMaxLength = 128;
+
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: EntitiesConstraints.INTERVIEWEE_NAME_MAX_LENGTH)]
+        [MaxLength(length: IntervieweeNameMaxLength)]
         public string IntervieweeName { get; set; }
 
-        [Required]
         [Column(TypeName = "datetime2")]
         public DateTime PassingStartTime { get; set; }
 
-        [Required]
         [Column(TypeName = "datetime2")]
         public DateTime PassingEndTime { get; set; }
 

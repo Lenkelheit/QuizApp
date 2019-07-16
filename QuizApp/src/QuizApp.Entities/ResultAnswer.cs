@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
+    [Table(nameof(ResultAnswer))]
     public class ResultAnswer
     {
+        [Key]
         public int Id { get; set; }
 
-        [Required]
         [Column(TypeName = "time")]
         public TimeSpan TimeTakenSeconds { get; set; }
 

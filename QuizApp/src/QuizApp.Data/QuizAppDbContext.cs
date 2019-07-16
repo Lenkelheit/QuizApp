@@ -3,12 +3,9 @@ using QuizApp.Entities;
 
 namespace QuizApp.Data
 {
-    public class DataBaseContext : DbContext
+    public class QuizAppDbContext : DbContext
     {
-        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
-        {
-            Database.Migrate();
-        }
+        public QuizAppDbContext(DbContextOptions<QuizAppDbContext> options) : base(options) { }
 
 
         public DbSet<User> Users { get; set; }

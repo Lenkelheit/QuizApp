@@ -5,18 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
+    [Table(nameof(TestQuestion))]
     public class TestQuestion
     {
+        public const int TextQuestionMaxLength = 512;
+
+        public const int HintMaxLength = 256;
+
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: EntitiesConstraints.TEXT_QUESTION_MAX_LENGTH)]
+        [MaxLength(length: TextQuestionMaxLength)]
         public string Text { get; set; }
 
-        [MaxLength(length: EntitiesConstraints.HINT_MAX_LENGTH)]
+        [MaxLength(length: HintMaxLength)]
         public string Hint { get; set; }
 
-        [Required]
         [Column(TypeName = "time")]
         public TimeSpan TimeLimitSeconds { get; set; }
 

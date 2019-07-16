@@ -4,12 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuizApp.Entities
 {
+    [Table(nameof(TestQuestionOption))]
     public class TestQuestionOption
     {
+        public const int TextQuestionOptionMaxLength = 256;
+
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: EntitiesConstraints.TEXT_QUESTION_OPTION_MAX_LENGTH)]
+        [MaxLength(length: TextQuestionOptionMaxLength)]
         public string Text { get; set; }
 
         public bool IsRight { get; set; }
