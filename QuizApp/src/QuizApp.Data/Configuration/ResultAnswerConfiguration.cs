@@ -9,9 +9,7 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<ResultAnswer> builder)
         {
-            builder.ToTable(nameof(ResultAnswer));
-
-            builder.HasKey(ra => ra.Id);
+            builder.ToTable(nameof(ResultAnswer)).HasKey(ra => ra.Id);
 
             builder.Property(ra => ra.TimeTakenSeconds).HasColumnType("time");
 
@@ -19,7 +17,7 @@ namespace QuizApp.Data.Configuration
 
             builder.HasOne(ra => ra.Question).WithMany(q => q.ResultAnswers).HasForeignKey(ra => ra.QuestionId).OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasMany(ra => ra.ResultAnswerOptions).WithOne(raopt => raopt.ResultAnswer).HasForeignKey(raopt => raopt.ResultAnswerId);
+            builder.HasMany(ra => ra.ResultAnswerOptions).WithOne(opt => opt.ResultAnswer).HasForeignKey(opt => opt.ResultAnswerId);
         }
     }
 }

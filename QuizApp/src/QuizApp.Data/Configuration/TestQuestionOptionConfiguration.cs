@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using QuizApp.Entities;
-using QuizApp.Data.EntitiesConstraints;
 
 namespace QuizApp.Data.Configuration
 {
@@ -10,15 +9,13 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<TestQuestionOption> builder)
         {
-            builder.ToTable(nameof(TestQuestionOption));
+            builder.ToTable(nameof(TestQuestionOption)).HasKey(opt => opt.Id);
 
-            builder.HasKey(tqopt => tqopt.Id);
+            builder.Property(opt => opt.Text).IsRequired().HasMaxLength(256);
 
-            builder.Property(tqopt => tqopt.Text).IsRequired().HasMaxLength(TestQuestionOptionConstraints.TextQuestionOptionMaxLength);
+            builder.HasOne(opt => opt.Question).WithMany(q => q.TestQuestionOptions).HasForeignKey(opt => opt.QuestionId);
 
-            builder.HasOne(tqopt => tqopt.Question).WithMany(q => q.TestQuestionOptions).HasForeignKey(tqopt => tqopt.QuestionId);
-
-            builder.HasMany(tqopt => tqopt.ResultAnswerOptions).WithOne(raopt => raopt.Option).HasForeignKey(raopt => raopt.OptionId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(topt => topt.ResultAnswerOptions).WithOne(ropt => ropt.Option).HasForeignKey(ropt => ropt.OptionId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

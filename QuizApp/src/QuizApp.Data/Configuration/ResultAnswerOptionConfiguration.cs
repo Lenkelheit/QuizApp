@@ -9,13 +9,11 @@ namespace QuizApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<ResultAnswerOption> builder)
         {
-            builder.ToTable(nameof(ResultAnswerOption));
+            builder.ToTable(nameof(ResultAnswerOption)).HasKey(opt => opt.Id);
 
-            builder.HasKey(raopt => raopt.Id);
+            builder.HasOne(ropt => ropt.Option).WithMany(topt => topt.ResultAnswerOptions).HasForeignKey(ropt => ropt.OptionId).OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(raopt => raopt.Option).WithMany(tqopt => tqopt.ResultAnswerOptions).HasForeignKey(raopt => raopt.OptionId).OnDelete(DeleteBehavior.SetNull);
-
-            builder.HasOne(raopt => raopt.ResultAnswer).WithMany(ra => ra.ResultAnswerOptions).HasForeignKey(raopt => raopt.ResultAnswerId);
+            builder.HasOne(opt => opt.ResultAnswer).WithMany(ra => ra.ResultAnswerOptions).HasForeignKey(opt => opt.ResultAnswerId);
         }
     }
 }
