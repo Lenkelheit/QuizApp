@@ -8,18 +8,14 @@ namespace QuizApp.Entities
     [Table(nameof(Test))]
     public class Test
     {
-        public const int TitleMaxLength = 128;
-
-        public const int DescriptionMaxLength = 512;
-
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: TitleMaxLength)]
+        [MaxLength(length: 128)]
         public string Title { get; set; }
 
-        [MaxLength(length: DescriptionMaxLength)]
+        [MaxLength(length: 512)]
         public string Description { get; set; }
 
         [Column(TypeName = "time")]

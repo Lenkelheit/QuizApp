@@ -8,13 +8,11 @@ namespace QuizApp.Entities
     [Table(nameof(TestResult))]
     public class TestResult
     {
-        public const int IntervieweeNameMaxLength = 128;
-
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: IntervieweeNameMaxLength)]
+        [MaxLength(length: 128)]
         public string IntervieweeName { get; set; }
 
         [Column(TypeName = "datetime2")]

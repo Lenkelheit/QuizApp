@@ -8,18 +8,14 @@ namespace QuizApp.Entities
     [Table(nameof(TestQuestion))]
     public class TestQuestion
     {
-        public const int TextQuestionMaxLength = 512;
-
-        public const int HintMaxLength = 256;
-
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: TextQuestionMaxLength)]
+        [MaxLength(length: 512)]
         public string Text { get; set; }
 
-        [MaxLength(length: HintMaxLength)]
+        [MaxLength(length: 256)]
         public string Hint { get; set; }
 
         [Column(TypeName = "time")]

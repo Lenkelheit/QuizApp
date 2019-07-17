@@ -8,8 +8,6 @@ namespace QuizApp.Entities
     [Table(nameof(Url))]
     public class Url
     {
-        public const int IntervieweeNameMaxLength = 128;
-
         [Key]
         public int Id { get; set; }
 
@@ -21,7 +19,7 @@ namespace QuizApp.Entities
         [Column(TypeName = "datetime2")]
         public DateTime ValidUntilTime { get; set; }
 
-        [MaxLength(length: IntervieweeNameMaxLength)]
+        [MaxLength(length: 128)]
         public string IntervieweeName { get; set; }
 
         public int TestId { get; set; }

@@ -7,13 +7,11 @@ namespace QuizApp.Entities
     [Table(nameof(TestQuestionOption))]
     public class TestQuestionOption
     {
-        public const int TextQuestionOptionMaxLength = 256;
-
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: TextQuestionOptionMaxLength)]
+        [MaxLength(length: 256)]
         public string Text { get; set; }
 
         public bool IsRight { get; set; }

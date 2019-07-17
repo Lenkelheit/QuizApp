@@ -7,25 +7,19 @@ namespace QuizApp.Entities
     [Table(nameof(User))]
     public class User
     {
-        public const int UsernameMaxLength = 128;
-
-        public const int EmailMaxLength = 128;
-
-        public const int PasswordMaxLength = 256;
-        
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(length: UsernameMaxLength)]
+        [MaxLength(length: 128)]
         public string Username { get; set; }
 
         [Required]
-        [MaxLength(length: EmailMaxLength)]
+        [MaxLength(length: 128)]
         public string Email { get; set; }
 
         [Required]
-        [MaxLength(length: PasswordMaxLength)]
+        [MaxLength(length: 256)]
         public string Password { get; set; }
 
 
