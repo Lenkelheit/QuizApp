@@ -17,7 +17,7 @@ namespace QuizApp.Data.Configuration
 
             builder.Property(u => u.IntervieweeName).HasMaxLength(128);
 
-            builder.HasOne(u => u.Test).WithMany(t => t.Urls).HasForeignKey(u => u.TestId);
+            builder.HasOne(u => u.Test).WithMany(t => t.Urls).HasForeignKey(u => u.TestId).OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(u => u.TestResults).WithOne(tr => tr.Url).HasForeignKey(tr => tr.UrlId);
         }

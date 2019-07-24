@@ -21,7 +21,7 @@ namespace QuizApp.Data.Configuration
 
             builder.HasOne(t => t.Author).WithMany(u => u.CreatedTests).HasForeignKey(t => t.AuthorId);
 
-            builder.HasMany(t => t.Urls).WithOne(u => u.Test).HasForeignKey(u => u.TestId);
+            builder.HasMany(t => t.Urls).WithOne(u => u.Test).HasForeignKey(u => u.TestId).OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(t => t.TestQuestions).WithOne(q => q.Test).HasForeignKey(q => q.TestId);
         }
