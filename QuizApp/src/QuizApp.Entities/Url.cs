@@ -15,7 +15,7 @@ namespace QuizApp.Entities
 
         public string IntervieweeName { get; set; }
 
-        public int TestId { get; set; }
+        public int? TestId { get; set; }
 
 
         public Test Test { get; set; }
