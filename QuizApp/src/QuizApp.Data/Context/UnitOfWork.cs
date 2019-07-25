@@ -36,16 +36,13 @@ namespace QuizApp.Data.Context
         public void RegisterRepository<TEntity, TIRepository, TRepository>()
             where TEntity : class
             where TIRepository : IRepository<TEntity>
-            where TRepository : IDbContextSettable, IRepository<TEntity>, new()
+            where TRepository : IRepository<TEntity>
         {
             Type key = typeof(TIRepository);
 
             if (!interfaceRepositoriesFactory.ContainsKey(key))
             {
-                TRepository repository = new TRepository();
-                repository.SetDbContext(dbContext);
-
-                interfaceRepositoriesFactory.Add(key, repository);
+                interfaceRepositoriesFactory.Add(key, Activator.CreateInstance(typeof(TRepository), dbContext));
             }
         }
 

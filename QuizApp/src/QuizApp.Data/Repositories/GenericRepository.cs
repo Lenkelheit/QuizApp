@@ -4,143 +4,103 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 using QuizApp.Data.Interfaces;
 
 namespace QuizApp.Data.Repositories
 {
-    public abstract class GenericRepository<TEntity> : IDbContextSettable, IRepository<TEntity> where TEntity : class
+    public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected DbContext dbContext;
+        protected DbContext DbContext { get; set; }
 
-        protected DbSet<TEntity> dbSet;
+        protected DbSet<TEntity> DbSet => DbContext?.Set<TEntity>();
 
-
-        public GenericRepository()
-        {
-            this.dbContext = null;
-            this.dbSet = null;
-        }
 
         public GenericRepository(DbContext dbContext)
         {
-            this.dbContext = dbContext;
-            this.dbSet = dbContext.Set<TEntity>();
+            this.DbContext = dbContext ?? throw new NullReferenceException("Database context is not setted.");
         }
 
 
-        public void SetDbContext(DbContext dbContext)
+        public virtual int Count(Expression<Func<TEntity, bool>> predicate = null)
         {
-            this.dbContext = dbContext;
-            this.dbSet = dbContext.Set<TEntity>();
+            return predicate == null ? DbSet.Count() : DbSet.Count(predicate);
         }
 
-        public int Count(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            ContextCheck();
-
-            return predicate == null ? dbSet.Count() : dbSet.Count(predicate);
-        }
-
-        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+        public virtual IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
                                         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                                        string includeProperties = "")
+                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
         {
-            ContextCheck();
-
-            IQueryable<TEntity> query = dbSet;
+            IQueryable<TEntity> query = DbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
             }
 
-            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
+            if (includeProperties != null) query = includeProperties(query);
 
             if (orderBy != null) query = orderBy(query);
 
             return query;
         }
 
-        public TEntity GetById(object id, string includeProperties = "")
+        public virtual TEntity GetById(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
         {
-            ContextCheck();
+            IQueryable<TEntity> query = DbSet;
 
-            IQueryable<TEntity> query = dbSet;
+            if (includeProperties != null) query = includeProperties(query);
 
-            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            dbSet = query as DbSet<TEntity>;
+            DbSet<TEntity> dbSet = query as DbSet<TEntity>;
 
             return dbSet?.Find(id);
         }
 
-        public async Task<TEntity> GetByIdAsync(object id, string includeProperties = "")
+        public virtual async Task<TEntity> GetByIdAsync(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
         {
-            ContextCheck();
+            IQueryable<TEntity> query = DbSet;
 
-            IQueryable<TEntity> query = dbSet;
+            if (includeProperties != null) query = includeProperties(query);
 
-            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            dbSet = query as DbSet<TEntity>;
+            DbSet<TEntity> dbSet = query as DbSet<TEntity>;
 
             return await dbSet?.FindAsync(id);
         }
 
-        public void Insert(TEntity entity)
+        public virtual void Insert(TEntity entity)
         {
-            ContextCheck();
-            dbSet.Add(entity);
+            DbSet.Add(entity);
         }
 
-        public async Task InsertAsync(TEntity entity)
+        public virtual async Task InsertAsync(TEntity entity)
         {
-            ContextCheck();
-
-            await dbSet.AddAsync(entity);
+            await DbSet.AddAsync(entity);
         }
 
-        public void Update(TEntity entityToUpdate)
+        public virtual void Update(TEntity entityToUpdate)
         {
-            if (dbContext.Entry(entityToUpdate).State == EntityState.Detached)
+            if (DbContext.Entry(entityToUpdate).State == EntityState.Detached)
             {
-                dbSet.Attach(entityToUpdate);
+                DbSet.Attach(entityToUpdate);
             }
-            dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+            DbContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
-        public void Delete(TEntity entityToDelete)
+        public virtual void Delete(TEntity entityToDelete)
         {
-            ContextCheck();
             if (entityToDelete == null) throw new ArgumentNullException(nameof(entityToDelete));
 
-            if (dbContext.Entry(entityToDelete).State == EntityState.Detached) 
+            if (DbContext.Entry(entityToDelete).State == EntityState.Detached) 
             {
-                dbSet.Attach(entityToDelete);
+                DbSet.Attach(entityToDelete);
             }
-            dbSet.Remove(entityToDelete);
+            DbSet.Remove(entityToDelete);
         }
 
-        public void Delete(Expression<Func<TEntity, bool>> predicate)
+        public virtual void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            ContextCheck();
-
-            if (predicate != null) dbSet.RemoveRange(dbSet.Where(predicate));
-            else dbSet.RemoveRange(dbSet);
-        }
-
-        protected void ContextCheck()
-        {
-            if (dbSet == null) throw new NullReferenceException("Database context is not setted.");
+            if (predicate != null) DbSet.RemoveRange(DbSet.Where(predicate));
+            else DbSet.RemoveRange(DbSet);
         }
     }
 }
