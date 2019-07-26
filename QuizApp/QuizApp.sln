@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Entities", "src\QuizApp.Entities\QuizApp.Entities.csproj", "{5D525CA5-B243-4347-9560-155306BF900C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Data", "src\QuizApp.Data\QuizApp.Data.csproj", "{D3966B6A-D7DF-4822-9173-FA0E29E2FE74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Data", "src\QuizApp.Data\QuizApp.Data.csproj", "{D3966B6A-D7DF-4822-9173-FA0E29E2FE74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.ConsoleApp", "src\QuizApp.ConsoleApp\QuizApp.ConsoleApp.csproj", "{F3F22393-E3AB-4B7F-809F-56B323C91B29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D3966B6A-D7DF-4822-9173-FA0E29E2FE74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3966B6A-D7DF-4822-9173-FA0E29E2FE74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3966B6A-D7DF-4822-9173-FA0E29E2FE74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3F22393-E3AB-4B7F-809F-56B323C91B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3F22393-E3AB-4B7F-809F-56B323C91B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3F22393-E3AB-4B7F-809F-56B323C91B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3F22393-E3AB-4B7F-809F-56B323C91B29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
