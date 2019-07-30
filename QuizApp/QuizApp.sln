@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Entities", "src\Qui
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Data", "src\QuizApp.Data\QuizApp.Data.csproj", "{D3966B6A-D7DF-4822-9173-FA0E29E2FE74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizApp.Web", "src\QuizApp.Web\QuizApp.Web.csproj", "{FE3888B0-CA25-47AE-B475-5EE88689CDCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp.Web", "src\QuizApp.Web\QuizApp.Web.csproj", "{FE3888B0-CA25-47AE-B475-5EE88689CDCA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C75CB6EA-A543-4E4D-B0CC-1AFFE94D3432}"
+	ProjectSection(SolutionItems) = preProject
+		default.ruleset = default.ruleset
+		stylecop.json = stylecop.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
