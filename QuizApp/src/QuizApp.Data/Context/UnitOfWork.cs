@@ -46,6 +46,16 @@ namespace QuizApp.Data.Context
             }
         }
 
+        public int Save()
+        {
+            return dbContext.SaveChanges();
+        }
+
+        public Task<int> SaveAsync()
+        {
+            return dbContext.SaveChangesAsync();
+        }
+
         private void RegisterBasicRepositories()
         {
             RegisterRepository<User, IUserRepository, UserRepository>();
@@ -56,16 +66,6 @@ namespace QuizApp.Data.Context
             RegisterRepository<TestQuestionOption, ITestQuestionOptionRepository, TestQuestionOptionRepository>();
             RegisterRepository<ResultAnswer, IResultAnswerRepository, ResultAnswerRepository>();
             RegisterRepository<ResultAnswerOption, IResultAnswerOptionRepository, ResultAnswerOptionRepository>();
-        }
-
-        public int Save()
-        {
-            return dbContext.SaveChanges();
-        }
-
-        public Task<int> SaveAsync()
-        {
-            return dbContext.SaveChangesAsync();
         }
     }
 }

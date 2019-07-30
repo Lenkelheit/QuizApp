@@ -12,15 +12,15 @@ namespace QuizApp.Data.Repositories
 {
     public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected DbContext DbContext { get; set; }
-
-        protected DbSet<TEntity> DbSet => DbContext?.Set<TEntity>();
-
-
         public GenericRepository(DbContext dbContext)
         {
             this.DbContext = dbContext ?? throw new NullReferenceException("Database context is not setted.");
         }
+
+
+        protected DbContext DbContext { get; set; }
+
+        protected DbSet<TEntity> DbSet => DbContext?.Set<TEntity>();
 
 
         public virtual int Count(Expression<Func<TEntity, bool>> predicate = null)
@@ -90,7 +90,7 @@ namespace QuizApp.Data.Repositories
         {
             if (entityToDelete == null) throw new ArgumentNullException(nameof(entityToDelete));
 
-            if (DbContext.Entry(entityToDelete).State == EntityState.Detached) 
+            if (DbContext.Entry(entityToDelete).State == EntityState.Detached)
             {
                 DbSet.Attach(entityToDelete);
             }
