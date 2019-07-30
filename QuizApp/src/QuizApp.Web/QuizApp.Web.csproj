@@ -5,14 +5,6 @@
     <UserSecretsId>ceee7e4a-501d-4264-af86-f5595fa4c8e2</UserSecretsId>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
