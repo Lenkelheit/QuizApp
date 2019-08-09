@@ -42,6 +42,8 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+!QuizApp/src/QuizApp.BLL/DTO/TestResult/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml
