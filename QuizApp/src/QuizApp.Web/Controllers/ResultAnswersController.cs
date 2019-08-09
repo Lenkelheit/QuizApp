@@ -5,42 +5,63 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using QuizApp.BLL.DTO.ResultAnswer;
+using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Interfaces;
+
 namespace QuizApp.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/answers")]
     [ApiController]
     public class ResultAnswersController : ControllerBase
     {
-        // GET: api/ResultAnswers
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IResultAnswerService resultAnswerService;
+
+
+        public ResultAnswersController(IResultAnswerService resultAnswerService)
         {
-            return new string[] { "value1", "value2" };
+            this.resultAnswerService = resultAnswerService;
         }
 
-        // GET: api/ResultAnswers/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ResultAnswerDetailDTO>> GetResultAnswerById(int id)
         {
-            return "value";
+            ResultAnswerDetailDTO resultAnswerDetailDTO = await resultAnswerService.GetResultAnswerById(id);
+
+            if (resultAnswerDetailDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultAnswerDetailDTO);
         }
 
-        // POST: api/ResultAnswers
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CreatedResultAnswerDTO>> Post([FromBody] NewResultAnswerDTO newResultAnswerDTO)
         {
+            if (newResultAnswerDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await resultAnswerService.CreateResultAnswer(newResultAnswerDTO));
         }
 
-        // PUT: api/ResultAnswers/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            DeletedResultAnswerDTO deletedResultAnswerDTO = await resultAnswerService.DeleteResultAnswer(id);
+
+            if (deletedResultAnswerDTO == null)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+        [HttpGet("{id}/options")]
+        public ActionResult<IEnumerable<ResultAnswerOptionDTO>> GetAnswerOptionsByResultAnswerId(int resultAnswerId)
+        {
+            return Ok(resultAnswerService.GetAnswerOptionsByResultAnswerId(resultAnswerId));
         }
     }
 }

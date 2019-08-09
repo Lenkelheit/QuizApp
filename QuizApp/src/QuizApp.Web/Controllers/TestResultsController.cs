@@ -5,42 +5,63 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using QuizApp.BLL.DTO.ResultAnswer;
+using QuizApp.BLL.DTO.TestResult;
+using QuizApp.BLL.Interfaces;
+
 namespace QuizApp.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/results")]
     [ApiController]
     public class TestResultsController : ControllerBase
     {
-        // GET: api/TestResults
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ITestResultService testResultService;
+
+
+        public TestResultsController(ITestResultService testResultService)
         {
-            return new string[] { "value1", "value2" };
+            this.testResultService = testResultService;
         }
 
-        // GET: api/TestResults/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TestResultDetailDTO>> GetTestResultById(int id)
         {
-            return "value";
+            TestResultDetailDTO testResultDetailDTO = await testResultService.GetTestResultById(id);
+
+            if (testResultDetailDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(testResultDetailDTO);
         }
 
-        // POST: api/TestResults
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CreatedTestResultDTO>> Post([FromBody] NewTestResultDTO newTestResultDTO)
         {
+            if (newTestResultDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await testResultService.CreateTestResult(newTestResultDTO));
         }
 
-        // PUT: api/TestResults/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            DeletedTestResultDTO deletedTestResultDTO = await testResultService.DeleteTestResult(id);
+
+            if (deletedTestResultDTO == null)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+        [HttpGet("{id}/answers")]
+        public ActionResult<IEnumerable<ResultAnswerFromResultDTO>> GetAnswersByResultId(int testResultId)
+        {
+            return Ok(testResultService.GetAnswersByResultId(testResultId));
         }
     }
 }

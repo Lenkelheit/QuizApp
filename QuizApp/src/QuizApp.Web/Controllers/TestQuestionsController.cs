@@ -5,42 +5,82 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using QuizApp.BLL.DTO.ResultAnswer;
+using QuizApp.BLL.DTO.TestQuestion;
+using QuizApp.BLL.DTO.TestQuestionOption;
+using QuizApp.BLL.Interfaces;
+
 namespace QuizApp.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/questions")]
     [ApiController]
     public class TestQuestionsController : ControllerBase
     {
-        // GET: api/TestQuestions
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ITestQuestionService testQuestionService;
+
+
+        public TestQuestionsController(ITestQuestionService testQuestionService)
         {
-            return new string[] { "value1", "value2" };
+            this.testQuestionService = testQuestionService;
         }
 
-        // GET: api/TestQuestions/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TestQuestionDetailDTO>> GetQuestionById(int id)
         {
-            return "value";
+            TestQuestionDetailDTO testQuestionDetailDTO = await testQuestionService.GetQuestionById(id);
+
+            if (testQuestionDetailDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(testQuestionDetailDTO);
         }
 
-        // POST: api/TestQuestions
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CreatedTestQuestionDTO>> Post([FromBody] NewTestQuestionDTO newTestQuestionDTO)
         {
+            if (newTestQuestionDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await testQuestionService.CreateQuestion(newTestQuestionDTO));
         }
 
-        // PUT: api/TestQuestions/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<ActionResult<UpdatedTestQuestionDTO>> Put([FromBody] UpdatedTestQuestionDTO updatedTestQuestionDTO)
         {
+            updatedTestQuestionDTO = await testQuestionService.UpdateQuestion(updatedTestQuestionDTO);
+
+            if (updatedTestQuestionDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(updatedTestQuestionDTO);
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            DeletedTestQuestionDTO deletedTestQuestionDTO = await testQuestionService.DeleteQuestion(id);
+
+            if (deletedTestQuestionDTO == null)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+        [HttpGet("{id}/options")]
+        public ActionResult<IEnumerable<TestQuestionOptionDTO>> GetQuestionOptionsByQuestionId(int questionId)
+        {
+            return Ok(testQuestionService.GetQuestionOptionsByQuestionId(questionId));
+        }
+
+        [HttpGet("{id}/answers")]
+        public ActionResult<IEnumerable<ResultAnswerFromQuestionDTO>> GetResultAnswersByQuestionId(int questionId)
+        {
+            return Ok(testQuestionService.GetResultAnswersByQuestionId(questionId));
         }
     }
 }

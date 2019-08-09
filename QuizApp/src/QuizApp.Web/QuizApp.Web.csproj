@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QuizApp.BLL\QuizApp.BLL.csproj" />
     <ProjectReference Include="..\QuizApp.Data\QuizApp.Data.csproj" />
   </ItemGroup>
 

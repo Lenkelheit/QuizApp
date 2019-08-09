@@ -5,42 +5,63 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using QuizApp.BLL.DTO.TestResult;
+using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Interfaces;
+
 namespace QuizApp.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UrlsController : ControllerBase
     {
-        // GET: api/Urls
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IUrlService urlService;
+
+
+        public UrlsController(IUrlService urlService)
         {
-            return new string[] { "value1", "value2" };
+            this.urlService = urlService;
         }
 
-        // GET: api/Urls/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UrlDetailDTO>> GetUrlById(int id)
         {
-            return "value";
+            UrlDetailDTO urlDetailDTO = await urlService.GetUrlById(id);
+
+            if (urlDetailDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(urlDetailDTO);
         }
 
-        // POST: api/Urls
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CreatedUrlDTO>> Post([FromBody] NewUrlDTO newUrlDTO)
         {
+            if (newUrlDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await urlService.CreateUrl(newUrlDTO));
         }
 
-        // PUT: api/Urls/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<ActionResult<UpdatedUrlDTO>> Put([FromBody] UpdatedUrlDTO updatedUrlDTO)
         {
+            updatedUrlDTO = await urlService.UpdateUrl(updatedUrlDTO);
+
+            if (updatedUrlDTO == null)
+            {
+                return BadRequest();
+            }
+            return Ok(updatedUrlDTO);
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpGet("{id}/results")]
+        public ActionResult<IEnumerable<TestResultDTO>> GetTestResultsByUrlId(int urlId)
         {
+            return Ok(urlService.GetTestResultsByUrlId(urlId));
         }
     }
 }
