@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuizApp.BLL.Dto.Test
 {
-    public class CreatedTestDto
+    public class UpdateTestDto
     {
         public int Id { get; set; }
 

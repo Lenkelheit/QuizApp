@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.Test
+namespace QuizApp.BLL.Dto.Test
 {
-    public class DeletedTestDTO
+    public class DeletedTestDto
     {
         public int Id { get; set; }
 

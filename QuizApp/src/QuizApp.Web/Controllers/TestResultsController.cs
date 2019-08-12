@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.DTO.ResultAnswer;
-using QuizApp.BLL.DTO.TestResult;
+using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.TestResult;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
@@ -25,41 +25,44 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TestResultDetailDTO>> GetTestResultById(int id)
+        public async Task<ActionResult<TestResultDetailDto>> GetTestResultById(int id)
         {
-            TestResultDetailDTO testResultDetailDTO = await testResultService.GetTestResultById(id);
+            TestResultDetailDto testResultDetailDto = await testResultService.GetTestResultById(id);
 
-            if (testResultDetailDTO == null)
+            if (testResultDetailDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(testResultDetailDTO);
+
+            return Ok(testResultDetailDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatedTestResultDTO>> Post([FromBody] NewTestResultDTO newTestResultDTO)
+        public async Task<ActionResult<CreatedTestResultDto>> Post([FromBody] NewTestResultDto newTestResultDto)
         {
-            if (newTestResultDTO == null)
+            if (newTestResultDto == null)
             {
                 return BadRequest();
             }
-            return Ok(await testResultService.CreateTestResult(newTestResultDTO));
+
+            return Ok(await testResultService.CreateTestResult(newTestResultDto));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            DeletedTestResultDTO deletedTestResultDTO = await testResultService.DeleteTestResult(id);
+            DeletedTestResultDto deletedTestResultDto = await testResultService.DeleteTestResult(id);
 
-            if (deletedTestResultDTO == null)
+            if (deletedTestResultDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
             return NoContent();
         }
 
         [HttpGet("{id}/answers")]
-        public ActionResult<IEnumerable<ResultAnswerFromResultDTO>> GetAnswersByResultId(int testResultId)
+        public ActionResult<IEnumerable<ResultAnswerFromResultDto>> GetAnswersByResultId(int testResultId)
         {
             return Ok(testResultService.GetAnswersByResultId(testResultId));
         }

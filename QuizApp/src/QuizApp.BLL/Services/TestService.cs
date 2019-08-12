@@ -8,9 +8,9 @@ using AutoMapper;
 using QuizApp.BLL.Interfaces;
 using QuizApp.Data.Interfaces;
 using QuizApp.Entities;
-using QuizApp.BLL.DTO.Test;
-using QuizApp.BLL.DTO.TestQuestion;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.Test;
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.Url;
 
 namespace QuizApp.BLL.Services
 {
@@ -29,59 +29,60 @@ namespace QuizApp.BLL.Services
 
         public TestService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork ?? throw new NullReferenceException("UnitOfWork is null.");
-            this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>();
-            this.testQuestionRepository = unitOfWork.GetRepository<TestQuestion, ITestQuestionRepository>();
-            this.urlRepository = unitOfWork.GetRepository<Url, IUrlRepository>();
-            this.mapper = mapper;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>() ?? throw new NullReferenceException(nameof(testRepository));
+            this.testQuestionRepository = unitOfWork.GetRepository<TestQuestion, ITestQuestionRepository>() ?? throw new NullReferenceException(nameof(testQuestionRepository));
+            this.urlRepository = unitOfWork.GetRepository<Url, IUrlRepository>() ?? throw new NullReferenceException(nameof(urlRepository));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
 
-        public IEnumerable<TestDTO> GetTests()
+        public IEnumerable<TestDto> GetTests()
         {
             IEnumerable<Test> tests = testRepository.Get();
 
-            return mapper.Map<IEnumerable<TestDTO>>(tests);
+            return mapper.Map<IEnumerable<TestDto>>(tests);
         }
 
-        public async Task<TestDetailDTO> GetTestById(int testId)
+        public async Task<TestDetailDto> GetTestById(int testId)
         {
             Test test = await testRepository.GetByIdAsync(id: testId, includeProperties: prop => prop
                 .Include(t => t.Urls)
                 .Include(t => t.TestQuestions)
                     .ThenInclude(q => q.TestQuestionOptions));
 
-            return mapper.Map<TestDetailDTO>(test);
+            return mapper.Map<TestDetailDto>(test);
         }
 
-        public async Task<CreatedTestDTO> CreateTest(NewTestDTO newTestDTO)
+        public async Task<CreatedTestDto> CreateTest(NewTestDto newTestDto)
         {
-            Test test = mapper.Map<Test>(newTestDTO);
+            Test test = mapper.Map<Test>(newTestDto);
 
             test.LastModifiedDate = DateTime.Now;
             testRepository.Insert(test);
             await unitOfWork.SaveAsync();
 
-            return mapper.Map<CreatedTestDTO>(test);
+            return mapper.Map<CreatedTestDto>(test);
         }
 
-        public async Task<UpdatedTestDTO> UpdateTest(UpdatedTestDTO updatedTestDTO)
+        public async Task<UpdatedTestDto> UpdateTest(UpdateTestDto updateTestDto)
         {
-            Test test = await testRepository.GetByIdAsync(updatedTestDTO.Id);
+            Test test = await testRepository.GetByIdAsync(updateTestDto.Id);
             if (test == null)
             {
                 return null;
             }
-            test = mapper.Map<Test>(updatedTestDTO);
+
+            test = mapper.Map<Test>(updateTestDto);
 
             test.LastModifiedDate = DateTime.Now;
             testRepository.Update(test);
             await unitOfWork.SaveAsync();
 
-            return updatedTestDTO;
+            return mapper.Map<UpdatedTestDto>(test);
         }
 
-        public async Task<DeletedTestDTO> DeleteTest(int testId)
+        public async Task<DeletedTestDto> DeleteTest(int testId)
         {
             Test test = await testRepository.GetByIdAsync(testId);
             if (test == null)
@@ -92,21 +93,21 @@ namespace QuizApp.BLL.Services
             testRepository.Delete(test);
             await unitOfWork.SaveAsync();
 
-            return mapper.Map<DeletedTestDTO>(test);
+            return mapper.Map<DeletedTestDto>(test);
         }
 
-        public IEnumerable<TestQuestionDTO> GetQuestionsByTestId(int testId)
+        public IEnumerable<TestQuestionDto> GetQuestionsByTestId(int testId)
         {
             IEnumerable<TestQuestion> testQuestions = testQuestionRepository.Get(filter: q => q.TestId == testId);
 
-            return mapper.Map<IEnumerable<TestQuestionDTO>>(testQuestions);
+            return mapper.Map<IEnumerable<TestQuestionDto>>(testQuestions);
         }
 
-        public IEnumerable<UrlDTO> GetUrlsByTestId(int testId)
+        public IEnumerable<UrlDto> GetUrlsByTestId(int testId)
         {
             IEnumerable<Url> urls = urlRepository.Get(filter: u => u.TestId == testId);
 
-            return mapper.Map<IEnumerable<UrlDTO>>(urls);
+            return mapper.Map<IEnumerable<UrlDto>>(urls);
         }
     }
 }

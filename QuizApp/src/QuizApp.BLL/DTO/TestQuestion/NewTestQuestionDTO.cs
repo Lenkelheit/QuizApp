@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.TestQuestion
+namespace QuizApp.BLL.Dto.TestQuestion
 {
-    public class NewTestQuestionDTO
+    public class NewTestQuestionDto
     {
         public string Text { get; set; }
 

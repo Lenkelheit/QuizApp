@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
-using QuizApp.BLL.DTO.ResultAnswer;
-using QuizApp.BLL.DTO.TestQuestion;
-using QuizApp.BLL.DTO.TestQuestionOption;
+using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.TestQuestionOption;
 using QuizApp.BLL.Interfaces;
 using QuizApp.Data.Interfaces;
 using QuizApp.Entities;
@@ -29,49 +29,50 @@ namespace QuizApp.BLL.Services
 
         public TestQuestionService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork ?? throw new NullReferenceException("UnitOfWork is null.");
-            this.testQuestionRepository = unitOfWork.GetRepository<TestQuestion, ITestQuestionRepository>();
-            this.questionOptionRepository = unitOfWork.GetRepository<TestQuestionOption, ITestQuestionOptionRepository>();
-            this.resultAnswerRepository = unitOfWork.GetRepository<ResultAnswer, IResultAnswerRepository>();
-            this.mapper = mapper;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.testQuestionRepository = unitOfWork.GetRepository<TestQuestion, ITestQuestionRepository>() ?? throw new NullReferenceException(nameof(testQuestionRepository));
+            this.questionOptionRepository = unitOfWork.GetRepository<TestQuestionOption, ITestQuestionOptionRepository>() ?? throw new NullReferenceException(nameof(questionOptionRepository));
+            this.resultAnswerRepository = unitOfWork.GetRepository<ResultAnswer, IResultAnswerRepository>() ?? throw new NullReferenceException(nameof(resultAnswerRepository));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
 
-        public async Task<TestQuestionDetailDTO> GetQuestionById(int questionId)
+        public async Task<TestQuestionDetailDto> GetQuestionById(int questionId)
         {
             TestQuestion testQuestion = await testQuestionRepository.GetByIdAsync(id: questionId, includeProperties: prop => prop
                 .Include(q => q.TestQuestionOptions)
                 .Include(q => q.ResultAnswers));
 
-            return mapper.Map<TestQuestionDetailDTO>(testQuestion);
+            return mapper.Map<TestQuestionDetailDto>(testQuestion);
         }
 
-        public async Task<CreatedTestQuestionDTO> CreateQuestion(NewTestQuestionDTO newTestQuestionDTO)
+        public async Task<CreatedTestQuestionDto> CreateQuestion(NewTestQuestionDto newTestQuestionDto)
         {
-            TestQuestion testQuestion = mapper.Map<TestQuestion>(newTestQuestionDTO);
+            TestQuestion testQuestion = mapper.Map<TestQuestion>(newTestQuestionDto);
 
             testQuestionRepository.Insert(testQuestion);
             await unitOfWork.SaveAsync();
 
-            return mapper.Map<CreatedTestQuestionDTO>(testQuestion);
+            return mapper.Map<CreatedTestQuestionDto>(testQuestion);
         }
 
-        public async Task<UpdatedTestQuestionDTO> UpdateQuestion(UpdatedTestQuestionDTO updatedTestQuestionDTO)
+        public async Task<UpdatedTestQuestionDto> UpdateQuestion(UpdateTestQuestionDto updateTestQuestionDto)
         {
-            TestQuestion testQuestion = await testQuestionRepository.GetByIdAsync(updatedTestQuestionDTO.Id);
+            TestQuestion testQuestion = await testQuestionRepository.GetByIdAsync(updateTestQuestionDto.Id);
             if (testQuestion == null)
             {
                 return null;
             }
-            testQuestion = mapper.Map<TestQuestion>(updatedTestQuestionDTO);
+
+            testQuestion = mapper.Map<TestQuestion>(updateTestQuestionDto);
 
             testQuestionRepository.Update(testQuestion);
             await unitOfWork.SaveAsync();
 
-            return updatedTestQuestionDTO;
+            return mapper.Map<UpdatedTestQuestionDto>(testQuestion);
         }
 
-        public async Task<DeletedTestQuestionDTO> DeleteQuestion(int questionId)
+        public async Task<DeletedTestQuestionDto> DeleteQuestion(int questionId)
         {
             TestQuestion testQuestion = await testQuestionRepository.GetByIdAsync(questionId);
             if (testQuestion == null)
@@ -82,21 +83,21 @@ namespace QuizApp.BLL.Services
             testQuestionRepository.Delete(testQuestion);
             await unitOfWork.SaveAsync();
 
-            return mapper.Map<DeletedTestQuestionDTO>(testQuestion);
+            return mapper.Map<DeletedTestQuestionDto>(testQuestion);
         }
 
-        public IEnumerable<TestQuestionOptionDTO> GetQuestionOptionsByQuestionId(int questionId)
+        public IEnumerable<TestQuestionOptionDto> GetQuestionOptionsByQuestionId(int questionId)
         {
             IEnumerable<TestQuestionOption> testQuestionOptions = questionOptionRepository.Get(filter: opt => opt.QuestionId == questionId);
 
-            return mapper.Map<IEnumerable<TestQuestionOptionDTO>>(testQuestionOptions);
+            return mapper.Map<IEnumerable<TestQuestionOptionDto>>(testQuestionOptions);
         }
 
-        public IEnumerable<ResultAnswerFromQuestionDTO> GetResultAnswersByQuestionId(int questionId)
+        public IEnumerable<ResultAnswerFromQuestionDto> GetResultAnswersByQuestionId(int questionId)
         {
             IEnumerable<ResultAnswer> resultAnswers = resultAnswerRepository.Get(filter: ra => ra.QuestionId == questionId);
 
-            return mapper.Map<IEnumerable<ResultAnswerFromQuestionDTO>>(resultAnswers);
+            return mapper.Map<IEnumerable<ResultAnswerFromQuestionDto>>(resultAnswers);
         }
     }
 }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.DTO.ResultAnswerOption;
-using QuizApp.BLL.DTO.TestQuestionOption;
+using QuizApp.BLL.Dto.ResultAnswerOption;
+using QuizApp.BLL.Dto.TestQuestionOption;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
@@ -25,53 +25,57 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TestQuestionOptionDetailDTO>> GetQuestionOptionById(int id)
+        public async Task<ActionResult<TestQuestionOptionDetailDto>> GetQuestionOptionById(int id)
         {
-            TestQuestionOptionDetailDTO questionOptionDetailDTO = await questionOptionService.GetQuestionOptionById(id);
+            TestQuestionOptionDetailDto questionOptionDetailDto = await questionOptionService.GetQuestionOptionById(id);
 
-            if (questionOptionDetailDTO == null)
+            if (questionOptionDetailDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(questionOptionDetailDTO);
+
+            return Ok(questionOptionDetailDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatedTestQuestionOptionDTO>> Post([FromBody] NewTestQuestionOptionDTO newQuestionOptionDTO)
+        public async Task<ActionResult<CreatedTestQuestionOptionDto>> Post([FromBody] NewTestQuestionOptionDto newQuestionOptionDto)
         {
-            if (newQuestionOptionDTO == null)
+            if (newQuestionOptionDto == null)
             {
                 return BadRequest();
             }
-            return Ok(await questionOptionService.CreateQuestionOption(newQuestionOptionDTO));
+
+            return Ok(await questionOptionService.CreateQuestionOption(newQuestionOptionDto));
         }
 
         [HttpPut]
-        public async Task<ActionResult<UpdatedTestQuestionOptionDTO>> Put([FromBody] UpdatedTestQuestionOptionDTO updatedQuestionOptionDTO)
+        public async Task<ActionResult<UpdatedTestQuestionOptionDto>> Put([FromBody] UpdateTestQuestionOptionDto updateQuestionOptionDto)
         {
-            updatedQuestionOptionDTO = await questionOptionService.UpdateQuestionOption(updatedQuestionOptionDTO);
+            UpdatedTestQuestionOptionDto updatedQuestionOptionDto = await questionOptionService.UpdateQuestionOption(updateQuestionOptionDto);
 
-            if (updatedQuestionOptionDTO == null)
+            if (updatedQuestionOptionDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(updatedQuestionOptionDTO);
+
+            return Ok(updatedQuestionOptionDto);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            DeletedTestQuestionOptionDTO deletedQuestionOptionDTO = await questionOptionService.DeleteQuestionOption(id);
+            DeletedTestQuestionOptionDto deletedQuestionOptionDto = await questionOptionService.DeleteQuestionOption(id);
 
-            if (deletedQuestionOptionDTO == null)
+            if (deletedQuestionOptionDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
             return NoContent();
         }
 
         [HttpGet("{id}/answerOptions")]
-        public ActionResult<IEnumerable<ResultAnswerOptionFromQuestionOptionDTO>> GetAnswerOptionsByQuestionOptionId(int questionOptionId)
+        public ActionResult<IEnumerable<ResultAnswerOptionFromQuestionOptionDto>> GetAnswerOptionsByQuestionOptionId(int questionOptionId)
         {
             return Ok(questionOptionService.GetAnswerOptionsByQuestionOptionId(questionOptionId));
         }

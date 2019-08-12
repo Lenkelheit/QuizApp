@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using QuizApp.BLL.DTO.ResultAnswer;
+using QuizApp.BLL.Dto.ResultAnswer;
 
-namespace QuizApp.BLL.DTO.TestResult
+namespace QuizApp.BLL.Dto.TestResult
 {
-    public class TestResultDetailDTO
+    public class TestResultDetailDto
     {
         public int Id { get; set; }
 
@@ -19,6 +19,6 @@ namespace QuizApp.BLL.DTO.TestResult
         public int Score { get; set; }
 
 
-        public ICollection<ResultAnswerDetailDTO> ResultAnswers { get; set; }
+        public ICollection<ResultAnswerDetailDto> ResultAnswers { get; set; } = new List<ResultAnswerDetailDto>();
     }
 }

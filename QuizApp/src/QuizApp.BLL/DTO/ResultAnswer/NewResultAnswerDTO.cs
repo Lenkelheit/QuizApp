@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.ResultAnswer
+namespace QuizApp.BLL.Dto.ResultAnswer
 {
-    public class NewResultAnswerDTO
+    public class NewResultAnswerDto
     {
         public TimeSpan TimeTakenSeconds { get; set; }
 

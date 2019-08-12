@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 
-namespace QuizApp.BLL.DTO.TestQuestionOption
+namespace QuizApp.BLL.Dto.TestQuestionOption
 {
-    public class TestQuestionOptionDetailDTO
+    public class TestQuestionOptionDetailDto
     {
         public int Id { get; set; }
 
@@ -15,6 +15,6 @@ namespace QuizApp.BLL.DTO.TestQuestionOption
         public bool IsRight { get; set; }
 
 
-        public ICollection<ResultAnswerOptionDetailDTO> ResultAnswerOptions { get; set; }
+        public ICollection<ResultAnswerOptionDetailDto> ResultAnswerOptions { get; set; } = new List<ResultAnswerOptionDetailDto>();
     }
 }

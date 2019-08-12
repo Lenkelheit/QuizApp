@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.DTO.TestResult;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.TestResult;
+using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
@@ -25,41 +25,44 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UrlDetailDTO>> GetUrlById(int id)
+        public async Task<ActionResult<UrlDetailDto>> GetUrlById(int id)
         {
-            UrlDetailDTO urlDetailDTO = await urlService.GetUrlById(id);
+            UrlDetailDto urlDetailDto = await urlService.GetUrlById(id);
 
-            if (urlDetailDTO == null)
+            if (urlDetailDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(urlDetailDTO);
+
+            return Ok(urlDetailDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatedUrlDTO>> Post([FromBody] NewUrlDTO newUrlDTO)
+        public async Task<ActionResult<CreatedUrlDto>> Post([FromBody] NewUrlDto newUrlDto)
         {
-            if (newUrlDTO == null)
+            if (newUrlDto == null)
             {
                 return BadRequest();
             }
-            return Ok(await urlService.CreateUrl(newUrlDTO));
+
+            return Ok(await urlService.CreateUrl(newUrlDto));
         }
 
         [HttpPut]
-        public async Task<ActionResult<UpdatedUrlDTO>> Put([FromBody] UpdatedUrlDTO updatedUrlDTO)
+        public async Task<ActionResult<UpdatedUrlDto>> Put([FromBody] UpdateUrlDto updateUrlDto)
         {
-            updatedUrlDTO = await urlService.UpdateUrl(updatedUrlDTO);
+            UpdatedUrlDto updatedUrlDto = await urlService.UpdateUrl(updateUrlDto);
 
-            if (updatedUrlDTO == null)
+            if (updatedUrlDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(updatedUrlDTO);
+
+            return Ok(updatedUrlDto);
         }
 
         [HttpGet("{id}/results")]
-        public ActionResult<IEnumerable<TestResultDTO>> GetTestResultsByUrlId(int urlId)
+        public ActionResult<IEnumerable<TestResultDto>> GetTestResultsByUrlId(int urlId)
         {
             return Ok(urlService.GetTestResultsByUrlId(urlId));
         }

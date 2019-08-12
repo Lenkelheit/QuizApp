@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
@@ -24,36 +24,39 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResultAnswerOptionDetailDTO>> GetAnswerOptionById(int id)
+        public async Task<ActionResult<ResultAnswerOptionDetailDto>> GetAnswerOptionById(int id)
         {
-            ResultAnswerOptionDetailDTO answerOptionDetailDTO = await answerOptionService.GetAnswerOptionById(id);
+            ResultAnswerOptionDetailDto answerOptionDetailDto = await answerOptionService.GetAnswerOptionById(id);
 
-            if (answerOptionDetailDTO == null)
+            if (answerOptionDetailDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(answerOptionDetailDTO);
+
+            return Ok(answerOptionDetailDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatedResultAnswerOptionDTO>> Post([FromBody] NewResultAnswerOptionDTO newAnswerOptionDTO)
+        public async Task<ActionResult<CreatedResultAnswerOptionDto>> Post([FromBody] NewResultAnswerOptionDto newAnswerOptionDto)
         {
-            if (newAnswerOptionDTO == null)
+            if (newAnswerOptionDto == null)
             {
                 return BadRequest();
             }
-            return Ok(await answerOptionService.CreateAnswerOption(newAnswerOptionDTO));
+
+            return Ok(await answerOptionService.CreateAnswerOption(newAnswerOptionDto));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            DeletedResultAnswerOptionDTO deletedAnswerOptionDTO = await answerOptionService.DeleteAnswerOption(id);
+            DeletedResultAnswerOptionDto deletedAnswerOptionDto = await answerOptionService.DeleteAnswerOption(id);
 
-            if (deletedAnswerOptionDTO == null)
+            if (deletedAnswerOptionDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
             return NoContent();
         }
     }

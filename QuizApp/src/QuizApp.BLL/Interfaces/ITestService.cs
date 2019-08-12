@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using QuizApp.BLL.DTO.Test;
-using QuizApp.BLL.DTO.TestQuestion;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.Test;
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.Url;
 
 namespace QuizApp.BLL.Interfaces
 {
     public interface ITestService
     {
-        IEnumerable<TestDTO> GetTests();
+        IEnumerable<TestDto> GetTests();
 
-        Task<TestDetailDTO> GetTestById(int testId);
+        Task<TestDetailDto> GetTestById(int testId);
 
-        Task<CreatedTestDTO> CreateTest(NewTestDTO newTestDTO);
+        Task<CreatedTestDto> CreateTest(NewTestDto newTestDto);
 
-        Task<UpdatedTestDTO> UpdateTest(UpdatedTestDTO updatedTestDTO);
+        Task<UpdatedTestDto> UpdateTest(UpdateTestDto updateTestDto);
 
-        Task<DeletedTestDTO> DeleteTest(int testId);
+        Task<DeletedTestDto> DeleteTest(int testId);
 
-        IEnumerable<TestQuestionDTO> GetQuestionsByTestId(int testId);
+        IEnumerable<TestQuestionDto> GetQuestionsByTestId(int testId);
 
-        IEnumerable<UrlDTO> GetUrlsByTestId(int testId);
+        IEnumerable<UrlDto> GetUrlsByTestId(int testId);
     }
 }

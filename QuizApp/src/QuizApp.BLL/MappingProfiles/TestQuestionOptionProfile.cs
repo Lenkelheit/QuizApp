@@ -4,7 +4,7 @@ using System.Text;
 using AutoMapper;
 
 using QuizApp.Entities;
-using QuizApp.BLL.DTO.TestQuestionOption;
+using QuizApp.BLL.Dto.TestQuestionOption;
 
 namespace QuizApp.BLL.MappingProfiles
 {
@@ -12,12 +12,13 @@ namespace QuizApp.BLL.MappingProfiles
     {
         public TestQuestionOptionProfile()
         {
-            CreateMap<TestQuestionOption, TestQuestionOptionDTO>();
-            CreateMap<TestQuestionOption, TestQuestionOptionDetailDTO>();
-            CreateMap<NewTestQuestionOptionDTO, TestQuestionOption>();
-            CreateMap<TestQuestionOption, CreatedTestQuestionOptionDTO>();
-            CreateMap<UpdatedTestQuestionOptionDTO, TestQuestionOption>();
-            CreateMap<TestQuestionOption, DeletedTestQuestionOptionDTO>();
+            CreateMap<TestQuestionOption, TestQuestionOptionDto>();
+            CreateMap<TestQuestionOption, TestQuestionOptionDetailDto>();
+            CreateMap<NewTestQuestionOptionDto, TestQuestionOption>();
+            CreateMap<TestQuestionOption, CreatedTestQuestionOptionDto>();
+            CreateMap<UpdateTestQuestionOptionDto, TestQuestionOption>();
+            CreateMap<TestQuestionOption, UpdatedTestQuestionOptionDto>();
+            CreateMap<TestQuestionOption, DeletedTestQuestionOptionDto>();
         }
     }
 }

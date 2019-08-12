@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuizApp.BLL.Dto.Url
 {
-    public class UpdatedUrlDto
+    public class UpdateUrlDto
     {
         public int Id { get; set; }
 

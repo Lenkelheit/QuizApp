@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using QuizApp.BLL.DTO.TestResult;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.TestResult;
+using QuizApp.BLL.Dto.Url;
 
 namespace QuizApp.BLL.Interfaces
 {
     public interface IUrlService
     {
-        Task<UrlDetailDTO> GetUrlById(int urlId);
+        Task<UrlDetailDto> GetUrlById(int urlId);
 
-        Task<CreatedUrlDTO> CreateUrl(NewUrlDTO newUrlDTO);
+        Task<CreatedUrlDto> CreateUrl(NewUrlDto newUrlDto);
 
-        Task<UpdatedUrlDTO> UpdateUrl(UpdatedUrlDTO updatedUrlDTO);
+        Task<UpdatedUrlDto> UpdateUrl(UpdateUrlDto updateUrlDto);
 
-        IEnumerable<TestResultDTO> GetTestResultsByUrlId(int urlId);
+        IEnumerable<TestResultDto> GetTestResultsByUrlId(int urlId);
     }
 }

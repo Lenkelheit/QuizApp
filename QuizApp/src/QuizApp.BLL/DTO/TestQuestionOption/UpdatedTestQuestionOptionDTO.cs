@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.TestQuestionOption
+namespace QuizApp.BLL.Dto.TestQuestionOption
 {
-    public class UpdatedTestQuestionOptionDTO
+    public class UpdatedTestQuestionOptionDto
     {
         public int Id { get; set; }
 

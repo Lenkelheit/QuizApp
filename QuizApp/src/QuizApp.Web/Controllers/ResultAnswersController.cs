@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.DTO.ResultAnswer;
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
@@ -25,41 +25,44 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResultAnswerDetailDTO>> GetResultAnswerById(int id)
+        public async Task<ActionResult<ResultAnswerDetailDto>> GetResultAnswerById(int id)
         {
-            ResultAnswerDetailDTO resultAnswerDetailDTO = await resultAnswerService.GetResultAnswerById(id);
+            ResultAnswerDetailDto resultAnswerDetailDto = await resultAnswerService.GetResultAnswerById(id);
 
-            if (resultAnswerDetailDTO == null)
+            if (resultAnswerDetailDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(resultAnswerDetailDTO);
+
+            return Ok(resultAnswerDetailDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatedResultAnswerDTO>> Post([FromBody] NewResultAnswerDTO newResultAnswerDTO)
+        public async Task<ActionResult<CreatedResultAnswerDto>> Post([FromBody] NewResultAnswerDto newResultAnswerDto)
         {
-            if (newResultAnswerDTO == null)
+            if (newResultAnswerDto == null)
             {
                 return BadRequest();
             }
-            return Ok(await resultAnswerService.CreateResultAnswer(newResultAnswerDTO));
+
+            return Ok(await resultAnswerService.CreateResultAnswer(newResultAnswerDto));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            DeletedResultAnswerDTO deletedResultAnswerDTO = await resultAnswerService.DeleteResultAnswer(id);
+            DeletedResultAnswerDto deletedResultAnswerDto = await resultAnswerService.DeleteResultAnswer(id);
 
-            if (deletedResultAnswerDTO == null)
+            if (deletedResultAnswerDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
             return NoContent();
         }
 
         [HttpGet("{id}/options")]
-        public ActionResult<IEnumerable<ResultAnswerOptionDTO>> GetAnswerOptionsByResultAnswerId(int resultAnswerId)
+        public ActionResult<IEnumerable<ResultAnswerOptionDto>> GetAnswerOptionsByResultAnswerId(int resultAnswerId)
         {
             return Ok(resultAnswerService.GetAnswerOptionsByResultAnswerId(resultAnswerId));
         }

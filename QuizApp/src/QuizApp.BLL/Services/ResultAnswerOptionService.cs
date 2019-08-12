@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 using QuizApp.BLL.Interfaces;
 using QuizApp.Data.Interfaces;
 using QuizApp.Entities;
@@ -23,30 +23,30 @@ namespace QuizApp.BLL.Services
 
         public ResultAnswerOptionService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork ?? throw new NullReferenceException("UnitOfWork is null.");
-            this.resultAnswerOptionRepository = unitOfWork.GetRepository<ResultAnswerOption, IResultAnswerOptionRepository>();
-            this.mapper = mapper;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.resultAnswerOptionRepository = unitOfWork.GetRepository<ResultAnswerOption, IResultAnswerOptionRepository>() ?? throw new NullReferenceException(nameof(resultAnswerOptionRepository));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
 
-        public async Task<ResultAnswerOptionDetailDTO> GetAnswerOptionById(int answerOptionId)
+        public async Task<ResultAnswerOptionDetailDto> GetAnswerOptionById(int answerOptionId)
         {
             ResultAnswerOption answerOption = await resultAnswerOptionRepository.GetByIdAsync(id: answerOptionId);
 
-            return mapper.Map<ResultAnswerOptionDetailDTO>(answerOption);
+            return mapper.Map<ResultAnswerOptionDetailDto>(answerOption);
         }
 
-        public async Task<CreatedResultAnswerOptionDTO> CreateAnswerOption(NewResultAnswerOptionDTO newAnswerOptionDTO)
+        public async Task<CreatedResultAnswerOptionDto> CreateAnswerOption(NewResultAnswerOptionDto newAnswerOptionDto)
         {
-            ResultAnswerOption answerOption = mapper.Map<ResultAnswerOption>(newAnswerOptionDTO);
+            ResultAnswerOption answerOption = mapper.Map<ResultAnswerOption>(newAnswerOptionDto);
 
             resultAnswerOptionRepository.Insert(answerOption);
             await unitOfWork.SaveAsync();
 
-            return mapper.Map<CreatedResultAnswerOptionDTO>(answerOption);
+            return mapper.Map<CreatedResultAnswerOptionDto>(answerOption);
         }
 
-        public async Task<DeletedResultAnswerOptionDTO> DeleteAnswerOption(int answerOptionId)
+        public async Task<DeletedResultAnswerOptionDto> DeleteAnswerOption(int answerOptionId)
         {
             ResultAnswerOption answerOption = await resultAnswerOptionRepository.GetByIdAsync(answerOptionId);
             if (answerOption == null)
@@ -57,7 +57,7 @@ namespace QuizApp.BLL.Services
             resultAnswerOptionRepository.Delete(answerOption);
             await unitOfWork.SaveAsync();
 
-            return mapper.Map<DeletedResultAnswerOptionDTO>(answerOption);
+            return mapper.Map<DeletedResultAnswerOptionDto>(answerOption);
         }
     }
 }

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using QuizApp.BLL.DTO.ResultAnswer;
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 
 namespace QuizApp.BLL.Interfaces
 {
     public interface IResultAnswerService
     {
-        Task<ResultAnswerDetailDTO> GetResultAnswerById(int resultAnswerId);
+        Task<ResultAnswerDetailDto> GetResultAnswerById(int resultAnswerId);
 
-        Task<CreatedResultAnswerDTO> CreateResultAnswer(NewResultAnswerDTO newResultAnswerDTO);
+        Task<CreatedResultAnswerDto> CreateResultAnswer(NewResultAnswerDto newResultAnswerDto);
 
-        Task<DeletedResultAnswerDTO> DeleteResultAnswer(int resultAnswerId);
+        Task<DeletedResultAnswerDto> DeleteResultAnswer(int resultAnswerId);
 
-        IEnumerable<ResultAnswerOptionDTO> GetAnswerOptionsByResultAnswerId(int resultAnswerId);
+        IEnumerable<ResultAnswerOptionDto> GetAnswerOptionsByResultAnswerId(int resultAnswerId);
     }
 }

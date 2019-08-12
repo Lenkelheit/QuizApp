@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.ResultAnswerOption
+namespace QuizApp.BLL.Dto.ResultAnswerOption
 {
-    public class ResultAnswerOptionDetailDTO
+    public class ResultAnswerOptionDetailDto
     {
         public int Id { get; set; }
     }

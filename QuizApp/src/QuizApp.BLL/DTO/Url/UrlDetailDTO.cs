@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using QuizApp.BLL.DTO.TestResult;
+using QuizApp.BLL.Dto.TestResult;
 
-namespace QuizApp.BLL.DTO.Url
+namespace QuizApp.BLL.Dto.Url
 {
-    public class UrlDetailDTO
+    public class UrlDetailDto
     {
         public int Id { get; set; }
 
@@ -19,6 +19,6 @@ namespace QuizApp.BLL.DTO.Url
         public string IntervieweeName { get; set; }
 
 
-        public ICollection<TestResultDetailDTO> TestResults { get; set; }
+        public ICollection<TestResultDetailDto> TestResults { get; set; } = new List<TestResultDetailDto>();
     }
 }

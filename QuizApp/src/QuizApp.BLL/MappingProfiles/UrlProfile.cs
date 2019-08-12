@@ -4,7 +4,7 @@ using System.Text;
 using AutoMapper;
 
 using QuizApp.Entities;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.Url;
 
 namespace QuizApp.BLL.MappingProfiles
 {
@@ -12,11 +12,12 @@ namespace QuizApp.BLL.MappingProfiles
     {
         public UrlProfile()
         {
-            CreateMap<Url, UrlDTO>();
-            CreateMap<Url, UrlDetailDTO>();
-            CreateMap<NewUrlDTO, Url>();
-            CreateMap<Url, CreatedUrlDTO>();
-            CreateMap<UpdatedUrlDTO, Url>();
+            CreateMap<Url, UrlDto>();
+            CreateMap<Url, UrlDetailDto>();
+            CreateMap<NewUrlDto, Url>();
+            CreateMap<Url, CreatedUrlDto>();
+            CreateMap<UpdateUrlDto, Url>();
+            CreateMap<Url, UpdatedUrlDto>();
         }
     }
 }

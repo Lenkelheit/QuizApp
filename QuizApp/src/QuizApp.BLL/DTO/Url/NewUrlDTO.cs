@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.Url
+namespace QuizApp.BLL.Dto.Url
 {
-    public class NewUrlDTO
+    public class NewUrlDto
     {
         public int? NumberOfRuns { get; set; }
 

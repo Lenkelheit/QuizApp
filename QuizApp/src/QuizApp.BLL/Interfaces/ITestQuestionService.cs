@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using QuizApp.BLL.DTO.ResultAnswer;
-using QuizApp.BLL.DTO.TestQuestion;
-using QuizApp.BLL.DTO.TestQuestionOption;
+using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.TestQuestionOption;
 
 namespace QuizApp.BLL.Interfaces
 {
     public interface ITestQuestionService
     {
-        Task<TestQuestionDetailDTO> GetQuestionById(int questionId);
+        Task<TestQuestionDetailDto> GetQuestionById(int questionId);
 
-        Task<CreatedTestQuestionDTO> CreateQuestion(NewTestQuestionDTO newTestQuestionDTO);
+        Task<CreatedTestQuestionDto> CreateQuestion(NewTestQuestionDto newTestQuestionDto);
 
-        Task<UpdatedTestQuestionDTO> UpdateQuestion(UpdatedTestQuestionDTO updatedTestQuestionDTO);
+        Task<UpdatedTestQuestionDto> UpdateQuestion(UpdateTestQuestionDto updateTestQuestionDto);
 
-        Task<DeletedTestQuestionDTO> DeleteQuestion(int questionId);
+        Task<DeletedTestQuestionDto> DeleteQuestion(int questionId);
 
-        IEnumerable<TestQuestionOptionDTO> GetQuestionOptionsByQuestionId(int questionId);
+        IEnumerable<TestQuestionOptionDto> GetQuestionOptionsByQuestionId(int questionId);
 
-        IEnumerable<ResultAnswerFromQuestionDTO> GetResultAnswersByQuestionId(int questionId);
+        IEnumerable<ResultAnswerFromQuestionDto> GetResultAnswersByQuestionId(int questionId);
     }
 }

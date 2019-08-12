@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-using QuizApp.BLL.DTO.TestQuestion;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.Url;
 
-namespace QuizApp.BLL.DTO.Test
+namespace QuizApp.BLL.Dto.Test
 {
-    public class TestDetailDTO
+    public class TestDetailDto
     {
         public int Id { get; set; }
 
@@ -20,8 +20,8 @@ namespace QuizApp.BLL.DTO.Test
         public DateTime LastModifiedDate { get; set; }
 
 
-        public ICollection<UrlDetailDTO> Urls { get; set; }
+        public ICollection<UrlDetailDto> Urls { get; set; } = new List<UrlDetailDto>();
 
-        public ICollection<TestQuestionDetailDTO> TestQuestions { get; set; }
+        public ICollection<TestQuestionDetailDto> TestQuestions { get; set; } = new List<TestQuestionDetailDto>();
     }
 }

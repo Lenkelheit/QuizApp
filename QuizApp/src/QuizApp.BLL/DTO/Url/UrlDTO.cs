@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.DTO.Url
+namespace QuizApp.BLL.Dto.Url
 {
-    public class UrlDTO
+    public class UrlDto
     {
         public int Id { get; set; }
 

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.DTO.Test;
-using QuizApp.BLL.DTO.TestQuestion;
-using QuizApp.BLL.DTO.Url;
+using QuizApp.BLL.Dto.Test;
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
@@ -26,65 +26,69 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<TestDTO>> Get()
+        public ActionResult<IEnumerable<TestDto>> Get()
         {
             return Ok(testService.GetTests());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TestDetailDTO>> GetTestById(int id)
+        public async Task<ActionResult<TestDetailDto>> GetTestById(int id)
         {
-            TestDetailDTO testDetailDTO = await testService.GetTestById(id);
+            TestDetailDto testDetailDto = await testService.GetTestById(id);
 
-            if (testDetailDTO == null)
+            if (testDetailDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(testDetailDTO);
+
+            return Ok(testDetailDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreatedTestDTO>> Post([FromBody] NewTestDTO newTestDTO)
+        public async Task<ActionResult<CreatedTestDto>> Post([FromBody] NewTestDto newTestDto)
         {
-            if (newTestDTO == null)
+            if (newTestDto == null)
             {
                 return BadRequest();
             }
-            return Ok(await testService.CreateTest(newTestDTO));
+
+            return Ok(await testService.CreateTest(newTestDto));
         }
 
         [HttpPut]
-        public async Task<ActionResult<UpdatedTestDTO>> Put([FromBody] UpdatedTestDTO updatedTestDTO)
+        public async Task<ActionResult<UpdatedTestDto>> Put([FromBody] UpdateTestDto updateTestDto)
         {
-            updatedTestDTO = await testService.UpdateTest(updatedTestDTO);
+            UpdatedTestDto updatedTestDto = await testService.UpdateTest(updateTestDto);
 
-            if (updatedTestDTO == null)
+            if (updatedTestDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            return Ok(updatedTestDTO);
+
+            return Ok(updatedTestDto);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            DeletedTestDTO deletedTestDTO = await testService.DeleteTest(id);
+            DeletedTestDto deletedTestDto = await testService.DeleteTest(id);
 
-            if (deletedTestDTO == null)
+            if (deletedTestDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
             return NoContent();
         }
 
         [HttpGet("{id}/questions")]
-        public ActionResult<IEnumerable<TestQuestionDTO>> GetQuestionsByTestId(int testId)
+        public ActionResult<IEnumerable<TestQuestionDto>> GetQuestionsByTestId(int testId)
         {
             return Ok(testService.GetQuestionsByTestId(testId));
         }
 
         [HttpGet("{id}/urls")]
-        public ActionResult<IEnumerable<UrlDTO>> GetUrlsByTestId(int testId)
+        public ActionResult<IEnumerable<UrlDto>> GetUrlsByTestId(int testId)
         {
             return Ok(testService.GetUrlsByTestId(testId));
         }

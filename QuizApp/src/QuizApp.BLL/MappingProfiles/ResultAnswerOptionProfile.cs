@@ -4,7 +4,7 @@ using System.Text;
 using AutoMapper;
 
 using QuizApp.Entities;
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 
 namespace QuizApp.BLL.MappingProfiles
 {
@@ -12,12 +12,12 @@ namespace QuizApp.BLL.MappingProfiles
     {
         public ResultAnswerOptionProfile()
         {
-            CreateMap<ResultAnswerOption, ResultAnswerOptionDTO>();
-            CreateMap<ResultAnswerOption, ResultAnswerOptionDetailDTO>();
-            CreateMap<NewResultAnswerOptionDTO, ResultAnswerOption>();
-            CreateMap<ResultAnswerOption, CreatedResultAnswerOptionDTO>();
-            CreateMap<ResultAnswerOption, DeletedResultAnswerOptionDTO>();
-            CreateMap<ResultAnswerOption, ResultAnswerOptionFromQuestionOptionDTO>();
+            CreateMap<ResultAnswerOption, ResultAnswerOptionDto>();
+            CreateMap<ResultAnswerOption, ResultAnswerOptionDetailDto>();
+            CreateMap<NewResultAnswerOptionDto, ResultAnswerOption>();
+            CreateMap<ResultAnswerOption, CreatedResultAnswerOptionDto>();
+            CreateMap<ResultAnswerOption, DeletedResultAnswerOptionDto>();
+            CreateMap<ResultAnswerOption, ResultAnswerOptionFromQuestionOptionDto>();
         }
     }
 }

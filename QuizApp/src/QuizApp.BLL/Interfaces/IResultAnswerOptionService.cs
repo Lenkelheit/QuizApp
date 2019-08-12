@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using QuizApp.BLL.DTO.ResultAnswerOption;
+using QuizApp.BLL.Dto.ResultAnswerOption;
 
 namespace QuizApp.BLL.Interfaces
 {
     public interface IResultAnswerOptionService
     {
-        Task<ResultAnswerOptionDetailDTO> GetAnswerOptionById(int answerOptionId);
+        Task<ResultAnswerOptionDetailDto> GetAnswerOptionById(int answerOptionId);
 
-        Task<CreatedResultAnswerOptionDTO> CreateAnswerOption(NewResultAnswerOptionDTO newAnswerOptionDTO);
+        Task<CreatedResultAnswerOptionDto> CreateAnswerOption(NewResultAnswerOptionDto newAnswerOptionDto);
 
-        Task<DeletedResultAnswerOptionDTO> DeleteAnswerOption(int answerOptionId);
+        Task<DeletedResultAnswerOptionDto> DeleteAnswerOption(int answerOptionId);
     }
 }

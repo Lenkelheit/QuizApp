@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-using QuizApp.BLL.DTO.ResultAnswer;
-using QuizApp.BLL.DTO.TestQuestionOption;
+using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.TestQuestionOption;
 
-namespace QuizApp.BLL.DTO.TestQuestion
+namespace QuizApp.BLL.Dto.TestQuestion
 {
-    public class TestQuestionDetailDTO
+    public class TestQuestionDetailDto
     {
         public int Id { get; set; }
 
@@ -18,8 +18,8 @@ namespace QuizApp.BLL.DTO.TestQuestion
         public TimeSpan TimeLimitSeconds { get; set; }
 
 
-        public ICollection<TestQuestionOptionDetailDTO> TestQuestionOptions { get; set; }
+        public ICollection<TestQuestionOptionDetailDto> TestQuestionOptions { get; set; } = new List<TestQuestionOptionDetailDto>();
 
-        public ICollection<ResultAnswerDetailDTO> ResultAnswers { get; set; }
+        public ICollection<ResultAnswerDetailDto> ResultAnswers { get; set; } = new List<ResultAnswerDetailDto>();
     }
 }
