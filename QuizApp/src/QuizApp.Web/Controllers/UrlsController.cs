@@ -20,7 +20,7 @@ namespace QuizApp.Web.Controllers
 
         public UrlsController(IUrlService urlService)
         {
-            this.urlService = urlService;
+            this.urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
         }
 
 

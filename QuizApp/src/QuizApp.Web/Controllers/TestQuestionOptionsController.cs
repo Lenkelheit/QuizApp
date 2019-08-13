@@ -20,7 +20,7 @@ namespace QuizApp.Web.Controllers
 
         public TestQuestionOptionsController(ITestQuestionOptionService questionOptionService)
         {
-            this.questionOptionService = questionOptionService;
+            this.questionOptionService = questionOptionService ?? throw new ArgumentNullException(nameof(questionOptionService));
         }
 
 

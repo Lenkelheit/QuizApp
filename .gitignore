@@ -42,6 +42,7 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# Don't ignore folder "TestResult" because it contains Dto of TestResult
 !QuizApp/src/QuizApp.BLL/Dto/TestResult/
 
 # NUnit
