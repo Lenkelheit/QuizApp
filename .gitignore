@@ -45,6 +45,9 @@ Generated\ Files/
 # Don't ignore folder "TestResult" because it contains Dto of TestResult
 !QuizApp/src/QuizApp.BLL/Dto/TestResult/
 
+# Don't ignore folder "TestResult" because it contains Dto validators of TestResult
+!QuizApp/src/QuizApp.Web/Validators/TestResult/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml

@@ -10,11 +10,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 
 using QuizApp.Data.Context;
 using QuizApp.Data.Interfaces;
 using QuizApp.BLL.MappingProfiles;
 using QuizApp.Web.Extensions;
+using QuizApp.Web.Validators.Test;
 
 namespace QuizApp.Web
 {
@@ -37,10 +39,15 @@ namespace QuizApp.Web
             });
 
             services.AddAutoMapper(typeof(TestProfile).Assembly);
+            services.AddScoped<DbContext, QuizAppDbContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddCustomServices();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining(typeof(NewTestDtoValidator)));
+
+            services.ConfigureCustomValidationErrors();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

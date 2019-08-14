@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 using QuizApp.BLL.Interfaces;
 using QuizApp.BLL.Services;
@@ -16,6 +18,25 @@ namespace QuizApp.Web.Extensions
             services.AddScoped<ITestResultService, TestResultService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IUrlService, UrlService>();
+        }
+
+        public static void ConfigureCustomValidationErrors(this IServiceCollection services)
+        {
+            // override ModelState
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (context) =>
+                {
+                    var errors = context.ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage)).ToList();
+                    var result = new
+                    {
+                        Message = "Validation errors",
+                        Errors = errors
+                    };
+
+                    return new BadRequestObjectResult(result);
+                };
+            });
         }
     }
 }
