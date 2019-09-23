@@ -1,0 +1,40 @@
+<form [formGroup]="questionsForm">
+
+    <div class="form-container" formArrayName="questions">
+        <button mat-raised-button color="primary" (click)="addQuestion()">Add question</button>
+
+        <div class="question-container mat-elevation-z10" *ngFor="let question of questions.controls; let i=index">
+
+            <div [formGroupName]="i">
+
+                <mat-form-field>
+                    <input formControlName="text" [(ngModel)]="newQuestions[i].text" name="text" type="text" matInput
+                        placeholder="Text" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input formControlName="hint" [(ngModel)]="newQuestions[i].hint" name="hint" type="text" matInput
+                        placeholder="Hint" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input formControlName="timeLimitSeconds" [(ngModel)]="newQuestions[i].timeLimitSeconds"
+                        name="timeLimitSeconds" type="text" matInput placeholder="Time limit in seconds" />
+                </mat-form-field>
+
+                <button mat-button (click)="deleteQuestion(i)">
+                    <i class="material-icons">delete</i>
+                </button>
+
+                <h3 class="mat-h3">Options</h3>
+
+                <app-question-option-create [deleteOptionsForms$]="deleteOptionsForms.asObservable()"
+                    [sendOptionsAndDeleteForms$]="sendOptionsAndDeleteForms[i].asObservable()"
+                    (deleteQuestion)="deleteQuestion(i)">
+                </app-question-option-create>
+
+            </div>
+
+        </div>
+    </div>
+</form>

@@ -1,0 +1,44 @@
+<form [formGroup]="urlsForm">
+
+    <div class="form-container" formArrayName="urls">
+        <button mat-raised-button color="primary" (click)="addUrl()">Add url</button>
+
+        <div class="url-container mat-elevation-z10" *ngFor=" let url of urls.controls; let i=index">
+
+            <div [formGroupName]="i">
+
+                <mat-form-field>
+                    <input formControlName="intervieweeName" [(ngModel)]="newUrls[i].intervieweeName"
+                        name="intervieweeName" type="text" matInput placeholder="Interviewee name" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input formControlName="numberOfRuns" [(ngModel)]="newUrls[i].numberOfRuns" name="numberOfRuns"
+                        type="text" matInput placeholder="Number of runs" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input formControlName="validFromTime" [(ngModel)]="newUrls[i].validFromTime" name="validFromTime"
+                        matInput [matDatepicker]="pickerFromTime" placeholder="Valid from time" />
+                    <mat-datepicker-toggle matSuffix [for]="pickerFromTime"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerFromTime></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input formControlName="validUntilTime" [(ngModel)]="newUrls[i].validUntilTime"
+                        name="validUntilTime" matInput [matDatepicker]="pickerUntilTime"
+                        placeholder="Valid until time" />
+                    <mat-datepicker-toggle matSuffix [for]="pickerUntilTime"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerUntilTime></mat-datepicker>
+                </mat-form-field>
+
+                <button mat-button (click)="deleteUrl(i)">
+                    <i class="material-icons">delete</i>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+</form>

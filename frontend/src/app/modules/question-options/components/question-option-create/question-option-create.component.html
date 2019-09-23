@@ -1,0 +1,26 @@
+<form [formGroup]="questionOptionsForm">
+
+    <div class="form-container" formArrayName="questionOptions">
+        <button mat-raised-button color="primary" (click)="addQuestionOption()">Add option</button>
+
+        <div *ngFor="let questionOption of questionOptions.controls; let i=index">
+
+            <div [formGroupName]="i">
+
+                <mat-checkbox formControlName="isRight" [(ngModel)]="newQuestionOptions[i].isRight">
+                    <mat-form-field>
+                        <input formControlName="text" [(ngModel)]="newQuestionOptions[i].text" name="text" type="text"
+                            matInput placeholder="Text" />
+                    </mat-form-field>
+                </mat-checkbox>
+
+                <button mat-button (click)="deleteQuestionOption(i)">
+                    <i class="material-icons">delete</i>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+</form>

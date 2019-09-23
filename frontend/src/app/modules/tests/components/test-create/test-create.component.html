@@ -1,0 +1,39 @@
+<h1 class="mat-h1">Test</h1>
+
+<div class="form-container">
+    <form>
+        <mat-form-field>
+            <input [(ngModel)]="newTest.title" name="title" type="text" matInput placeholder="Title" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <input [(ngModel)]="newTest.description" name="description" type="text" matInput
+                placeholder="Description" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <input [(ngModel)]="newTest.timeLimitSeconds" name="timeLimitSeconds" type="text" matInput
+                placeholder="Time limit in seconds" />
+        </mat-form-field>
+
+        <h2 class="mat-h2">Questions</h2>
+
+        <app-question-create [deleteQuestionsForms$]="deleteQuestionsForms.asObservable()"
+            [sendQuestions$]="sendQuestions.asObservable()">
+        </app-question-create>
+
+        <h2 class="mat-h2">Urls</h2>
+
+        <app-url-create [deleteUrlsForms$]="deleteUrlsForms.asObservable()"
+            [sendUrlsAndDeleteForms$]="sendUrlsAndDeleteForms.asObservable()">
+        </app-url-create>
+
+        <button mat-raised-button color="warn" (click)="clearTestWithChildForms()">
+            Clear
+        </button>
+
+        <button mat-raised-button color="primary" (click)="sendTest()">
+            Send
+        </button>
+    </form>
+</div>

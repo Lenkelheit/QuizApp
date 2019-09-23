@@ -10,7 +10,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
-    [Route("api/answerOptions")]
+    [Route("api/answer-options")]
     [ApiController]
     public class ResultAnswerOptionsController : ControllerBase
     {

@@ -19,7 +19,7 @@ namespace QuizApp.Web.Validators.TestQuestionOption
                     .WithMessage("{PropertyName} must be from {MinLength} to {MaxLength} characters.");
 
             RuleFor(option => option.IsRight)
-                .NotEmpty()
+                .NotNull()
                     .WithMessage("{PropertyName} is mandatory.");
         }
     }

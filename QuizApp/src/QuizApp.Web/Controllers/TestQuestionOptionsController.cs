@@ -11,7 +11,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
-    [Route("api/questinOptions")]
+    [Route("api/question-options")]
     [ApiController]
     public class TestQuestionOptionsController : ControllerBase
     {
@@ -74,7 +74,7 @@ namespace QuizApp.Web.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/answerOptions")]
+        [HttpGet("{id}/answer-options")]
         public ActionResult<IEnumerable<ResultAnswerOptionFromQuestionOptionDto>> GetAnswerOptionsByQuestionOptionId(int questionOptionId)
         {
             return Ok(questionOptionService.GetAnswerOptionsByQuestionOptionId(questionOptionId));
