@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using QuizApp.BLL.Dto.TestQuestionOption;
+
 namespace QuizApp.BLL.Dto.TestQuestion
 {
     public class NewTestQuestionDto
@@ -12,6 +14,7 @@ namespace QuizApp.BLL.Dto.TestQuestion
 
         public TimeSpan TimeLimitSeconds { get; set; }
 
-        public int TestId { get; set; }
+
+        public ICollection<NewTestQuestionOptionDto> TestQuestionOptions { get; set; } = new List<NewTestQuestionOptionDto>();
     }
 }

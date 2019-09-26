@@ -3,15 +3,27 @@
 }
 
 mat-form-field {
-  width: 100%;
   margin: 8px;
+  width: 35%;
+  display: block;
 }
 
 h1,
 h2 {
   text-align: center;
+  margin: 8px;
 }
 
-button {
+button,
+form {
   margin: 8px;
+}
+
+.error-container {
+  padding: 10px;
+  margin: 10px;
+  width: 45%;
+  display: block;
+  color: #721c24;
+  background-color: #f8d7da;
 }

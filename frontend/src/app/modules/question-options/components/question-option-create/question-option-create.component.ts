@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { QuestionOptionService } from 'src/app/services/question-option.service';
 import { NewQuestionOptionDto } from 'src/app/models/question-option/new-question-option-dto';
 import { CreatedQuestionDto } from 'src/app/models/question/created-question-dto';
 import { CreatedQuestionOptionDto } from 'src/app/models/question-option/created-question-option-dto';
@@ -17,13 +16,13 @@ export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
     public createdQuestionOptions: CreatedQuestionOptionDto[] = [];
 
     @Input() deleteOptionsForms$: Observable<void>;
-    @Input() sendOptionsAndDeleteForms$: Observable<CreatedQuestionDto>;
-    @Output() deleteQuestion = new EventEmitter();
+    @Input() getOptionsAndDeleteForms$: Observable<void>;
+    @Output() passUpNewQuestionOptions: EventEmitter<NewQuestionOptionDto[]> = new EventEmitter<NewQuestionOptionDto[]>();
     private ngUnsubscribe = new Subject();
 
     questionOptionsForm: FormGroup;
 
-    constructor(private questionOptionService: QuestionOptionService, private formBuilder: FormBuilder) { }
+    constructor(private formBuilder: FormBuilder) { }
 
     ngOnInit() {
         this.questionOptionsForm = this.formBuilder.group({
@@ -35,20 +34,15 @@ export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
             ])
         });
 
-        this.sendOptionsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(question => {
+        this.getOptionsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(question => {
             this.newQuestionOptions.forEach(option => {
-                option.questionId = question.id;
-
                 if (typeof option.isRight === 'undefined') {
                     option.isRight = false;
                 }
-
-                this.sendOption(option);
             });
 
+            this.passUpNewQuestionOptions.emit(this.newQuestionOptions);
             this.clearOptions();
-
-            this.deleteQuestion.emit();
         });
 
         this.deleteOptionsForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
@@ -77,11 +71,10 @@ export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
     public deleteQuestionOption(index: number) {
         this.newQuestionOptions.splice(index, 1);
         this.questionOptions.removeAt(index);
-    }
 
-    public sendOption(option: NewQuestionOptionDto) {
-        this.questionOptionService.createQuestionOption(option)
-            .subscribe(respQuestionOption => this.createdQuestionOptions.push(respQuestionOption.body));
+        if (this.newQuestionOptions.length === 0) {
+            this.clearOptions();
+        }
     }
 
     private clearOptions() {

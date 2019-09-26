@@ -28,9 +28,9 @@
 
                 <h3 class="mat-h3">Options</h3>
 
-                <app-question-option-create [deleteOptionsForms$]="deleteOptionsForms.asObservable()"
-                    [sendOptionsAndDeleteForms$]="sendOptionsAndDeleteForms[i].asObservable()"
-                    (deleteQuestion)="deleteQuestion(i)">
+                <app-question-option-create (passUpNewQuestionOptions)="saveQuestionOptions(i, $event)"
+                    [deleteOptionsForms$]="deleteOptionsForms.asObservable()"
+                    [getOptionsAndDeleteForms$]="getOptionsAndDeleteForms[i].asObservable()">
                 </app-question-option-create>
 
             </div>

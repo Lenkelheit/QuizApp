@@ -3,6 +3,9 @@ import { Subject } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { NewTestDto } from 'src/app/models/test/new-test-dto';
 import { CreatedTestDto } from 'src/app/models/test/created-test-dto';
+import { NewUrlDto } from 'src/app/models/url/new-url-dto';
+import { NewQuestionDto } from 'src/app/models/question/new-question-dto';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-test-create',
@@ -12,10 +15,12 @@ import { CreatedTestDto } from 'src/app/models/test/created-test-dto';
 export class TestCreateComponent implements OnInit {
     public newTest: NewTestDto = {} as NewTestDto;
 
+    public errors: Error;
+
     private deleteQuestionsForms: Subject<void> = new Subject<void>();
     private deleteUrlsForms: Subject<void> = new Subject<void>();
-    private sendQuestions: Subject<CreatedTestDto> = new Subject<CreatedTestDto>();
-    private sendUrlsAndDeleteForms: Subject<CreatedTestDto> = new Subject<CreatedTestDto>();
+    private getQuestionsAndDeleteForms: Subject<void> = new Subject<void>();
+    private getUrlsAndDeleteForms: Subject<void> = new Subject<void>();
 
     constructor(private testService: TestService) { }
 
@@ -23,17 +28,18 @@ export class TestCreateComponent implements OnInit {
     }
 
     public sendTest() {
-        this.newTest.authorId = 14101;
+        this.newTest.authorId = 1;
 
-        const timeLimitSeconds: Date = new Date(0, 0, 0, 0, 0, 0);
-        timeLimitSeconds.setSeconds(parseInt(this.newTest.timeLimitSeconds));
-        this.newTest.timeLimitSeconds = timeLimitSeconds.toLocaleTimeString();
+        this.getQuestionsAndDeleteForms.next();
+        this.getUrlsAndDeleteForms.next();
 
-        this.testService.createTest(this.newTest).subscribe(respTest => {
-            this.sendQuestions.next(respTest.body);
-            this.sendUrlsAndDeleteForms.next(respTest.body);
-            this.clearTest();
-        });
+        this.testService.createTest(this.newTest).subscribe(() => { },
+            (respErrors: HttpErrorResponse) => {
+                this.errors = respErrors.error;
+            }
+        );
+
+        this.clearTest();
     }
 
     public clearTestWithChildForms() {
@@ -44,5 +50,14 @@ export class TestCreateComponent implements OnInit {
 
     private clearTest() {
         this.newTest = {} as NewTestDto;
+        this.errors = null;
+    }
+
+    private saveUrls(newUrls: NewUrlDto[]) {
+        this.newTest.urls = newUrls;
+    }
+
+    private saveQuestions(newQuestions: NewQuestionDto[]) {
+        this.newTest.testQuestions = newQuestions;
     }
 }

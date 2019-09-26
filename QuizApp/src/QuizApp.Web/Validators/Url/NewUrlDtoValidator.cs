@@ -14,18 +14,18 @@ namespace QuizApp.Web.Validators.Url
         {
             RuleFor(url => url.ValidFromTime)
                 .NotEmpty()
-                    .WithMessage("{PropertyName} is mandatory.");
+                    .WithMessage("{PropertyName} is mandatory in url.");
 
             RuleFor(url => url.ValidUntilTime)
                 .NotEmpty()
-                    .WithMessage("{PropertyName} is mandatory.")
+                    .WithMessage("{PropertyName} is mandatory in url.")
                 .Must((url, untilTime) => untilTime > url.ValidFromTime)
-                    .WithMessage(url => $"{nameof(url.ValidUntilTime)} must be later than {nameof(url.ValidFromTime)}.");
+                    .WithMessage(url => $"{nameof(url.ValidUntilTime)} must be later than {nameof(url.ValidFromTime)} in url.");
 
             RuleFor(url => url.IntervieweeName)
                 .Length(4, 128)
                     .When(url => url.IntervieweeName != null)
-                    .WithMessage("{PropertyName} must be from {MinLength} to {MaxLength} characters.");
+                    .WithMessage("{PropertyName} must be from {MinLength} to {MaxLength} characters in url.");
         }
     }
 }

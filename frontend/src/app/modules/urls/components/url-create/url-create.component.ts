@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UrlService } from 'src/app/services/url.service';
 import { NewUrlDto } from 'src/app/models/url/new-url-dto';
-import { CreatedTestDto } from 'src/app/models/test/created-test-dto';
 import { CreatedUrlDto } from 'src/app/models/url/created-url-dto';
 
 @Component({
@@ -17,13 +15,13 @@ export class UrlCreateComponent implements OnInit, OnDestroy {
     public createdUrls: CreatedUrlDto[] = [];
 
     @Input() deleteUrlsForms$: Observable<void>;
-    @Input() sendUrlsAndDeleteForms$: Observable<CreatedTestDto>;
-
+    @Input() getUrlsAndDeleteForms$: Observable<void>;
+    @Output() passUpNewUrls: EventEmitter<NewUrlDto[]> = new EventEmitter<NewUrlDto[]>();
     private ngUnsubscribe = new Subject();
 
     urlsForm: FormGroup;
 
-    constructor(private urlService: UrlService, private formBuilder: FormBuilder) { }
+    constructor(private formBuilder: FormBuilder) { }
 
     ngOnInit() {
         this.urlsForm = this.formBuilder.group({
@@ -37,12 +35,8 @@ export class UrlCreateComponent implements OnInit, OnDestroy {
             ])
         });
 
-        this.sendUrlsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((test: CreatedTestDto) => {
-            this.newUrls.forEach(url => {
-                url.testId = test.id;
-
-                this.sendUrl(url);
-            });
+        this.getUrlsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+            this.passUpNewUrls.emit(this.newUrls);
 
             this.clearUrls();
         });
@@ -75,10 +69,10 @@ export class UrlCreateComponent implements OnInit, OnDestroy {
     public deleteUrl(index: number) {
         this.newUrls.splice(index, 1);
         this.urls.removeAt(index);
-    }
 
-    public sendUrl(url: NewUrlDto) {
-        this.urlService.createUrl(url).subscribe(respUrl => this.createdUrls.push(respUrl.body));
+        if (this.newUrls.length === 0) {
+            this.clearUrls();
+        }
     }
 
     private clearUrls() {

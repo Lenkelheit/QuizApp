@@ -9,7 +9,5 @@ namespace QuizApp.BLL.Dto.TestQuestionOption
         public string Text { get; set; }
 
         public bool IsRight { get; set; }
-
-        public int QuestionId { get; set; }
     }
 }

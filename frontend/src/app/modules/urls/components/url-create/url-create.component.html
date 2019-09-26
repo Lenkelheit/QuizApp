@@ -1,12 +1,11 @@
 <form [formGroup]="urlsForm">
-
     <div class="form-container" formArrayName="urls">
-        <button mat-raised-button color="primary" (click)="addUrl()">Add url</button>
+        <button mat-raised-button color="primary" (click)="addUrl()">
+            Add url
+        </button>
 
-        <div class="url-container mat-elevation-z10" *ngFor=" let url of urls.controls; let i=index">
-
+        <div class="url-container mat-elevation-z10" *ngFor="let url of urls.controls; let i = index">
             <div [formGroupName]="i">
-
                 <mat-form-field>
                     <input formControlName="intervieweeName" [(ngModel)]="newUrls[i].intervieweeName"
                         name="intervieweeName" type="text" matInput placeholder="Interviewee name" />
@@ -35,10 +34,7 @@
                 <button mat-button (click)="deleteUrl(i)">
                     <i class="material-icons">delete</i>
                 </button>
-
             </div>
-
         </div>
     </div>
-
 </form>

@@ -14,13 +14,13 @@ namespace QuizApp.Web.Validators.TestQuestionOption
         {
             RuleFor(option => option.Text)
                 .NotEmpty()
-                    .WithMessage("{PropertyName} is mandatory.")
+                    .WithMessage("{PropertyName} is mandatory in question option.")
                 .Length(4, 256)
-                    .WithMessage("{PropertyName} must be from {MinLength} to {MaxLength} characters.");
+                    .WithMessage("{PropertyName} must be from {MinLength} to {MaxLength} characters in question option.");
 
             RuleFor(option => option.IsRight)
                 .NotNull()
-                    .WithMessage("{PropertyName} is mandatory.");
+                    .WithMessage("{PropertyName} is mandatory in question option.");
         }
     }
 }

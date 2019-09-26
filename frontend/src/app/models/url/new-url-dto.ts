@@ -3,5 +3,4 @@ export interface NewUrlDto {
     validFromTime: Date;
     validUntilTime: Date;
     intervieweeName: string;
-    testId: number;
 }

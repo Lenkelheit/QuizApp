@@ -1,6 +1,12 @@
 <h1 class="mat-h1">Test</h1>
 
 <div class="form-container">
+    <mat-error *ngIf="errors">
+        <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
+            {{error}}
+        </div>
+    </mat-error>
+
     <form>
         <mat-form-field>
             <input [(ngModel)]="newTest.title" name="title" type="text" matInput placeholder="Title" />
@@ -18,14 +24,15 @@
 
         <h2 class="mat-h2">Questions</h2>
 
-        <app-question-create [deleteQuestionsForms$]="deleteQuestionsForms.asObservable()"
-            [sendQuestions$]="sendQuestions.asObservable()">
+        <app-question-create (passUpNewQuestions)="saveQuestions($event)"
+            [deleteQuestionsForms$]="deleteQuestionsForms.asObservable()"
+            [getQuestionsAndDeleteForms$]="getQuestionsAndDeleteForms.asObservable()">
         </app-question-create>
 
         <h2 class="mat-h2">Urls</h2>
 
-        <app-url-create [deleteUrlsForms$]="deleteUrlsForms.asObservable()"
-            [sendUrlsAndDeleteForms$]="sendUrlsAndDeleteForms.asObservable()">
+        <app-url-create (passUpNewUrls)="saveUrls($event)" [deleteUrlsForms$]="deleteUrlsForms.asObservable()"
+            [getUrlsAndDeleteForms$]="getUrlsAndDeleteForms.asObservable()">
         </app-url-create>
 
         <button mat-raised-button color="warn" (click)="clearTestWithChildForms()">

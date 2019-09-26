@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ɵConsole } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { QuestionService } from 'src/app/services/question.service';
 import { NewQuestionDto } from 'src/app/models/question/new-question-dto';
-import { CreatedTestDto } from 'src/app/models/test/created-test-dto';
 import { CreatedQuestionDto } from 'src/app/models/question/created-question-dto';
+import { NewQuestionOptionDto } from 'src/app/models/question-option/new-question-option-dto';
 
 @Component({
     selector: 'app-question-create',
@@ -17,14 +16,16 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
     public createdQuestions: CreatedQuestionDto[] = [];
 
     @Input() deleteQuestionsForms$: Observable<void>;
-    @Input() sendQuestions$: Observable<CreatedTestDto>;
-    private sendOptionsAndDeleteForms: Subject<CreatedQuestionDto>[] = [new Subject<CreatedQuestionDto>()];
+    @Input() getQuestionsAndDeleteForms$: Observable<void>;
+    @Output() passUpNewQuestions: EventEmitter<NewQuestionDto[]> = new EventEmitter<NewQuestionDto[]>();
+
+    private getOptionsAndDeleteForms: Subject<void>[] = [new Subject<void>()];
     private deleteOptionsForms: Subject<void> = new Subject<void>();
     private ngUnsubscribe = new Subject();
 
     public questionsForm: FormGroup;
 
-    constructor(private questionService: QuestionService, private formBuilder: FormBuilder) { }
+    constructor(private formBuilder: FormBuilder) { }
 
     ngOnInit() {
         this.questionsForm = this.formBuilder.group({
@@ -37,12 +38,12 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
             ])
         });
 
-        this.sendQuestions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(test => {
-            this.newQuestions.forEach((question, index) => {
-                question.testId = test.id;
+        this.getQuestionsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+            this.getOptionsAndDeleteForms.forEach(elem => elem.next());
 
-                this.sendQuestion(question);
-            });
+            this.passUpNewQuestions.emit(this.newQuestions);
+
+            this.clearQuestions();
         });
 
         this.deleteQuestionsForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
@@ -67,7 +68,7 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
         }));
         this.newQuestions.push({} as NewQuestionDto);
 
-        this.sendOptionsAndDeleteForms.push(new Subject<CreatedQuestionDto>());
+        this.getOptionsAndDeleteForms.push(new Subject<void>());
     }
 
     public deleteQuestion(index: number) {
@@ -75,24 +76,13 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
 
         this.questions.removeAt(index);
 
-        this.sendOptionsAndDeleteForms.splice(index, 1);
+        this.getOptionsAndDeleteForms.splice(index, 1);
 
         this.createdQuestions.splice(index, 1);
 
         if (this.newQuestions.length === 0) {
             this.clearQuestions();
         }
-    }
-
-    public sendQuestion(question: NewQuestionDto) {
-        const timeLimitSeconds: Date = new Date(0, 0, 0, 0, 0, 0);
-        timeLimitSeconds.setSeconds(parseInt(question.timeLimitSeconds));
-        question.timeLimitSeconds = timeLimitSeconds.toLocaleTimeString();
-
-        this.questionService.createQuestion(question).subscribe(respQuestion => {
-            this.createdQuestions.push(respQuestion.body);
-            this.sendOptionsAndDeleteForms[this.createdQuestions.length - 1].next(respQuestion.body);
-        });
     }
 
     private clearQuestions() {
@@ -104,11 +94,15 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
             hint: [''],
             timeLimitSeconds: ['']
         }));
-        this.sendOptionsAndDeleteForms = [new Subject<CreatedQuestionDto>()];
+        this.getOptionsAndDeleteForms = [new Subject<void>()];
     }
 
     private clearQuestionsWithChildForms() {
         this.clearQuestions();
         this.deleteOptionsForms.next();
+    }
+
+    private saveQuestionOptions(index: number, newQuestionOptions: NewQuestionOptionDto[]) {
+        this.newQuestions[index].testQuestionOptions = newQuestionOptions;
     }
 }
