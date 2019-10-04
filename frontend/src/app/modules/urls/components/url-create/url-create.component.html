@@ -9,26 +9,64 @@
                 <mat-form-field>
                     <input formControlName="intervieweeName" [(ngModel)]="newUrls[i].intervieweeName"
                         name="intervieweeName" type="text" matInput placeholder="Interviewee name" />
+
+                    <mat-error
+                        *ngIf="getIntervieweeName(i).errors?.minlength && (getIntervieweeName(i).touched || getIntervieweeName(i).dirty)">
+                        Interviewee name must be at least 4 characters long.
+                    </mat-error>
+
+                    <mat-error
+                        *ngIf="getIntervieweeName(i).errors?.maxlength && (getIntervieweeName(i).touched || getIntervieweeName(i).dirty)">
+                        Interviewee name must be less than 32 characters long.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <mat-form-field>
                     <input formControlName="numberOfRuns" [(ngModel)]="newUrls[i].numberOfRuns" name="numberOfRuns"
-                        type="text" matInput placeholder="Number of runs" />
+                        type="number" matInput placeholder="Number of runs" />
+
+                    <mat-error
+                        *ngIf="getNumberOfRuns(i).errors?.min && (getNumberOfRuns(i).touched || getNumberOfRuns(i).dirty)">
+                        Number of runs must be equal or more than 0.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <mat-form-field>
                     <input formControlName="validFromTime" [(ngModel)]="newUrls[i].validFromTime" name="validFromTime"
-                        matInput [matDatepicker]="pickerFromTime" placeholder="Valid from time" />
+                        matInput [matDatepicker]="pickerFromTime" placeholder="Valid from time"
+                        [errorStateMatcher]="confirmValidParentMatcher" required />
                     <mat-datepicker-toggle matSuffix [for]="pickerFromTime"></mat-datepicker-toggle>
                     <mat-datepicker #pickerFromTime></mat-datepicker>
+
+                    <mat-error *ngIf="(getValidFromTime(i).errors?.required || getValidFromTime(i).errors?.matDatepickerParse)
+                        && (getValidFromTime(i).touched || getValidFromTime(i).dirty)">
+                        This field is empty or not valid.
+                    </mat-error>
+
+                    <mat-error *ngIf="getUrl(i).errors?.endDateLessThanStartDate">
+                        Valid from time must be earlier than valid until time in url.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <mat-form-field>
                     <input formControlName="validUntilTime" [(ngModel)]="newUrls[i].validUntilTime"
-                        name="validUntilTime" matInput [matDatepicker]="pickerUntilTime"
-                        placeholder="Valid until time" />
+                        name="validUntilTime" matInput [matDatepicker]="pickerUntilTime" placeholder="Valid until time"
+                        [errorStateMatcher]="confirmValidParentMatcher" required />
                     <mat-datepicker-toggle matSuffix [for]="pickerUntilTime"></mat-datepicker-toggle>
                     <mat-datepicker #pickerUntilTime></mat-datepicker>
+
+                    <mat-error *ngIf="(getValidUntilTime(i).errors?.required || getValidUntilTime(i).errors?.matDatepickerParse) 
+                        && (getValidUntilTime(i).touched || getValidUntilTime(i).dirty)">
+                        This field is empty or not valid.
+                    </mat-error>
+
+                    <mat-error *ngIf="getUrl(i).errors?.endDateLessThanStartDate">
+                        Valid until time must be later than valid from time in url.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <button mat-button (click)="deleteUrl(i)">

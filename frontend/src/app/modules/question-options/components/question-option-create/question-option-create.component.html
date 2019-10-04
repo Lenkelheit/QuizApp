@@ -10,7 +10,20 @@
                 <mat-checkbox formControlName="isRight" [(ngModel)]="newQuestionOptions[i].isRight">
                     <mat-form-field>
                         <input formControlName="text" [(ngModel)]="newQuestionOptions[i].text" name="text" type="text"
-                            matInput placeholder="Text" />
+                            matInput placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
+
+                        <mat-error *ngIf="getText(i).errors?.required && (getText(i).touched || getText(i).dirty)">
+                            This field is required.
+                        </mat-error>
+
+                        <mat-error *ngIf="getText(i).errors?.minlength && (getText(i).touched || getText(i).dirty)">
+                            Text must be at least 4 characters long.
+                        </mat-error>
+
+                        <mat-error *ngIf="getText(i).errors?.maxlength && (getText(i).touched || getText(i).dirty)">
+                            Text must be less than 256 characters long.
+                        </mat-error>
+
                     </mat-form-field>
                 </mat-checkbox>
 

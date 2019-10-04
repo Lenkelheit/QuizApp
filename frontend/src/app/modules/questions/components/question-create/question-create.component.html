@@ -9,17 +9,53 @@
 
                 <mat-form-field>
                     <input formControlName="text" [(ngModel)]="newQuestions[i].text" name="text" type="text" matInput
-                        placeholder="Text" />
+                        placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
+
+                    <mat-error *ngIf="getText(i).errors?.required && (getText(i).touched || getText(i).dirty)">
+                        This field is required.
+                    </mat-error>
+
+                    <mat-error *ngIf="getText(i).errors?.minlength && (getText(i).touched || getText(i).dirty)">
+                        Text must be at least 4 characters long.
+                    </mat-error>
+
+                    <mat-error *ngIf="getText(i).errors?.maxlength && (getText(i).touched || getText(i).dirty)">
+                        Text must be less than 256 characters long.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <mat-form-field>
                     <input formControlName="hint" [(ngModel)]="newQuestions[i].hint" name="hint" type="text" matInput
                         placeholder="Hint" />
+
+                    <mat-error *ngIf="getHint(i).errors?.minlength && (getHint(i).touched || getHint(i).dirty)">
+                        Hint must be at least 4 characters long.
+                    </mat-error>
+
+                    <mat-error *ngIf="getHint(i).errors?.maxlength && (getHint(i).touched || getHint(i).dirty)">
+                        Hint must be less than 256 characters long.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <mat-form-field>
                     <input formControlName="timeLimitSeconds" [(ngModel)]="newQuestions[i].timeLimitSeconds"
-                        name="timeLimitSeconds" type="text" matInput placeholder="Time limit in seconds" />
+                        name="timeLimitSeconds" type="text" matInput placeholder="Time limit in seconds"
+                        [errorStateMatcher]="validControlMatcher" required />
+
+                    <mat-error
+                        *ngIf="getTimeLimitSeconds(i).errors?.required && (getTimeLimitSeconds(i).touched || getTimeLimitSeconds(i).dirty)">
+                        This field is required.
+                    </mat-error>
+
+                    <mat-error
+                        *ngIf="getTimeLimitSeconds(i).errors?.formatTimeLimit && (getTimeLimitSeconds(i).touched || getTimeLimitSeconds(i).dirty)">
+                        Invalid. Input time limit in such format: hh:mm:ss, where hh is from 00 to 23, mm - from 00 to
+                        59, ss -
+                        from 00 to 59.
+                    </mat-error>
+
                 </mat-form-field>
 
                 <button mat-button (click)="deleteQuestion(i)">
@@ -29,6 +65,7 @@
                 <h3 class="mat-h3">Options</h3>
 
                 <app-question-option-create (passUpNewQuestionOptions)="saveQuestionOptions(i, $event)"
+                    (passUpQuestionOptionsFormStatusInvalid)="saveQuestionOptionsFormStatusInvalid(i, $event)"
                     [deleteOptionsForms$]="deleteOptionsForms.asObservable()"
                     [getOptionsAndDeleteForms$]="getOptionsAndDeleteForms[i].asObservable()">
                 </app-question-option-create>

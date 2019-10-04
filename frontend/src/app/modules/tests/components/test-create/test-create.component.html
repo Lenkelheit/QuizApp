@@ -1,37 +1,76 @@
 <h1 class="mat-h1">Test</h1>
 
 <div class="form-container">
-    <mat-error *ngIf="errors">
+    <div *ngIf="errors">
         <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
             {{error}}
         </div>
-    </mat-error>
+    </div>
 
-    <form>
+    <form [formGroup]="testForm">
         <mat-form-field>
-            <input [(ngModel)]="newTest.title" name="title" type="text" matInput placeholder="Title" />
+            <input formControlName="title" [(ngModel)]="newTest.title" name="title" type="text" matInput
+                placeholder="Title" [errorStateMatcher]="validControlMatcher" required />
+
+            <mat-error *ngIf="title.errors?.required && (title.touched || title.dirty)">
+                This field is required.
+            </mat-error>
+
+            <mat-error *ngIf="title.errors?.minlength && (title.touched || title.dirty)">
+                Title must be at least 4 characters long.
+            </mat-error>
+
+            <mat-error *ngIf="title.errors?.maxlength && (title.touched || title.dirty)">
+                Title must be less than 32 characters long.
+            </mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
-            <input [(ngModel)]="newTest.description" name="description" type="text" matInput
-                placeholder="Description" />
+            <input formControlName="description" [(ngModel)]="newTest.description" name="description" type="text"
+                matInput placeholder="Description" />
+
+            <mat-error *ngIf="description.errors?.minlength && (description.touched || description.dirty)">
+                Description must be at least 4 characters long.
+            </mat-error>
+
+            <mat-error *ngIf="description.errors?.maxlength && (description.touched || description.dirty)">
+                Description must be less than 256 characters long.
+            </mat-error>
+
         </mat-form-field>
 
         <mat-form-field>
-            <input [(ngModel)]="newTest.timeLimitSeconds" name="timeLimitSeconds" type="text" matInput
-                placeholder="Time limit in seconds" />
+            <input formControlName="timeLimitSeconds" [(ngModel)]="newTest.timeLimitSeconds" name="timeLimitSeconds"
+                type="text" matInput placeholder="Time limit in seconds" [errorStateMatcher]="validControlMatcher"
+                required />
+
+            <mat-error
+                *ngIf="timeLimitSeconds.errors?.required && (timeLimitSeconds.touched || timeLimitSeconds.dirty)">
+                This field is required.
+            </mat-error>
+
+            <mat-error
+                *ngIf="timeLimitSeconds.errors?.formatTimeLimit && (timeLimitSeconds.touched || timeLimitSeconds.dirty)">
+                Invalid. Input time limit in such format: hh:mm:ss, where hh is from 00 to 23, mm - from 00 to 59, ss -
+                from 00 to 59.
+            </mat-error>
+
         </mat-form-field>
 
         <h2 class="mat-h2">Questions</h2>
 
         <app-question-create (passUpNewQuestions)="saveQuestions($event)"
+            (passUpQuestionsFormStatusInvalid)="setQuestionsFormStatusInvalid($event)"
             [deleteQuestionsForms$]="deleteQuestionsForms.asObservable()"
             [getQuestionsAndDeleteForms$]="getQuestionsAndDeleteForms.asObservable()">
         </app-question-create>
 
         <h2 class="mat-h2">Urls</h2>
 
-        <app-url-create (passUpNewUrls)="saveUrls($event)" [deleteUrlsForms$]="deleteUrlsForms.asObservable()"
+        <app-url-create (passUpNewUrls)="saveUrls($event)"
+            (passUpUrlsFormStatusInvalid)="setUrlsFormStatusInvalid($event)"
+            [deleteUrlsForms$]="deleteUrlsForms.asObservable()"
             [getUrlsAndDeleteForms$]="getUrlsAndDeleteForms.asObservable()">
         </app-url-create>
 
@@ -39,7 +78,7 @@
             Clear
         </button>
 
-        <button mat-raised-button color="primary" (click)="sendTest()">
+        <button mat-raised-button color="primary" [disabled]="checkFormsStatus()" (click)="sendTest()">
             Send
         </button>
     </form>

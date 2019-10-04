@@ -6,6 +6,10 @@ import { CreatedTestDto } from 'src/app/models/test/created-test-dto';
 import { NewUrlDto } from 'src/app/models/url/new-url-dto';
 import { NewQuestionDto } from 'src/app/models/question/new-question-dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormatTimeLimitValidator } from '../../../../shared/validators/format-time-limit-validator';
+import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes';
+import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
 
 @Component({
     selector: 'app-test-create',
@@ -17,14 +21,38 @@ export class TestCreateComponent implements OnInit {
 
     public errors: Error;
 
+    public urlsFormStatusInvalid = true;
+    public questionsFormStatusInvalid = true;
+
     private deleteQuestionsForms: Subject<void> = new Subject<void>();
     private deleteUrlsForms: Subject<void> = new Subject<void>();
     private getQuestionsAndDeleteForms: Subject<void> = new Subject<void>();
     private getUrlsAndDeleteForms: Subject<void> = new Subject<void>();
 
-    constructor(private testService: TestService) { }
+    testForm: FormGroup;
+
+    public validControlMatcher = new ValidControlMatcher();
+
+    constructor(private testService: TestService, private formBuilder: FormBuilder) { }
 
     ngOnInit() {
+        this.testForm = this.formBuilder.group({
+            title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(64)]],
+            description: ['', [Validators.minLength(4), Validators.maxLength(256)]],
+            timeLimitSeconds: ['', [Validators.required, FormatTimeLimitValidator.validate(ValidationRegexes.timeLimitRegex)]]
+        });
+    }
+
+    get title() {
+        return this.testForm.get('title');
+    }
+
+    get description() {
+        return this.testForm.get('description');
+    }
+
+    get timeLimitSeconds() {
+        return this.testForm.get('timeLimitSeconds');
     }
 
     public sendTest() {
@@ -51,6 +79,7 @@ export class TestCreateComponent implements OnInit {
     private clearTest() {
         this.newTest = {} as NewTestDto;
         this.errors = null;
+        this.testForm.reset();
     }
 
     private saveUrls(newUrls: NewUrlDto[]) {
@@ -59,5 +88,17 @@ export class TestCreateComponent implements OnInit {
 
     private saveQuestions(newQuestions: NewQuestionDto[]) {
         this.newTest.testQuestions = newQuestions;
+    }
+
+    private setUrlsFormStatusInvalid(statusInvalid: boolean) {
+        this.urlsFormStatusInvalid = statusInvalid;
+    }
+
+    private setQuestionsFormStatusInvalid(statusInvalid: boolean) {
+        this.questionsFormStatusInvalid = statusInvalid;
+    }
+
+    public checkFormsStatus() {
+        return this.testForm.invalid || this.urlsFormStatusInvalid || this.questionsFormStatusInvalid;
     }
 }
