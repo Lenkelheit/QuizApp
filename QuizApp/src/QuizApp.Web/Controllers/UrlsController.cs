@@ -24,6 +24,12 @@ namespace QuizApp.Web.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult<IEnumerable<UrlDto>> Get()
+        {
+            return Ok(urlService.GetUrls());
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<UrlDetailDto>> GetUrlById(int id)
         {

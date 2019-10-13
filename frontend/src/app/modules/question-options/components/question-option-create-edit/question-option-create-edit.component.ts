@@ -2,23 +2,21 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NewQuestionOptionDto } from 'src/app/models/question-option/new-question-option-dto';
-import { CreatedQuestionDto } from 'src/app/models/question/created-question-dto';
-import { CreatedQuestionOptionDto } from 'src/app/models/question-option/created-question-option-dto';
 import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
+import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-question-option-dto';
 
 @Component({
-    selector: 'app-question-option-create',
-    templateUrl: './question-option-create.component.html',
-    styleUrls: ['./question-option-create.component.css']
+    selector: 'app-question-option-create-edit',
+    templateUrl: './question-option-create-edit.component.html',
+    styleUrls: ['./question-option-create-edit.component.css']
 })
-export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
-    public newQuestionOptions: NewQuestionOptionDto[] = [{} as NewQuestionOptionDto];
-    public createdQuestionOptions: CreatedQuestionOptionDto[] = [];
+export class QuestionOptionCreateEditComponent implements OnInit, OnDestroy {
+    public updateQuestionOptions: UpdateQuestionOptionDto[] = [];
 
+    @Input() initializeQuestionOptions$: Observable<UpdateQuestionOptionDto[]>;
     @Input() deleteOptionsForms$: Observable<void>;
-    @Input() getOptionsAndDeleteForms$: Observable<void>;
-    @Output() passUpNewQuestionOptions: EventEmitter<NewQuestionOptionDto[]> = new EventEmitter<NewQuestionOptionDto[]>();
+    @Input() getOptions$: Observable<void>;
+    @Output() passUpUpdateQuestionOptions: EventEmitter<UpdateQuestionOptionDto[]> = new EventEmitter<UpdateQuestionOptionDto[]>();
     @Output() passUpQuestionOptionsFormStatusInvalid: EventEmitter<boolean> = new EventEmitter<boolean>();
     private ngUnsubscribe = new Subject();
 
@@ -30,24 +28,34 @@ export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.questionOptionsForm = this.formBuilder.group({
-            questionOptions: this.formBuilder.array([
-                this.addQuestionOptionFormGroup()
-            ])
+            questionOptions: this.formBuilder.array([])
+        });
+
+        this.initializeQuestionOptions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(options => {
+            if (options.length === 0) {
+                this.updateQuestionOptions = [{} as UpdateQuestionOptionDto];
+                this.questionOptions.push(this.addQuestionOptionFormGroup());
+            } else {
+                this.updateQuestionOptions = options;
+
+                this.updateQuestionOptions.forEach((value, index) => {
+                    this.questionOptions.push(this.addQuestionOptionFormGroup());
+                });
+            }
         });
 
         this.questionOptionsForm.statusChanges.subscribe(status => {
             this.passUpQuestionOptionsFormStatusInvalid.emit(status === 'INVALID');
         });
 
-        this.getOptionsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(question => {
-            this.newQuestionOptions.forEach(option => {
+        this.getOptions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(question => {
+            this.updateQuestionOptions.forEach(option => {
                 if (typeof option.isRight === 'undefined') {
                     option.isRight = false;
                 }
             });
 
-            this.passUpNewQuestionOptions.emit(this.newQuestionOptions);
-            this.clearOptions();
+            this.passUpUpdateQuestionOptions.emit(this.updateQuestionOptions);
         });
 
         this.deleteOptionsForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
@@ -75,7 +83,7 @@ export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
     public addQuestionOption() {
         this.questionOptions.push(this.addQuestionOptionFormGroup());
 
-        this.newQuestionOptions.push({} as NewQuestionOptionDto);
+        this.updateQuestionOptions.push({} as UpdateQuestionOptionDto);
     }
 
     public addQuestionOptionFormGroup() {
@@ -86,17 +94,16 @@ export class QuestionOptionCreateComponent implements OnInit, OnDestroy {
     }
 
     public deleteQuestionOption(index: number) {
-        this.newQuestionOptions.splice(index, 1);
+        this.updateQuestionOptions.splice(index, 1);
         this.questionOptions.removeAt(index);
 
-        if (this.newQuestionOptions.length === 0) {
+        if (this.updateQuestionOptions.length === 0) {
             this.clearOptions();
         }
     }
 
     private clearOptions() {
-        this.newQuestionOptions = [{} as NewQuestionOptionDto];
-        this.createdQuestionOptions = [];
+        this.updateQuestionOptions = [{} as UpdateQuestionOptionDto];
         this.questionOptions.clear();
         this.questionOptions.push(this.addQuestionOptionFormGroup());
     }

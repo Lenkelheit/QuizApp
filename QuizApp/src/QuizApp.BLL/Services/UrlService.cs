@@ -33,10 +33,18 @@ namespace QuizApp.BLL.Services
         }
 
 
+        public IEnumerable<UrlDto> GetUrls()
+        {
+            IEnumerable<Url> urls = urlRepository.Get();
+
+            return mapper.Map<IEnumerable<UrlDto>>(urls);
+        }
+
         public async Task<UrlDetailDto> GetUrlById(int urlId)
         {
             Url url = await urlRepository.GetByIdAsync(id: urlId, includeProperties: prop => prop
-                .Include(u => u.TestResults));
+                .Include(u => u.TestResults)
+                .Include(u => u.Test));
 
             return mapper.Map<UrlDetailDto>(url);
         }

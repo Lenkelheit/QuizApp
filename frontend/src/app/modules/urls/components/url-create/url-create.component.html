@@ -1,78 +1,98 @@
-<form [formGroup]="urlsForm">
-    <div class="form-container" formArrayName="urls">
-        <button mat-raised-button color="primary" (click)="addUrl()">
-            Add url
-        </button>
+<h1 class="mat-h1">Url</h1>
 
-        <div class="url-container mat-elevation-z10" *ngFor="let url of urls.controls; let i = index">
-            <div [formGroupName]="i">
-                <mat-form-field>
-                    <input formControlName="intervieweeName" [(ngModel)]="newUrls[i].intervieweeName"
-                        name="intervieweeName" type="text" matInput placeholder="Interviewee name" />
-
-                    <mat-error
-                        *ngIf="getIntervieweeName(i).errors?.minlength && (getIntervieweeName(i).touched || getIntervieweeName(i).dirty)">
-                        Interviewee name must be at least 4 characters long.
-                    </mat-error>
-
-                    <mat-error
-                        *ngIf="getIntervieweeName(i).errors?.maxlength && (getIntervieweeName(i).touched || getIntervieweeName(i).dirty)">
-                        Interviewee name must be less than 32 characters long.
-                    </mat-error>
-
-                </mat-form-field>
-
-                <mat-form-field>
-                    <input formControlName="numberOfRuns" [(ngModel)]="newUrls[i].numberOfRuns" name="numberOfRuns"
-                        type="number" matInput placeholder="Number of runs" />
-
-                    <mat-error
-                        *ngIf="getNumberOfRuns(i).errors?.min && (getNumberOfRuns(i).touched || getNumberOfRuns(i).dirty)">
-                        Number of runs must be equal or more than 0.
-                    </mat-error>
-
-                </mat-form-field>
-
-                <mat-form-field>
-                    <input formControlName="validFromTime" [(ngModel)]="newUrls[i].validFromTime" name="validFromTime"
-                        matInput [matDatepicker]="pickerFromTime" placeholder="Valid from time"
-                        [errorStateMatcher]="confirmValidParentMatcher" required />
-                    <mat-datepicker-toggle matSuffix [for]="pickerFromTime"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerFromTime></mat-datepicker>
-
-                    <mat-error *ngIf="(getValidFromTime(i).errors?.required || getValidFromTime(i).errors?.matDatepickerParse)
-                        && (getValidFromTime(i).touched || getValidFromTime(i).dirty)">
-                        This field is empty or not valid.
-                    </mat-error>
-
-                    <mat-error *ngIf="getUrl(i).errors?.endDateLessThanStartDate">
-                        Valid from time must be earlier than valid until time in url.
-                    </mat-error>
-
-                </mat-form-field>
-
-                <mat-form-field>
-                    <input formControlName="validUntilTime" [(ngModel)]="newUrls[i].validUntilTime"
-                        name="validUntilTime" matInput [matDatepicker]="pickerUntilTime" placeholder="Valid until time"
-                        [errorStateMatcher]="confirmValidParentMatcher" required />
-                    <mat-datepicker-toggle matSuffix [for]="pickerUntilTime"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerUntilTime></mat-datepicker>
-
-                    <mat-error *ngIf="(getValidUntilTime(i).errors?.required || getValidUntilTime(i).errors?.matDatepickerParse) 
-                        && (getValidUntilTime(i).touched || getValidUntilTime(i).dirty)">
-                        This field is empty or not valid.
-                    </mat-error>
-
-                    <mat-error *ngIf="getUrl(i).errors?.endDateLessThanStartDate">
-                        Valid until time must be later than valid from time in url.
-                    </mat-error>
-
-                </mat-form-field>
-
-                <button mat-button (click)="deleteUrl(i)">
-                    <i class="material-icons">delete</i>
-                </button>
-            </div>
+<div class="form-container">
+    <div *ngIf="errors">
+        <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
+            {{error}}
         </div>
     </div>
-</form>
+
+    <form [formGroup]="urlsForm">
+        <mat-form-field class="mat-field-block">
+            <mat-label>Test</mat-label>
+            <mat-select formControlName="testId" [(value)]="newUrl.testId" [errorStateMatcher]="validControlMatcher"
+                required>
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let test of tests" [value]="test.id">
+                    Id - {{test.id}}, Title - {{test.title}}
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="testId.errors?.required  && (testId.touched || testId.dirty)">
+                This field is required.
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field class="mat-field-block">
+            <input formControlName="intervieweeName" [(ngModel)]="newUrl.intervieweeName" name="intervieweeName"
+                type="text" matInput placeholder="Interviewee name" />
+
+            <mat-error *ngIf="intervieweeName.errors?.minlength && (intervieweeName.touched || intervieweeName.dirty)">
+                Interviewee name must be at least 4 characters long.
+            </mat-error>
+
+            <mat-error *ngIf="intervieweeName.errors?.maxlength && (intervieweeName.touched || intervieweeName.dirty)">
+                Interviewee name must be less than 32 characters long.
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field class="mat-field-block">
+            <input formControlName="numberOfRuns" [(ngModel)]="newUrl.numberOfRuns" name="numberOfRuns" type="number"
+                matInput placeholder="Number of runs" />
+
+            <mat-error *ngIf="numberOfRuns.errors?.min && (numberOfRuns.touched || numberOfRuns.dirty)">
+                Number of runs must be equal or more than 0.
+            </mat-error>
+
+        </mat-form-field>
+
+        <div>
+            <mat-form-field class="mat-field-oneline">
+                <input formControlName="validFromTime" [(ngModel)]="newUrl.validFromTime" name="validFromTime" matInput
+                    [matDatepicker]="pickerFromTime" placeholder="Valid from time"
+                    [errorStateMatcher]="confirmValidParentMatcher" required />
+                <mat-datepicker-toggle matSuffix [for]="pickerFromTime"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFromTime></mat-datepicker>
+
+                <mat-error *ngIf="(validFromTime.errors?.required || validFromTime.errors?.matDatepickerParse)
+                            && (validFromTime.touched || validFromTime.dirty)">
+                    This field is empty or not valid.
+                </mat-error>
+
+                <mat-error *ngIf="urlsForm.errors?.endDateLessThanStartDate">
+                    Valid from time must be earlier than valid until time in url.
+                </mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field class="mat-field-oneline">
+                <input formControlName="validUntilTime" [(ngModel)]="newUrl.validUntilTime" name="validUntilTime"
+                    matInput [matDatepicker]="pickerUntilTime" placeholder="Valid until time"
+                    [errorStateMatcher]="confirmValidParentMatcher" required />
+                <mat-datepicker-toggle matSuffix [for]="pickerUntilTime"></mat-datepicker-toggle>
+                <mat-datepicker #pickerUntilTime></mat-datepicker>
+
+                <mat-error *ngIf="(validUntilTime.errors?.required || validUntilTime.errors?.matDatepickerParse) 
+                            && (validUntilTime.touched || validUntilTime.dirty)">
+                    This field is empty or not valid.
+                </mat-error>
+
+                <mat-error *ngIf="urlsForm.errors?.endDateLessThanStartDate">
+                    Valid until time must be later than valid from time in url.
+                </mat-error>
+
+            </mat-form-field>
+
+        </div>
+
+        <button mat-raised-button color="warn" (click)="clearUrl()">
+            Clear
+        </button>
+
+        <button mat-raised-button color="primary" [disabled]="urlsForm.invalid" (click)="sendNewUrls()">
+            Create
+        </button>
+    </form>
+</div>

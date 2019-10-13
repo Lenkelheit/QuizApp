@@ -10,6 +10,8 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface IUrlService
     {
+        IEnumerable<UrlDto> GetUrls();
+
         Task<UrlDetailDto> GetUrlById(int urlId);
 
         Task<CreatedUrlDto> CreateUrl(NewUrlDto newUrlDto);

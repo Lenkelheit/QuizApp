@@ -8,7 +8,7 @@
             <div [formGroupName]="i">
 
                 <mat-form-field>
-                    <input formControlName="text" [(ngModel)]="newQuestions[i].text" name="text" type="text" matInput
+                    <input formControlName="text" [(ngModel)]="updateQuestions[i].text" name="text" type="text" matInput
                         placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
 
                     <mat-error *ngIf="getText(i).errors?.required && (getText(i).touched || getText(i).dirty)">
@@ -26,7 +26,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
-                    <input formControlName="hint" [(ngModel)]="newQuestions[i].hint" name="hint" type="text" matInput
+                    <input formControlName="hint" [(ngModel)]="updateQuestions[i].hint" name="hint" type="text" matInput
                         placeholder="Hint" />
 
                     <mat-error *ngIf="getHint(i).errors?.minlength && (getHint(i).touched || getHint(i).dirty)">
@@ -40,7 +40,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
-                    <input formControlName="timeLimitSeconds" [(ngModel)]="newQuestions[i].timeLimitSeconds"
+                    <input formControlName="timeLimitSeconds" [(ngModel)]="updateQuestions[i].timeLimitSeconds"
                         name="timeLimitSeconds" type="text" matInput placeholder="Time limit in seconds"
                         [errorStateMatcher]="validControlMatcher" required />
 
@@ -64,11 +64,13 @@
 
                 <h3 class="mat-h3">Options</h3>
 
-                <app-question-option-create (passUpNewQuestionOptions)="saveQuestionOptions(i, $event)"
+                <app-question-option-create-edit
+                    [initializeQuestionOptions$]="initializeQuestionOptions[i].asObservable()"
+                    (passUpUpdateQuestionOptions)="saveQuestionOptions(i, $event)"
                     (passUpQuestionOptionsFormStatusInvalid)="saveQuestionOptionsFormStatusInvalid(i, $event)"
                     [deleteOptionsForms$]="deleteOptionsForms.asObservable()"
-                    [getOptionsAndDeleteForms$]="getOptionsAndDeleteForms[i].asObservable()">
-                </app-question-option-create>
+                    [getOptions$]="getOptions[i].asObservable()">
+                </app-question-option-create-edit>
 
             </div>
 

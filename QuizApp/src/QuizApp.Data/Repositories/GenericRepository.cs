@@ -52,7 +52,7 @@ namespace QuizApp.Data.Repositories
 
             if (includeProperties != null) query = includeProperties(query);
 
-            return query.FirstOrDefault(entity => entity.Id == (int)id);
+            return query.AsNoTracking().FirstOrDefault(entity => entity.Id == (int)id);
         }
 
         public virtual async Task<TEntity> GetByIdAsync(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
@@ -61,7 +61,7 @@ namespace QuizApp.Data.Repositories
 
             if (includeProperties != null) query = includeProperties(query);
 
-            return await query.FirstOrDefaultAsync(entity => entity.Id == (int)id);
+            return await query.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == (int)id);
         }
 
         public virtual void Insert(TEntity entity)
@@ -76,11 +76,17 @@ namespace QuizApp.Data.Repositories
 
         public virtual void Update(TEntity entityToUpdate)
         {
-            if (DbContext.Entry(entityToUpdate).State == EntityState.Detached)
+            DbContext.ChangeTracker.TrackGraph(entityToUpdate, e =>
             {
-                DbSet.Attach(entityToUpdate);
-            }
-            DbContext.Entry(entityToUpdate).State = EntityState.Modified;
+                if (e.Entry.IsKeySet)
+                {
+                    e.Entry.State = EntityState.Modified;
+                }
+                else
+                {
+                    e.Entry.State = EntityState.Added;
+                }
+            });
         }
 
         public virtual void Delete(TEntity entityToDelete)

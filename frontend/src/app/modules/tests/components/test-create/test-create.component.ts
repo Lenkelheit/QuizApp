@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { NewTestDto } from 'src/app/models/test/new-test-dto';
-import { CreatedTestDto } from 'src/app/models/test/created-test-dto';
-import { NewUrlDto } from 'src/app/models/url/new-url-dto';
-import { NewQuestionDto } from 'src/app/models/question/new-question-dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FormatTimeLimitValidator } from '../../../../shared/validators/format-time-limit-validator';
 import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes';
 import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
+import { Router } from '@angular/router';
+import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
 
 @Component({
     selector: 'app-test-create',
@@ -21,19 +18,11 @@ export class TestCreateComponent implements OnInit {
 
     public errors: Error;
 
-    public urlsFormStatusInvalid = true;
-    public questionsFormStatusInvalid = true;
-
-    private deleteQuestionsForms: Subject<void> = new Subject<void>();
-    private deleteUrlsForms: Subject<void> = new Subject<void>();
-    private getQuestionsAndDeleteForms: Subject<void> = new Subject<void>();
-    private getUrlsAndDeleteForms: Subject<void> = new Subject<void>();
-
     testForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
 
-    constructor(private testService: TestService, private formBuilder: FormBuilder) { }
+    constructor(private testService: TestService, private formBuilder: FormBuilder, private router: Router) { }
 
     ngOnInit() {
         this.testForm = this.formBuilder.group({
@@ -55,50 +44,23 @@ export class TestCreateComponent implements OnInit {
         return this.testForm.get('timeLimitSeconds');
     }
 
-    public sendTest() {
+    public sendNewTest() {
         this.newTest.authorId = 1;
 
-        this.getQuestionsAndDeleteForms.next();
-        this.getUrlsAndDeleteForms.next();
+        this.testService.createTest(this.newTest).subscribe(createdTestResp => {
+            this.clearTest();
 
-        this.testService.createTest(this.newTest).subscribe(() => { },
+            this.router.navigate(['/tests', createdTestResp.body.id]);
+        },
             (respErrors: HttpErrorResponse) => {
                 this.errors = respErrors.error;
             }
         );
-
-        this.clearTest();
-    }
-
-    public clearTestWithChildForms() {
-        this.clearTest();
-        this.deleteQuestionsForms.next();
-        this.deleteUrlsForms.next();
     }
 
     private clearTest() {
         this.newTest = {} as NewTestDto;
         this.errors = null;
         this.testForm.reset();
-    }
-
-    private saveUrls(newUrls: NewUrlDto[]) {
-        this.newTest.urls = newUrls;
-    }
-
-    private saveQuestions(newQuestions: NewQuestionDto[]) {
-        this.newTest.testQuestions = newQuestions;
-    }
-
-    private setUrlsFormStatusInvalid(statusInvalid: boolean) {
-        this.urlsFormStatusInvalid = statusInvalid;
-    }
-
-    private setQuestionsFormStatusInvalid(statusInvalid: boolean) {
-        this.questionsFormStatusInvalid = statusInvalid;
-    }
-
-    public checkFormsStatus() {
-        return this.testForm.invalid || this.urlsFormStatusInvalid || this.questionsFormStatusInvalid;
     }
 }

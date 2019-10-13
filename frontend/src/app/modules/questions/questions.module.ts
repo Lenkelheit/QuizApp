@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
-import { QuestionCreateComponent } from './components/question-create/question-create.component';
+import { QuestionCreateEditComponent } from './components/question-create-edit/question-create-edit.component';
 import { QuestionOptionsModule } from '../question-options/question-options.module';
 
 @NgModule({
-    declarations: [QuestionCreateComponent],
+    declarations: [QuestionCreateEditComponent],
     imports: [
         CommonModule,
         SharedModule,
         QuestionOptionsModule
     ],
     exports: [
-        QuestionCreateComponent
+        QuestionCreateEditComponent
     ]
 })
 export class QuestionsModule { }

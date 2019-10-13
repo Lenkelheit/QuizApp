@@ -21,7 +21,7 @@ namespace QuizApp.Web.Validators.TestQuestion
 
             RuleFor(question => question.Hint)
                 .Length(4, 256)
-                    .When(test => test.Hint != null)
+                    .When(question => !string.IsNullOrEmpty(question.Hint))
                     .WithMessage("{PropertyName} must be from {MinLength} to {MaxLength} characters in question.");
 
             RuleFor(question => question.TimeLimitSeconds)

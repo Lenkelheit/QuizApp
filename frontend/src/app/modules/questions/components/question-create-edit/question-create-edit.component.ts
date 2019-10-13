@@ -1,34 +1,34 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject, merge } from 'rxjs';
+import { Observable, Subject, merge, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NewQuestionDto } from 'src/app/models/question/new-question-dto';
-import { CreatedQuestionDto } from 'src/app/models/question/created-question-dto';
-import { NewQuestionOptionDto } from 'src/app/models/question-option/new-question-option-dto';
-import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
 import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes';
 import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
+import { UpdateQuestionDto } from 'src/app/models/question/update-question-dto';
+import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-question-option-dto';
+import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
 
 @Component({
-    selector: 'app-question-create',
-    templateUrl: './question-create.component.html',
-    styleUrls: ['./question-create.component.css']
+    selector: 'app-question-create-edit',
+    templateUrl: './question-create-edit.component.html',
+    styleUrls: ['./question-create-edit.component.css']
 })
-export class QuestionCreateComponent implements OnInit, OnDestroy {
-    public newQuestions: NewQuestionDto[] = [{} as NewQuestionDto];
-    public createdQuestions: CreatedQuestionDto[] = [];
+export class QuestionCreateEditComponent implements OnInit, OnDestroy {
+    public updateQuestions: UpdateQuestionDto[] = [];
 
-    public questionOptionsFormsStatusInvalid: boolean[] = [true];
+    public questionOptionsFormsStatusInvalid: boolean[] = [];
 
+    @Input() initializeQuestions$: Observable<UpdateQuestionDto[]>;
     @Input() deleteQuestionsForms$: Observable<void>;
-    @Input() getQuestionsAndDeleteForms$: Observable<void>;
-    @Output() passUpNewQuestions: EventEmitter<NewQuestionDto[]> = new EventEmitter<NewQuestionDto[]>();
+    @Input() getQuestions$: Observable<void>;
+    @Output() passUpUpdateQuestions: EventEmitter<UpdateQuestionDto[]> = new EventEmitter<UpdateQuestionDto[]>();
     @Output() passUpQuestionsFormStatusInvalid: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    private getOptionsAndDeleteForms: Subject<void>[] = [new Subject<void>()];
+    private getOptions: Subject<void>[] = [];
     private deleteOptionsForms: Subject<void> = new Subject<void>();
     private updateQuestionOptionsFormStatus: Subject<void> = new Subject<void>();
     private questionsAndOptionsFormsStatusChanges$: Observable<void>;
+    private initializeQuestionOptions: BehaviorSubject<UpdateQuestionOptionDto[]>[] = [];
     private ngUnsubscribe = new Subject();
 
     public questionsForm: FormGroup;
@@ -39,9 +39,31 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.questionsForm = this.formBuilder.group({
-            questions: this.formBuilder.array([
-                this.addQuestionFormGroup()
-            ])
+            questions: this.formBuilder.array([])
+        });
+
+        this.initializeQuestions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(questions => {
+            if (questions.length === 0) {
+
+                this.updateQuestions = [{} as UpdateQuestionDto];
+                this.questionOptionsFormsStatusInvalid.push(true);
+
+                this.getOptions.push(new Subject<void>());
+                this.initializeQuestionOptions.push(new BehaviorSubject<UpdateQuestionOptionDto[]>([{} as UpdateQuestionOptionDto]));
+
+                this.questions.push(this.addQuestionFormGroup());
+            } else {
+                this.updateQuestions = questions;
+                this.questionOptionsFormsStatusInvalid.push(false);
+
+                this.updateQuestions.forEach((value, index) => {
+                    this.getOptions.push(new Subject<void>());
+                    this.initializeQuestionOptions
+                        .push(new BehaviorSubject<UpdateQuestionOptionDto[]>(this.updateQuestions[index].testQuestionOptions));
+
+                    this.questions.push(this.addQuestionFormGroup());
+                });
+            }
         });
 
         this.questionsAndOptionsFormsStatusChanges$ =
@@ -53,12 +75,10 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
             this.passUpQuestionsFormStatusInvalid.emit((this.questionsForm.status === 'INVALID') || questionOptionsFormsStatusInvalid);
         });
 
-        this.getQuestionsAndDeleteForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-            this.getOptionsAndDeleteForms.forEach(elem => elem.next());
+        this.getQuestions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+            this.getOptions.forEach(elem => elem.next());
 
-            this.passUpNewQuestions.emit(this.newQuestions);
-
-            this.clearQuestions();
+            this.passUpUpdateQuestions.emit(this.updateQuestions);
         });
 
         this.deleteQuestionsForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
@@ -93,9 +113,10 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
 
     public addQuestion() {
         this.questions.push(this.addQuestionFormGroup());
-        this.newQuestions.push({} as NewQuestionDto);
+        this.updateQuestions.push({} as UpdateQuestionDto);
 
-        this.getOptionsAndDeleteForms.push(new Subject<void>());
+        this.getOptions.push(new Subject<void>());
+        this.initializeQuestionOptions.push(new BehaviorSubject<UpdateQuestionOptionDto[]>([{} as UpdateQuestionOptionDto]));
 
         this.questionOptionsFormsStatusInvalid.push(true);
     }
@@ -109,27 +130,27 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
     }
 
     public deleteQuestion(index: number) {
-        this.newQuestions.splice(index, 1);
-
+        this.updateQuestions.splice(index, 1);
         this.questions.removeAt(index);
 
-        this.getOptionsAndDeleteForms.splice(index, 1);
-
-        this.createdQuestions.splice(index, 1);
+        this.getOptions.splice(index, 1);
+        this.initializeQuestionOptions.splice(index, 1);
 
         this.questionOptionsFormsStatusInvalid.splice(index, 1);
 
-        if (this.newQuestions.length === 0) {
+        if (this.updateQuestions.length === 0) {
             this.clearQuestions();
         }
     }
 
     private clearQuestions() {
-        this.newQuestions = [{} as NewQuestionDto];
-        this.createdQuestions = [];
+        this.updateQuestions = [{} as UpdateQuestionDto];
         this.questions.clear();
         this.questions.push(this.addQuestionFormGroup());
-        this.getOptionsAndDeleteForms = [new Subject<void>()];
+
+        this.getOptions = [new Subject<void>()];
+        this.initializeQuestionOptions = [new BehaviorSubject<UpdateQuestionOptionDto[]>([{} as UpdateQuestionOptionDto])];
+
         this.questionOptionsFormsStatusInvalid = [true];
     }
 
@@ -138,8 +159,8 @@ export class QuestionCreateComponent implements OnInit, OnDestroy {
         this.deleteOptionsForms.next();
     }
 
-    private saveQuestionOptions(index: number, newQuestionOptions: NewQuestionOptionDto[]) {
-        this.newQuestions[index].testQuestionOptions = newQuestionOptions;
+    private saveQuestionOptions(index: number, updateQuestionOptions: UpdateQuestionOptionDto[]) {
+        this.updateQuestions[index].testQuestionOptions = updateQuestionOptions;
     }
 
     private saveQuestionOptionsFormStatusInvalid(index: number, questionOptionsFormStatusInvalid: boolean) {

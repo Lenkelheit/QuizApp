@@ -7,10 +7,11 @@
 
             <div [formGroupName]="i">
 
-                <mat-checkbox formControlName="isRight" [(ngModel)]="newQuestionOptions[i].isRight">
+                <mat-checkbox formControlName="isRight" [(ngModel)]="updateQuestionOptions[i].isRight">
                     <mat-form-field>
-                        <input formControlName="text" [(ngModel)]="newQuestionOptions[i].text" name="text" type="text"
-                            matInput placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
+                        <input formControlName="text" [(ngModel)]="updateQuestionOptions[i].text" name="text"
+                            type="text" matInput placeholder="Text" [errorStateMatcher]="validControlMatcher"
+                            required />
 
                         <mat-error *ngIf="getText(i).errors?.required && (getText(i).touched || getText(i).dirty)">
                             This field is required.

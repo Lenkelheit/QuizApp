@@ -13,5 +13,7 @@ namespace QuizApp.BLL.Dto.Url
         public DateTime ValidUntilTime { get; set; }
 
         public string IntervieweeName { get; set; }
+
+        public int? TestId { get; set; }
     }
 }

@@ -5,9 +5,10 @@ import { SharedModule } from '../../shared/shared.module';
 import { TestCreateComponent } from './components/test-create/test-create.component';
 import { QuestionsModule } from '../questions/questions.module';
 import { UrlsModule } from '../urls/urls.module';
+import { TestEditComponent } from './components/test-edit/test-edit.component';
 
 @NgModule({
-    declarations: [TestListComponent, TestCreateComponent],
+    declarations: [TestListComponent, TestCreateComponent, TestEditComponent],
     imports: [
         CommonModule,
         SharedModule,

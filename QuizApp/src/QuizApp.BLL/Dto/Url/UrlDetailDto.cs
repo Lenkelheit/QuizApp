@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestResult;
 
 namespace QuizApp.BLL.Dto.Url
@@ -18,6 +18,10 @@ namespace QuizApp.BLL.Dto.Url
 
         public string IntervieweeName { get; set; }
 
+        public int? TestId { get; set; }
+
+
+        public TestDto Test { get; set; }
 
         public ICollection<TestResultDetailDto> TestResults { get; set; } = new List<TestResultDetailDto>();
     }

@@ -24,12 +24,16 @@ export class HttpInternalService {
         });
     }
 
+    public putRequest<T>(url: string, payload: object): Observable<HttpResponse<T>> {
+        return this.http.put<T>(this.baseUrl + url, payload, {
+            observe: 'response'
+        });
+    }
+
     public deleteRequest<T>(url: string, httpParams?: any): Observable<HttpResponse<T>> {
         return this.http.delete<T>(this.baseUrl + url, {
             observe: 'response',
             params: httpParams
         });
     }
-
-
 }
