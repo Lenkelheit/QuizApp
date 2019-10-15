@@ -8,7 +8,7 @@ import { TestDto } from '../../../../models/test/test-dto';
     styleUrls: ['./test-list.component.css']
 })
 export class TestListComponent implements OnInit {
-    public columnsToDisplay: string[] = ['id', 'title', 'description', 'timeLimitSeconds', 'lastModifiedDate', 'read', 'update', 'delete'];
+    public columnsToDisplay: string[] = ['id', 'title', 'description', 'timeLimitSeconds', 'lastModifiedDate', 'update', 'delete'];
     public tests: TestDto[] = [];
 
     constructor(private testService: TestService) { }

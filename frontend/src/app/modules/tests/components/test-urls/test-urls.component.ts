@@ -1,0 +1,40 @@
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { UrlDto } from 'src/app/models/url/url-dto';
+import { TestService } from 'src/app/services/test.service';
+import { environment } from 'src/environments/environment';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+@Component({
+    selector: 'app-test-urls',
+    templateUrl: './test-urls.component.html',
+    styleUrls: ['./test-urls.component.css']
+})
+export class TestUrlsComponent implements OnInit, OnDestroy {
+    public columnsToDisplay: string[] = ['intervieweeName', 'numberOfRuns', 'validFromTime', 'validUntilTime', 'urlId', 'update'];
+    public testUrls: UrlDto[] = [];
+
+    public baseUrl: string = environment.baseUrl;
+
+    @Input() getTestId$: Observable<number>;
+    private ngUnsubscribe = new Subject();
+
+    constructor(private testService: TestService) { }
+
+    ngOnInit() {
+        this.getTestId$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(testId => {
+            this.getUrlsByTestId(testId);
+        });
+    }
+
+    ngOnDestroy() {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+    }
+
+    public getUrlsByTestId(testId: number) {
+        this.testService.getUrlsByTestId(testId).subscribe(urlsResp => {
+            this.testUrls = urlsResp.body;
+        });
+    }
+}

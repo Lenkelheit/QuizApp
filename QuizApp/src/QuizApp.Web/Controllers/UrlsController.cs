@@ -67,7 +67,7 @@ namespace QuizApp.Web.Controllers
             return Ok(updatedUrlDto);
         }
 
-        [HttpGet("{id}/results")]
+        [HttpGet("{urlId}/results")]
         public ActionResult<IEnumerable<TestResultDto>> GetTestResultsByUrlId(int urlId)
         {
             return Ok(urlService.GetTestResultsByUrlId(urlId));

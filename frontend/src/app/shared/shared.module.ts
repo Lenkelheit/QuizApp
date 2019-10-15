@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, MatTabsModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -27,7 +27,8 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatCheckboxModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTabsModule
     ],
     exports: [
         RouterModule,
@@ -42,7 +43,8 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatCheckboxModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTabsModule
     ]
 })
 export class SharedModule { }

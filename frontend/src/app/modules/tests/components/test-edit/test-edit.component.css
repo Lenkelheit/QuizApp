@@ -2,10 +2,19 @@
   margin: 2%;
 }
 
-mat-form-field {
+.mat-field-block {
   margin: 8px;
   width: 35%;
   display: block;
+}
+
+.mat-field-oneline {
+  margin: 8px 15px 8px 8px;
+  width: 35%;
+}
+
+.test-urls {
+  margin: 25px;
 }
 
 h1,

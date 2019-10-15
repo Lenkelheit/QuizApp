@@ -26,6 +26,7 @@ export class TestEditComponent implements OnInit {
     private deleteQuestionsForms: Subject<void> = new Subject<void>();
     private getQuestions: Subject<void> = new Subject<void>();
     private initializeQuestions: Subject<UpdateQuestionDto[]> = new Subject<UpdateQuestionDto[]>();
+    private passTestId: Subject<number> = new Subject<number>();
 
     testForm: FormGroup;
 
@@ -49,6 +50,8 @@ export class TestEditComponent implements OnInit {
             this.initializeQuestions.next(this.updateTest.testQuestions);
 
             this.questionsFormStatusInvalid = this.updateTest.testQuestions.length === 0;
+
+            this.passTestId.next(testId);
         });
     }
 
@@ -66,7 +69,7 @@ export class TestEditComponent implements OnInit {
 
     public sendUpdateTest() {
         this.getQuestions.next();
-        
+
         this.testService.updateTest(this.updateTest).subscribe(() => {
             this.clearTestWithChildForms();
 
