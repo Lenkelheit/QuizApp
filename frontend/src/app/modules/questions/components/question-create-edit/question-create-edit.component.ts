@@ -43,27 +43,15 @@ export class QuestionCreateEditComponent implements OnInit, OnDestroy {
         });
 
         this.initializeQuestions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(questions => {
-            if (questions.length === 0) {
+            this.updateQuestions = questions;
 
-                this.updateQuestions = [{} as UpdateQuestionDto];
-                this.questionOptionsFormsStatusInvalid.push(true);
-
+            this.updateQuestions.forEach((value, index) => {
                 this.getOptions.push(new Subject<void>());
-                this.initializeQuestionOptions.push(new BehaviorSubject<UpdateQuestionOptionDto[]>([{} as UpdateQuestionOptionDto]));
+                this.initializeQuestionOptions
+                    .push(new BehaviorSubject<UpdateQuestionOptionDto[]>(this.updateQuestions[index].testQuestionOptions));
 
                 this.questions.push(this.addQuestionFormGroup());
-            } else {
-                this.updateQuestions = questions;
-                this.questionOptionsFormsStatusInvalid.push(false);
-
-                this.updateQuestions.forEach((value, index) => {
-                    this.getOptions.push(new Subject<void>());
-                    this.initializeQuestionOptions
-                        .push(new BehaviorSubject<UpdateQuestionOptionDto[]>(this.updateQuestions[index].testQuestionOptions));
-
-                    this.questions.push(this.addQuestionFormGroup());
-                });
-            }
+            });
         });
 
         this.questionsAndOptionsFormsStatusChanges$ =
@@ -130,33 +118,28 @@ export class QuestionCreateEditComponent implements OnInit, OnDestroy {
     }
 
     public deleteQuestion(index: number) {
+        this.questionOptionsFormsStatusInvalid.splice(index, 1);
+
         this.updateQuestions.splice(index, 1);
         this.questions.removeAt(index);
 
         this.getOptions.splice(index, 1);
         this.initializeQuestionOptions.splice(index, 1);
-
-        this.questionOptionsFormsStatusInvalid.splice(index, 1);
-
-        if (this.updateQuestions.length === 0) {
-            this.clearQuestions();
-        }
     }
 
     private clearQuestions() {
-        this.updateQuestions = [{} as UpdateQuestionDto];
+        this.questionOptionsFormsStatusInvalid = [];
+
+        this.updateQuestions = [];
         this.questions.clear();
-        this.questions.push(this.addQuestionFormGroup());
 
-        this.getOptions = [new Subject<void>()];
-        this.initializeQuestionOptions = [new BehaviorSubject<UpdateQuestionOptionDto[]>([{} as UpdateQuestionOptionDto])];
-
-        this.questionOptionsFormsStatusInvalid = [true];
+        this.getOptions = [];
+        this.initializeQuestionOptions = [];
     }
 
     private clearQuestionsWithChildForms() {
-        this.clearQuestions();
         this.deleteOptionsForms.next();
+        this.clearQuestions();
     }
 
     private saveQuestionOptions(index: number, updateQuestionOptions: UpdateQuestionOptionDto[]) {

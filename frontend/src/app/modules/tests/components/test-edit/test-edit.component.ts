@@ -49,7 +49,7 @@ export class TestEditComponent implements OnInit {
 
             this.initializeQuestions.next(this.updateTest.testQuestions);
 
-            this.questionsFormStatusInvalid = this.updateTest.testQuestions.length === 0;
+            this.questionsFormStatusInvalid = false;
 
             this.passTestId.next(testId);
         });
@@ -89,10 +89,12 @@ export class TestEditComponent implements OnInit {
     private clearTest() {
         const updateTestId = this.updateTest.id;
         const updateTestAuthorId = this.updateTest.authorId;
+        const updateTestLastModifiedDate = this.updateTest.lastModifiedDate;
 
         this.updateTest = {} as UpdateTestDto;
         this.updateTest.id = updateTestId;
         this.updateTest.authorId = updateTestAuthorId;
+        this.updateTest.lastModifiedDate = updateTestLastModifiedDate;
 
         this.errors = null;
         this.testForm.reset();

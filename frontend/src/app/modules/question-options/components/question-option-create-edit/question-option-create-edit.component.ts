@@ -32,16 +32,11 @@ export class QuestionOptionCreateEditComponent implements OnInit, OnDestroy {
         });
 
         this.initializeQuestionOptions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(options => {
-            if (options.length === 0) {
-                this.updateQuestionOptions = [{} as UpdateQuestionOptionDto];
-                this.questionOptions.push(this.addQuestionOptionFormGroup());
-            } else {
-                this.updateQuestionOptions = options;
+            this.updateQuestionOptions = options;
 
-                this.updateQuestionOptions.forEach((value, index) => {
-                    this.questionOptions.push(this.addQuestionOptionFormGroup());
-                });
-            }
+            this.updateQuestionOptions.forEach((value, index) => {
+                this.questionOptions.push(this.addQuestionOptionFormGroup());
+            });
         });
 
         this.questionOptionsForm.statusChanges.subscribe(status => {

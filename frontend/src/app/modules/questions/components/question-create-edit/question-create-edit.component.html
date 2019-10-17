@@ -3,6 +3,12 @@
     <div class="form-container" formArrayName="questions">
         <button mat-raised-button color="primary" (click)="addQuestion()">Add question</button>
 
+        <div *ngIf="!updateQuestions || updateQuestions?.length === 0">
+            <p>
+                There is not any questions.
+            </p>
+        </div>
+
         <div class="question-container mat-elevation-z10" *ngFor="let question of questions.controls; let i=index">
 
             <div [formGroupName]="i">
