@@ -18,6 +18,7 @@ namespace QuizApp.Web.Extensions
             services.AddScoped<ITestResultService, TestResultService>();
             services.AddScoped<ITestService, TestService>();
             services.AddScoped<IUrlService, UrlService>();
+            services.AddScoped<IPassingTestService, PassingTestService>();
         }
 
         public static void ConfigureCustomValidationErrors(this IServiceCollection services)

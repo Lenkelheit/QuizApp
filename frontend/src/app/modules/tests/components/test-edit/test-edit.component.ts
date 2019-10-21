@@ -10,6 +10,7 @@ import { UpdateTestDto } from 'src/app/models/test/update-test-dto';
 import { TestDetailDto } from 'src/app/models/test/test-detail-dto';
 import { UpdateQuestionDto } from 'src/app/models/question/update-question-dto';
 import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
+import { Error } from 'src/app/models/error/error';
 
 @Component({
     selector: 'app-test-edit',

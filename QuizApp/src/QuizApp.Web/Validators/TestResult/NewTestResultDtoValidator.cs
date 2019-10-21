@@ -29,7 +29,7 @@ namespace QuizApp.Web.Validators.TestResult
                     .WithMessage(customer => $"{nameof(customer.PassingEndTime)} must be later than {nameof(customer.PassingStartTime)}.");
 
             RuleFor(result => result.Score)
-                .NotEmpty()
+                .NotNull()
                     .WithMessage("{PropertyName} is mandatory.")
                 .InclusiveBetween(0, 100)
                     .WithMessage("{PropertyName} must be between {From} and {To}.");

@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateUrlDto } from 'src/app/models/url/update-url-dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Error } from 'src/app/models/error/error';
 
 @Component({
     selector: 'app-url-edit',

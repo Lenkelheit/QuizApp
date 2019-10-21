@@ -1,3 +1,5 @@
+<app-top-bar></app-top-bar>
+
 <h1 class="mat-h1">Url</h1>
 
 <div class="form-container">
@@ -7,7 +9,7 @@
         </div>
     </div>
 
-    <form [formGroup]="urlsForm">
+    <form [formGroup]="urlForm">
         <mat-form-field class="mat-field-block">
             <mat-label>Test</mat-label>
             <mat-select formControlName="testId" [(value)]="newUrl.testId" [errorStateMatcher]="validControlMatcher"
@@ -61,7 +63,7 @@
                     This field is empty or not valid.
                 </mat-error>
 
-                <mat-error *ngIf="urlsForm.errors?.endDateLessThanStartDate">
+                <mat-error *ngIf="urlForm.errors?.endDateLessThanStartDate">
                     Valid from time must be earlier than valid until time in url.
                 </mat-error>
 
@@ -79,7 +81,7 @@
                     This field is empty or not valid.
                 </mat-error>
 
-                <mat-error *ngIf="urlsForm.errors?.endDateLessThanStartDate">
+                <mat-error *ngIf="urlForm.errors?.endDateLessThanStartDate">
                     Valid until time must be later than valid from time in url.
                 </mat-error>
 
@@ -91,7 +93,7 @@
             Clear
         </button>
 
-        <button mat-raised-button color="primary" [disabled]="urlsForm.invalid" (click)="sendNewUrls()">
+        <button mat-raised-button color="primary" [disabled]="urlForm.invalid" (click)="sendNewUrls()">
             Create
         </button>
     </form>

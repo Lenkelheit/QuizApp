@@ -7,6 +7,7 @@ import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes'
 import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
 import { Router } from '@angular/router';
 import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
+import { Error } from 'src/app/models/error/error';
 
 @Component({
     selector: 'app-test-create',

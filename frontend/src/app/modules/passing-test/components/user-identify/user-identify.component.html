@@ -1,0 +1,60 @@
+<div class="form-container">
+
+    <div *ngIf="!urlValidationResult.isValid; else urlIsValid">
+        <div class="url-validation-error-container" *ngFor="let error of urlValidationResult.errors">
+            {{error}}
+        </div>
+    </div>
+
+    <ng-template #urlIsValid>
+
+        <div *ngIf="errors">
+            <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
+                {{error}}
+            </div>
+        </div>
+
+        <form [formGroup]="urlForm">
+
+            <h1 class="mat-h1">{{testPreview.title}}</h1>
+
+            <div>
+                <p>
+                    {{testPreview.description}}
+                </p>
+            </div>
+
+            <div>
+                <p>
+                    Test will be lasted {{testPreview.timeLimitSeconds}}.
+                </p>
+            </div>
+
+            <mat-form-field class="mat-field-block">
+                <input formControlName="intervieweeName" [(ngModel)]="identityUrl.intervieweeName"
+                    name="intervieweeName" type="text" matInput placeholder="Interviewee name" required />
+
+                <mat-error
+                    *ngIf="intervieweeName.errors?.required  && (intervieweeName.touched || intervieweeName.dirty)">
+                    This field is required.
+                </mat-error>
+
+                <mat-error
+                    *ngIf="intervieweeName.errors?.minlength && (intervieweeName.touched || intervieweeName.dirty)">
+                    Interviewee name must be at least 4 characters long.
+                </mat-error>
+
+                <mat-error
+                    *ngIf="intervieweeName.errors?.maxlength && (intervieweeName.touched || intervieweeName.dirty)">
+                    Interviewee name must be less than 32 characters long.
+                </mat-error>
+
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" [disabled]="urlForm.invalid" (click)="sendUrlOnValidation()">
+                Next
+            </button>
+        </form>
+
+    </ng-template>
+</div>

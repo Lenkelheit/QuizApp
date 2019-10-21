@@ -6,6 +6,7 @@ import { CreatedUrlDto } from '../models/url/created-url-dto';
 import { UpdateUrlDto } from '../models/url/update-url-dto';
 import { UpdatedUrlDto } from '../models/url/updated-url-dto';
 import { UrlDetailDto } from '../models/url/url-detail-dto';
+import { TestPreviewDto } from '../models/test/test-preview-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -29,5 +30,9 @@ export class UrlService {
 
     public updateUrl(url: UpdateUrlDto) {
         return this.httpService.putRequest<UpdatedUrlDto>(`${this.routePrefix}`, url);
+    }
+
+    public getTestByUrlId(urlId: number) {
+        return this.httpService.getRequest<TestPreviewDto>(`${this.routePrefix}/${urlId}/test`);
     }
 }

@@ -10,9 +10,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { TopBarComponent } from './components/top-bar/top-bar.component';
 
 @NgModule({
-    declarations: [],
+    declarations: [TopBarComponent],
     imports: [
         CommonModule,
         RouterModule,
@@ -31,6 +32,7 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatTabsModule
     ],
     exports: [
+        TopBarComponent,
         RouterModule,
         FormsModule,
         MatTableModule,
