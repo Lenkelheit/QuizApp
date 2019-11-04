@@ -1,0 +1,25 @@
+<div class="form-container">
+    <div *ngIf="!isTestSent; else testSent" class="test-form">
+
+        <h1>{{viewTest.title}}</h1>
+
+        <h2>{{viewTest.description}}</h2>
+
+        <p appCounter [counter]="timeLimitSeconds" [interval]="1000" (value)="timeLimitSecondsCounter = $event"
+            (counterCompleted)="sendTest()" class="test-time-limit-seconds">
+            {{timeLimitSecondsCounter | timeSecondsToHhMmSs}}</p>
+
+        <app-questions-form [initializeQuestions$]="initializeQuestions.asObservable()"
+            [sendLastSelectedQuestion$]="sendLastSelectedQuestion.asObservable()" [sessionId]="sessionId"
+            (passUpSendTest)="sendTest()">
+        </app-questions-form>
+
+        <button mat-raised-button color="primary" (click)="sendTest()">
+            Submit
+        </button>
+    </div>
+
+    <ng-template #testSent>
+        <p class="test-sent-container">Test ended and was successfully sent.</p>
+    </ng-template>
+</div>

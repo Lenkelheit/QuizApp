@@ -8,6 +8,7 @@ namespace QuizApp.BLL.Dto.PassingTest
     {
         public bool IsValid { get; set; }
 
+
         public ICollection<string> Errors { get; set; } = new List<string>();
     }
 }

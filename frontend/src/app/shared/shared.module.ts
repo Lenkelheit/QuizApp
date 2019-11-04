@@ -11,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
     declarations: [TopBarComponent],
@@ -29,7 +30,8 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
-        MatTabsModule
+        MatTabsModule,
+        MatStepperModule
     ],
     exports: [
         TopBarComponent,
@@ -46,7 +48,8 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
-        MatTabsModule
+        MatTabsModule,
+        MatStepperModule
     ]
 })
 export class SharedModule { }

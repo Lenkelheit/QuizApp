@@ -10,6 +10,7 @@ namespace QuizApp.BLL.Dto.PassingTest
 
         public bool IsUrlValid { get; set; }
 
+
         public ICollection<string> Errors { get; set; } = new List<string>();
     }
 }

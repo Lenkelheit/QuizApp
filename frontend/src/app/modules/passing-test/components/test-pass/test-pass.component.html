@@ -2,4 +2,11 @@
     <img class="quiz-logo" src="../../../../assets/quizLogo.png">
 </mat-toolbar>
 
-<app-user-identify (passUpTestId)="saveTestId($event)"></app-user-identify>
+<div *ngIf="!isUserIdentified; else userIdentified">
+    <app-user-identify (passUpIdentityUrl)="setIdentityUrl($event)">
+    </app-user-identify>
+</div>
+
+<ng-template #userIdentified>
+    <app-test-form [getIdentityUrl$]="passIdentityUrl.asObservable()"></app-test-form>
+</ng-template>

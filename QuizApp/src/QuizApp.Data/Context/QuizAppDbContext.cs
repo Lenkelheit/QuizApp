@@ -25,6 +25,8 @@ namespace QuizApp.Data.Context
 
         public DbSet<TestQuestionOption> TestQuestionOptions { get; set; }
 
+        public DbSet<TestEvent> TestEvents { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

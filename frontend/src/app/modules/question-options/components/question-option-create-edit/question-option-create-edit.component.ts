@@ -43,7 +43,7 @@ export class QuestionOptionCreateEditComponent implements OnInit, OnDestroy {
             this.passUpQuestionOptionsFormStatusInvalid.emit(status === 'INVALID');
         });
 
-        this.getOptions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(question => {
+        this.getOptions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
             this.updateQuestionOptions.forEach(option => {
                 if (typeof option.isRight === 'undefined') {
                     option.isRight = false;

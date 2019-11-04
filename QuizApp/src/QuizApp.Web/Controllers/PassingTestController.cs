@@ -34,9 +34,36 @@ namespace QuizApp.Web.Controllers
         [HttpPost("identify-user")]
         public async Task<ActionResult<UserIdentificationResultDto>> IdentifyUser([FromBody] IdentityUrlDto urlDto)
         {
-            UserIdentificationResultDto isUserIdentifiedResult = await passingTestService.IdentifyUser(urlDto);
+            if (urlDto == null)
+            {
+                return BadRequest();
+            }
 
-            return Ok(isUserIdentifiedResult);
+            return Ok(await passingTestService.IdentifyUser(urlDto));
+        }
+
+        [HttpGet("test/{testId}")]
+        public async Task<ActionResult<ViewTestDto>> GetTestById(int testId)
+        {
+            ViewTestDto viewTestDto = await passingTestService.GetTestById(testId);
+
+            if (viewTestDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(viewTestDto);
+        }
+
+        [HttpPost("test-result")]
+        public async Task<ActionResult<CreatedTestResultDto>> CreateTestResult([FromBody] UserUrlDto userUrlDto)
+        {
+            if (userUrlDto == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await passingTestService.CreateTestResult(userUrlDto));
         }
     }
 }

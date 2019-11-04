@@ -19,7 +19,7 @@ export class UserIdentifyComponent implements OnInit {
     public testPreview: TestPreviewDto = {} as TestPreviewDto;
     public urlValidationResult: UrlValidationResultDto = {} as UrlValidationResultDto;
 
-    @Output() passUpTestId: EventEmitter<number> = new EventEmitter<number>();
+    @Output() passUpIdentityUrl: EventEmitter<IdentityUrlDto> = new EventEmitter<IdentityUrlDto>();
 
     public errors: Error = {} as Error;
 
@@ -42,7 +42,8 @@ export class UserIdentifyComponent implements OnInit {
 
                 this.urlService.getTestByUrlId(urlId).subscribe(testResp => {
                     this.testPreview = testResp.body;
-                    this.passUpTestId.emit(this.testPreview.id);
+
+                    this.identityUrl.testId = this.testPreview.id;
                 });
 
                 this.identityUrl.id = urlId;
@@ -61,9 +62,8 @@ export class UserIdentifyComponent implements OnInit {
             if (userIdentificationResult.isUrlValid) {
                 if (userIdentificationResult.isIdentified) {
 
+                    this.passUpIdentityUrl.emit(this.identityUrl);
 
-
-                    // go to passing test
                 } else {
                     this.errors.errors = userIdentificationResult.errors;
                 }

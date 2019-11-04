@@ -1,0 +1,25 @@
+<div *ngIf="viewQuestions?.length !== 0">
+    <mat-horizontal-stepper (selectionChange)="sendQuestion($event.previouslySelectedIndex)" linear #stepper>
+        <mat-step *ngFor="let question of viewQuestions; let i = index" [editable]="false">
+
+            <div *ngIf="stepper.selectedIndex === i" class="question mat-elevation-z7">
+                <p class="question-text">{{question.text}}</p>
+                <p>{{question.hint}}</p>
+                <p appCounter [counter]="questionsTimeLimitSeconds[i]" [interval]="1000"
+                    (value)="questionsTimeLimitSecondsCounters[i] = $event"
+                    (counterCompleted)="i === (viewQuestions.length - 1) ? passUpSendTest.emit() : stepper.next()"
+                    class="question-time-limit-seconds">
+                    {{questionsTimeLimitSecondsCounters[i] | timeSecondsToHhMmSs}}</p>
+
+                <app-question-options-form [initializeQuestionOptions$]="initializeQuestionOptions[i].asObservable()"
+                    [getOptions$]="getOptions[i].asObservable()" (passUpOptions)="saveOptions(i, $event)">
+                </app-question-options-form>
+
+                <div>
+                    <button mat-raised-button matStepperNext [disabled]="i === viewQuestions.length - 1">Next</button>
+                </div>
+            </div>
+
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

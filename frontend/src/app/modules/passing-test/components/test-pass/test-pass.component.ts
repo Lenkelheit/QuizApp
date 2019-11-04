@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UrlService } from 'src/app/services/url.service';
 import { TestPreviewDto } from 'src/app/models/test/test-preview-dto';
 import { Error } from 'src/app/models/error/error';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-test-pass',
@@ -15,15 +15,18 @@ import { Subject } from 'rxjs';
     styleUrls: ['./test-pass.component.css']
 })
 export class TestPassComponent implements OnInit {
+    public isUserIdentified = false;
 
-    private passTestId: Subject<number> = new Subject<number>();
+    private passIdentityUrl: BehaviorSubject<IdentityUrlDto>;
 
     constructor() { }
 
     ngOnInit() {
     }
 
-    public saveTestId(testId: number) {
-        this.passTestId.next(testId);
+    public setIdentityUrl(identityUrl: IdentityUrlDto) {
+        this.passIdentityUrl = new BehaviorSubject<IdentityUrlDto>(identityUrl);
+
+        this.isUserIdentified = true;
     }
 }

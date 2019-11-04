@@ -17,6 +17,7 @@ using QuizApp.Data.Interfaces;
 using QuizApp.BLL.MappingProfiles;
 using QuizApp.Web.Extensions;
 using QuizApp.Web.Validators.Test;
+using QuizApp.BLL.Settings;
 
 namespace QuizApp.Web
 {
@@ -33,6 +34,8 @@ namespace QuizApp.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<TimeErrorSetting>(Configuration.GetSection(nameof(TimeErrorSetting)));
+
             services.AddDbContext<QuizAppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("QuizAppConnection"));
