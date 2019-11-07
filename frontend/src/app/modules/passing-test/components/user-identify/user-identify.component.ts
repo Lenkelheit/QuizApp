@@ -19,11 +19,11 @@ export class UserIdentifyComponent implements OnInit {
     public testPreview: TestPreviewDto = {} as TestPreviewDto;
     public urlValidationResult: UrlValidationResultDto = {} as UrlValidationResultDto;
 
-    @Output() passUpIdentityUrl: EventEmitter<IdentityUrlDto> = new EventEmitter<IdentityUrlDto>();
-
     public errors: Error = {} as Error;
 
-    urlForm: FormGroup;
+    @Output() passUpIdentityUrl: EventEmitter<IdentityUrlDto> = new EventEmitter<IdentityUrlDto>();
+
+    public urlForm: FormGroup;
 
     constructor(private passingTestService: PassingTestService, private urlService: UrlService, private formBuilder: FormBuilder,
         // tslint:disable-next-line: align

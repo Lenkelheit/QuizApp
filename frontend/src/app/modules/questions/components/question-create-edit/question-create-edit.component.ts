@@ -13,9 +13,11 @@ import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-li
     styleUrls: ['./question-create-edit.component.css']
 })
 export class QuestionCreateEditComponent implements OnInit, OnDestroy {
-    @Input() updateQuestion: UpdateQuestionDto;
+    private subscription: Subscription = new Subscription();
+
     public questionOptionsFormStatusInvalid: boolean[] = [];
 
+    @Input() updateQuestion: UpdateQuestionDto;
     @Input() getQuestion$: Observable<void>;
     @Output() passUpUpdateQuestion: EventEmitter<UpdateQuestionDto> = new EventEmitter<UpdateQuestionDto>();
     @Output() passUpQuestionFormStatusInvalid: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -28,8 +30,6 @@ export class QuestionCreateEditComponent implements OnInit, OnDestroy {
     public questionForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
-
-    private subscription: Subscription = new Subscription();
 
     constructor(private formBuilder: FormBuilder) { }
 

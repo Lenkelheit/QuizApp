@@ -21,14 +21,14 @@ export class UrlEditComponent implements OnInit {
 
     public errors: Error;
 
-    public urlsForm: FormGroup;
+    public urlForm: FormGroup;
 
     public confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
     constructor(private urlService: UrlService, private formBuilder: FormBuilder, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.urlsForm = this.formBuilder.group({
+        this.urlForm = this.formBuilder.group({
             numberOfRuns: ['', [Validators.min(0)]],
             validFromTime: ['', [Validators.required]],
             validUntilTime: ['', [Validators.required]],
@@ -45,19 +45,19 @@ export class UrlEditComponent implements OnInit {
     }
 
     get numberOfRuns() {
-        return this.urlsForm.get('numberOfRuns');
+        return this.urlForm.get('numberOfRuns');
     }
 
     get validFromTime() {
-        return this.urlsForm.get('validFromTime');
+        return this.urlForm.get('validFromTime');
     }
 
     get validUntilTime() {
-        return this.urlsForm.get('validUntilTime');
+        return this.urlForm.get('validUntilTime');
     }
 
     get intervieweeName() {
-        return this.urlsForm.get('intervieweeName');
+        return this.urlForm.get('intervieweeName');
     }
 
     public sendUpdateUrl() {
@@ -80,6 +80,6 @@ export class UrlEditComponent implements OnInit {
         } as UpdateUrlDto;
 
         this.errors = null;
-        this.urlsForm.reset();
+        this.urlForm.reset();
     }
 }

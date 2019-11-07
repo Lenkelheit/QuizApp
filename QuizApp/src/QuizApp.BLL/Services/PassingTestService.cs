@@ -74,7 +74,7 @@ namespace QuizApp.BLL.Services
                 return userIdentificationResult;
             }
 
-            if (url.NumberOfRuns != null && url.NumberOfRuns > 0)
+            if (url.NumberOfRuns.HasValue && url.NumberOfRuns > 0)
             {
                 --url.NumberOfRuns;
                 urlRepository.Update(url);

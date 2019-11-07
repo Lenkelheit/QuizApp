@@ -10,13 +10,14 @@ import { Observable, Subject, Subscription } from 'rxjs';
     styleUrls: ['./test-urls.component.css']
 })
 export class TestUrlsComponent implements OnInit, OnDestroy {
+    private subscription: Subscription = new Subscription();
+
     public columnsToDisplay: string[] = ['intervieweeName', 'numberOfRuns', 'validFromTime', 'validUntilTime', 'urlId', 'update'];
     public testUrls: UrlDto[] = [];
 
     public baseUrl: string = environment.baseUrl;
 
     @Input() getTestId$: Observable<number>;
-    private subscription: Subscription = new Subscription();
 
     constructor(private testService: TestService) { }
 
