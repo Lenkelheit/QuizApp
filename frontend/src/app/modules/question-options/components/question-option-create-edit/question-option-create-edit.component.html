@@ -1,40 +1,27 @@
-<form [formGroup]="questionOptionsForm">
+<form [formGroup]="questionOptionForm">
 
-    <div class="form-container" formArrayName="questionOptions">
-        <button mat-raised-button color="primary" (click)="addQuestionOption()">Add option</button>
+    <mat-checkbox formControlName="isRight" [(ngModel)]="updateQuestionOption.isRight">
+        <mat-form-field>
+            <input formControlName="text" [(ngModel)]="updateQuestionOption.text" name="text" type="text" matInput
+                placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
 
-        <div *ngFor="let questionOption of questionOptions.controls; let i=index">
+            <mat-error *ngIf="text.errors?.required && (text.touched || text.dirty)">
+                This field is required.
+            </mat-error>
 
-            <div [formGroupName]="i">
+            <mat-error *ngIf="text.errors?.minlength && (text.touched || text.dirty)">
+                Text must be at least 4 characters long.
+            </mat-error>
 
-                <mat-checkbox formControlName="isRight" [(ngModel)]="updateQuestionOptions[i].isRight">
-                    <mat-form-field>
-                        <input formControlName="text" [(ngModel)]="updateQuestionOptions[i].text" name="text"
-                            type="text" matInput placeholder="Text" [errorStateMatcher]="validControlMatcher"
-                            required />
+            <mat-error *ngIf="text.errors?.maxlength && (text.touched || text.dirty)">
+                Text must be less than 256 characters long.
+            </mat-error>
 
-                        <mat-error *ngIf="getText(i).errors?.required && (getText(i).touched || getText(i).dirty)">
-                            This field is required.
-                        </mat-error>
+        </mat-form-field>
+    </mat-checkbox>
 
-                        <mat-error *ngIf="getText(i).errors?.minlength && (getText(i).touched || getText(i).dirty)">
-                            Text must be at least 4 characters long.
-                        </mat-error>
-
-                        <mat-error *ngIf="getText(i).errors?.maxlength && (getText(i).touched || getText(i).dirty)">
-                            Text must be less than 256 characters long.
-                        </mat-error>
-
-                    </mat-form-field>
-                </mat-checkbox>
-
-                <button mat-button (click)="deleteQuestionOption(i)">
-                    <i class="material-icons">delete</i>
-                </button>
-
-            </div>
-
-        </div>
-    </div>
+    <button type="button" mat-button (click)="deleteQuestionOption.emit()">
+        <i class="material-icons">delete</i>
+    </button>
 
 </form>

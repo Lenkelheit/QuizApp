@@ -14,7 +14,7 @@ namespace QuizApp.Web.Validators.Url
         {
             RuleFor(url => url.NumberOfRuns)
                 .GreaterThanOrEqualTo(0)
-                    .When(url => url.NumberOfRuns != null)
+                    .When(url => url.NumberOfRuns.HasValue)
                     .WithMessage("{PropertyName} must be greater than or equal to {ComparisonValue} in url.");
 
             RuleFor(url => url.ValidFromTime)
@@ -34,7 +34,7 @@ namespace QuizApp.Web.Validators.Url
 
             RuleFor(url => url.TestId)
                 .GreaterThan(0)
-                    .When(url => url.TestId != null)
+                    .When(url => url.TestId.HasValue)
                     .WithMessage("{PropertyName} must be greater than {ComparisonValue} in url.");
         }
     }

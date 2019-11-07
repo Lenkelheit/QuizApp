@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInternalService } from '../http-internal.service';
+import { HttpInternalService } from './http-internal.service';
 import { NewTestEventDto } from '../models/test-event/new-test-event-dto';
 import { CreatedTestEventDto } from '../models/test-event/created-test-event-dto';
 

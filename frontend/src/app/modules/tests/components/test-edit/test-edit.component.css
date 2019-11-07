@@ -36,3 +36,13 @@ form {
   color: #721c24;
   background-color: #f8d7da;
 }
+
+.question-container {
+  padding: 20px;
+  margin: 15px;
+}
+
+p {
+  text-align: center;
+  font-size: x-large;
+}

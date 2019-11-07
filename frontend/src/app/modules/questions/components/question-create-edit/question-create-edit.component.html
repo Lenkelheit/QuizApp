@@ -1,85 +1,74 @@
-<form [formGroup]="questionsForm">
+<form [formGroup]="questionForm">
 
-    <div class="form-container" formArrayName="questions">
-        <button mat-raised-button color="primary" (click)="addQuestion()">Add question</button>
+    <mat-form-field>
+        <input formControlName="text" [(ngModel)]="updateQuestion.text" name="text" type="text" matInput
+            placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
 
-        <div *ngIf="!updateQuestions || updateQuestions?.length === 0">
-            <p>
-                There is not any questions.
-            </p>
-        </div>
+        <mat-error *ngIf="text.errors?.required && (text.touched || text.dirty)">
+            This field is required.
+        </mat-error>
 
-        <div class="question-container mat-elevation-z10" *ngFor="let question of questions.controls; let i=index">
+        <mat-error *ngIf="text.errors?.minlength && (text.touched || text.dirty)">
+            Text must be at least 4 characters long.
+        </mat-error>
 
-            <div [formGroupName]="i">
+        <mat-error *ngIf="text.errors?.maxlength && (text.touched || text.dirty)">
+            Text must be less than 256 characters long.
+        </mat-error>
 
-                <mat-form-field>
-                    <input formControlName="text" [(ngModel)]="updateQuestions[i].text" name="text" type="text" matInput
-                        placeholder="Text" [errorStateMatcher]="validControlMatcher" required />
+    </mat-form-field>
 
-                    <mat-error *ngIf="getText(i).errors?.required && (getText(i).touched || getText(i).dirty)">
-                        This field is required.
-                    </mat-error>
+    <mat-form-field>
+        <input formControlName="hint" [(ngModel)]="updateQuestion.hint" name="hint" type="text" matInput
+            placeholder="Hint" />
 
-                    <mat-error *ngIf="getText(i).errors?.minlength && (getText(i).touched || getText(i).dirty)">
-                        Text must be at least 4 characters long.
-                    </mat-error>
+        <mat-error *ngIf="hint.errors?.minlength && (hint.touched || hint.dirty)">
+            Hint must be at least 4 characters long.
+        </mat-error>
 
-                    <mat-error *ngIf="getText(i).errors?.maxlength && (getText(i).touched || getText(i).dirty)">
-                        Text must be less than 256 characters long.
-                    </mat-error>
+        <mat-error *ngIf="hint.errors?.maxlength && (hint.touched || hint.dirty)">
+            Hint must be less than 256 characters long.
+        </mat-error>
 
-                </mat-form-field>
+    </mat-form-field>
 
-                <mat-form-field>
-                    <input formControlName="hint" [(ngModel)]="updateQuestions[i].hint" name="hint" type="text" matInput
-                        placeholder="Hint" />
+    <mat-form-field>
+        <input formControlName="timeLimitSeconds" [(ngModel)]="updateQuestion.timeLimitSeconds" name="timeLimitSeconds"
+            type="text" matInput placeholder="Time limit in seconds" [errorStateMatcher]="validControlMatcher"
+            required />
 
-                    <mat-error *ngIf="getHint(i).errors?.minlength && (getHint(i).touched || getHint(i).dirty)">
-                        Hint must be at least 4 characters long.
-                    </mat-error>
+        <mat-error *ngIf="timeLimitSeconds.errors?.required && (timeLimitSeconds.touched || timeLimitSeconds.dirty)">
+            This field is required.
+        </mat-error>
 
-                    <mat-error *ngIf="getHint(i).errors?.maxlength && (getHint(i).touched || getHint(i).dirty)">
-                        Hint must be less than 256 characters long.
-                    </mat-error>
+        <mat-error
+            *ngIf="timeLimitSeconds.errors?.formatTimeLimit && (timeLimitSeconds.touched || timeLimitSeconds.dirty)">
+            Invalid. Input time limit in such format: hh:mm:ss, where hh is from 00 to 23, mm - from 00 to
+            59, ss -
+            from 00 to 59.
+        </mat-error>
 
-                </mat-form-field>
+    </mat-form-field>
 
-                <mat-form-field>
-                    <input formControlName="timeLimitSeconds" [(ngModel)]="updateQuestions[i].timeLimitSeconds"
-                        name="timeLimitSeconds" type="text" matInput placeholder="Time limit in seconds"
-                        [errorStateMatcher]="validControlMatcher" required />
+    <button type="button" mat-button (click)="deleteQuestion.emit()">
+        <i class="material-icons">delete</i>
+    </button>
 
-                    <mat-error
-                        *ngIf="getTimeLimitSeconds(i).errors?.required && (getTimeLimitSeconds(i).touched || getTimeLimitSeconds(i).dirty)">
-                        This field is required.
-                    </mat-error>
+    <h3 class="mat-h3">Options</h3>
 
-                    <mat-error
-                        *ngIf="getTimeLimitSeconds(i).errors?.formatTimeLimit && (getTimeLimitSeconds(i).touched || getTimeLimitSeconds(i).dirty)">
-                        Invalid. Input time limit in such format: hh:mm:ss, where hh is from 00 to 23, mm - from 00 to
-                        59, ss -
-                        from 00 to 59.
-                    </mat-error>
+    <div class="form-container">
+        <button mat-raised-button color="primary" (click)="addQuestionOption()">Add option</button>
 
-                </mat-form-field>
+        <div *ngFor="let questionOption of updateQuestion.testQuestionOptions; let i=index">
 
-                <button mat-button (click)="deleteQuestion(i)">
-                    <i class="material-icons">delete</i>
-                </button>
-
-                <h3 class="mat-h3">Options</h3>
-
-                <app-question-option-create-edit
-                    [initializeQuestionOptions$]="initializeQuestionOptions[i].asObservable()"
-                    (passUpUpdateQuestionOptions)="saveQuestionOptions(i, $event)"
-                    (passUpQuestionOptionsFormStatusInvalid)="saveQuestionOptionsFormStatusInvalid(i, $event)"
-                    [deleteOptionsForms$]="deleteOptionsForms.asObservable()"
-                    [getOptions$]="getOptions[i].asObservable()">
-                </app-question-option-create-edit>
-
-            </div>
+            <app-question-option-create-edit [updateQuestionOption]="questionOption"
+                (deleteQuestionOption)="deleteQuestionOption(i)"
+                (passUpUpdateQuestionOption)="setQuestionOption(i, $event)"
+                (passUpQuestionOptionFormStatusInvalid)="setQuestionOptionFormStatusInvalid(i, $event)"
+                [getOption$]="getOptions.asObservable()">
+            </app-question-option-create-edit>
 
         </div>
     </div>
+
 </form>

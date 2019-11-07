@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInternalService } from '../http-internal.service';
+import { HttpInternalService } from './http-internal.service';
 import { IdentityUrlDto } from '../models/passing-test/identity-url-dto';
 import { UrlValidationResultDto } from '../models/passing-test/url-validation-result-dto';
 import { UserIdentificationResultDto } from '../models/passing-test/user-identification-result-dto';

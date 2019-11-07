@@ -21,7 +21,7 @@ export class UrlEditComponent implements OnInit {
 
     public errors: Error;
 
-    urlsForm: FormGroup;
+    public urlsForm: FormGroup;
 
     public confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -72,11 +72,12 @@ export class UrlEditComponent implements OnInit {
         );
     }
 
-    private clearUrl() {
-        this.updateUrl.intervieweeName = null;
-        this.updateUrl.numberOfRuns = null;
-        this.updateUrl.validFromTime = null;
-        this.updateUrl.validUntilTime = null;
+    public clearUrl() {
+        this.updateUrl = {
+            id: this.updateUrl.id,
+            test: this.updateUrl.test,
+            testId: this.updateUrl.testId
+        } as UpdateUrlDto;
 
         this.errors = null;
         this.urlsForm.reset();

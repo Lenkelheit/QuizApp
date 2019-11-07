@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TestDto } from 'src/app/models/test/test-dto';
 import { TestService } from 'src/app/services/test.service';
-import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
 import { Error } from 'src/app/models/error/error';
+import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
 
 @Component({
     selector: 'app-url-create',
@@ -22,7 +22,7 @@ export class UrlCreateComponent implements OnInit {
 
     public errors: Error;
 
-    urlForm: FormGroup;
+    public urlForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
     public confirmValidParentMatcher = new ConfirmValidParentMatcher();
@@ -76,7 +76,7 @@ export class UrlCreateComponent implements OnInit {
         );
     }
 
-    private clearUrl() {
+    public clearUrl() {
         this.newUrl = {} as NewUrlDto;
         this.errors = null;
         this.urlForm.reset();
