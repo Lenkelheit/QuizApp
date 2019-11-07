@@ -77,14 +77,29 @@
 
                     <h2 class="mat-h2">Questions</h2>
 
-                    <app-question-create-edit [initializeQuestions$]="initializeQuestions.asObservable()"
-                        (passUpUpdateQuestions)="saveQuestions($event)"
-                        (passUpQuestionsFormStatusInvalid)="setQuestionsFormStatusInvalid($event)"
-                        [deleteQuestionsForms$]="deleteQuestionsForms.asObservable()"
-                        [getQuestions$]="getQuestions.asObservable()">
-                    </app-question-create-edit>
+                    <div class="form-container">
+                        <div *ngIf="!updateTest.testQuestions || updateTest.testQuestions?.length === 0">
+                            <p>
+                                There is not any questions.
+                            </p>
+                        </div>
 
-                    <button mat-raised-button color="warn" (click)="clearTestWithChildForms()">
+                        <div class="question-container mat-elevation-z10"
+                            *ngFor="let question of updateTest.testQuestions; let i=index">
+
+                            <app-question-create-edit [updateQuestion]="question" (deleteQuestion)="deleteQuestion(i)"
+                                (passUpUpdateQuestion)="setQuestion(i, $event)"
+                                (passUpQuestionFormStatusInvalid)="setQuestionFormStatusInvalid(i, $event)"
+                                [getQuestion$]="getQuestions.asObservable()">
+                            </app-question-create-edit>
+
+                        </div>
+
+                        <button mat-raised-button color="primary" (click)="addQuestion()">Add question</button>
+                    </div>
+
+
+                    <button mat-raised-button color="warn" (click)="clearTest()">
                         Clear
                     </button>
 

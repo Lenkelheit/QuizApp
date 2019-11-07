@@ -2,8 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { UrlDto } from 'src/app/models/url/url-dto';
 import { TestService } from 'src/app/services/test.service';
 import { environment } from 'src/environments/environment';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-test-urls',
@@ -17,22 +16,23 @@ export class TestUrlsComponent implements OnInit, OnDestroy {
     public baseUrl: string = environment.baseUrl;
 
     @Input() getTestId$: Observable<number>;
-    private ngUnsubscribe = new Subject();
+    private subscription: Subscription = new Subscription();
 
     constructor(private testService: TestService) { }
 
     ngOnInit() {
-        this.getTestId$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(testId => {
-            this.getUrlsByTestId(testId);
-        });
+        this.subscription.add(
+            this.getTestId$.subscribe(testId => {
+                this.getUrlsByTestId(testId);
+            })
+        );
     }
 
     ngOnDestroy() {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
+        this.subscription.unsubscribe();
     }
 
-    public getUrlsByTestId(testId: number) {
+    private getUrlsByTestId(testId: number) {
         this.testService.getUrlsByTestId(testId).subscribe(urlsResp => {
             this.testUrls = urlsResp.body;
         });

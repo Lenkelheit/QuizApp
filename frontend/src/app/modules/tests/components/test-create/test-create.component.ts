@@ -3,10 +3,10 @@ import { TestService } from 'src/app/services/test.service';
 import { NewTestDto } from 'src/app/models/test/new-test-dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes';
-import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
+import { ValidationRegexes } from 'src/app/core/validators/validation-regexes';
+import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
 import { Router } from '@angular/router';
-import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
+import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
 
 @Component({
     selector: 'app-test-create',
@@ -18,7 +18,7 @@ export class TestCreateComponent implements OnInit {
 
     public errors: Error;
 
-    testForm: FormGroup;
+    public testForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
 
@@ -58,7 +58,7 @@ export class TestCreateComponent implements OnInit {
         );
     }
 
-    private clearTest() {
+    public clearTest() {
         this.newTest = {} as NewTestDto;
         this.errors = null;
         this.testForm.reset();

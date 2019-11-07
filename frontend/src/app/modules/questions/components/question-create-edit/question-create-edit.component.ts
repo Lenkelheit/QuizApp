@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject, merge, BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes';
-import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { ValidationRegexes } from 'src/app/core/validators/validation-regexes';
+import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
 import { UpdateQuestionDto } from 'src/app/models/question/update-question-dto';
 import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-question-option-dto';
-import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
+import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
 
 @Component({
     selector: 'app-question-create-edit',
@@ -14,140 +13,96 @@ import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-
     styleUrls: ['./question-create-edit.component.css']
 })
 export class QuestionCreateEditComponent implements OnInit, OnDestroy {
-    public updateQuestions: UpdateQuestionDto[] = [];
+    @Input() updateQuestion: UpdateQuestionDto;
+    public questionOptionsFormStatusInvalid: boolean[] = [];
 
-    public questionOptionsFormsStatusInvalid: boolean[] = [];
+    @Input() getQuestion$: Observable<void>;
+    @Output() passUpUpdateQuestion: EventEmitter<UpdateQuestionDto> = new EventEmitter<UpdateQuestionDto>();
+    @Output() passUpQuestionFormStatusInvalid: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() deleteQuestion: EventEmitter<void> = new EventEmitter<void>();
 
-    @Input() initializeQuestions$: Observable<UpdateQuestionDto[]>;
-    @Input() deleteQuestionsForms$: Observable<void>;
-    @Input() getQuestions$: Observable<void>;
-    @Output() passUpUpdateQuestions: EventEmitter<UpdateQuestionDto[]> = new EventEmitter<UpdateQuestionDto[]>();
-    @Output() passUpQuestionsFormStatusInvalid: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public getOptions: Subject<void> = new Subject<void>();
+    public updateQuestionOptionsFormStatus: Subject<void> = new Subject<void>();
+    public questionAndOptionsFormStatusChanges$: Observable<void>;
 
-    private getOptions: Subject<void>[] = [];
-    private deleteOptionsForms: Subject<void> = new Subject<void>();
-    private updateQuestionOptionsFormStatus: Subject<void> = new Subject<void>();
-    private questionsAndOptionsFormsStatusChanges$: Observable<void>;
-    private initializeQuestionOptions: BehaviorSubject<UpdateQuestionOptionDto[]>[] = [];
-    private ngUnsubscribe = new Subject();
-
-    public questionsForm: FormGroup;
+    public questionForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
+
+    private subscription: Subscription = new Subscription();
 
     constructor(private formBuilder: FormBuilder) { }
 
     ngOnInit() {
-        this.questionsForm = this.formBuilder.group({
-            questions: this.formBuilder.array([])
-        });
-
-        this.initializeQuestions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(questions => {
-            this.updateQuestions = questions;
-
-            this.updateQuestions.forEach((value, index) => {
-                this.getOptions.push(new Subject<void>());
-                this.initializeQuestionOptions
-                    .push(new BehaviorSubject<UpdateQuestionOptionDto[]>(this.updateQuestions[index].testQuestionOptions));
-
-                this.questions.push(this.addQuestionFormGroup());
-            });
-        });
-
-        this.questionsAndOptionsFormsStatusChanges$ =
-            merge(this.questionsForm.statusChanges, this.updateQuestionOptionsFormStatus.asObservable());
-
-        this.questionsAndOptionsFormsStatusChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-            const questionOptionsFormsStatusInvalid = this.questionOptionsFormsStatusInvalid.some(value => value === true);
-
-            this.passUpQuestionsFormStatusInvalid.emit((this.questionsForm.status === 'INVALID') || questionOptionsFormsStatusInvalid);
-        });
-
-        this.getQuestions$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-            this.getOptions.forEach(elem => elem.next());
-
-            this.passUpUpdateQuestions.emit(this.updateQuestions);
-        });
-
-        this.deleteQuestionsForms$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-            this.clearQuestionsWithChildForms();
-        });
-    }
-
-    ngOnDestroy() {
-        this.ngUnsubscribe.next();
-        this.ngUnsubscribe.complete();
-    }
-
-    get questions() {
-        return this.questionsForm.get('questions') as FormArray;
-    }
-
-    public getQuestion(index: number) {
-        return this.questions.controls[index] as FormGroup;
-    }
-
-    public getText(index: number) {
-        return this.getQuestion(index).controls.text;
-    }
-
-    public getHint(index: number) {
-        return this.getQuestion(index).controls.hint;
-    }
-
-    public getTimeLimitSeconds(index: number) {
-        return this.getQuestion(index).controls.timeLimitSeconds;
-    }
-
-    public addQuestion() {
-        this.questions.push(this.addQuestionFormGroup());
-        this.updateQuestions.push({} as UpdateQuestionDto);
-
-        this.getOptions.push(new Subject<void>());
-        this.initializeQuestionOptions.push(new BehaviorSubject<UpdateQuestionOptionDto[]>([{} as UpdateQuestionOptionDto]));
-
-        this.questionOptionsFormsStatusInvalid.push(true);
-    }
-
-    public addQuestionFormGroup() {
-        return this.formBuilder.group({
+        this.questionForm = this.formBuilder.group({
             text: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(256)]],
             hint: ['', [Validators.minLength(4), Validators.maxLength(256)]],
             timeLimitSeconds: ['', [Validators.required, FormatTimeLimitValidator.validate(ValidationRegexes.timeLimitRegex)]]
         });
+
+        this.updateQuestion.testQuestionOptions.forEach(() => {
+            this.questionOptionsFormStatusInvalid.push(false);
+        });
+
+        this.questionAndOptionsFormStatusChanges$ =
+            merge(this.questionForm.statusChanges, this.updateQuestionOptionsFormStatus.asObservable());
+
+        this.subscription.add(
+            this.questionAndOptionsFormStatusChanges$.subscribe(() => {
+                const questionOptionsFormStatusInvalid = this.questionOptionsFormStatusInvalid.some(value => value === true);
+
+                this.passUpQuestionFormStatusInvalid.emit((this.questionForm.status === 'INVALID') || questionOptionsFormStatusInvalid);
+            })
+        );
+
+        this.subscription.add(
+            this.getQuestion$.subscribe(() => {
+                this.getOptions.next();
+                this.passUpUpdateQuestion.emit(this.updateQuestion);
+            })
+        );
     }
 
-    public deleteQuestion(index: number) {
-        this.questionOptionsFormsStatusInvalid.splice(index, 1);
-
-        this.updateQuestions.splice(index, 1);
-        this.questions.removeAt(index);
-
-        this.getOptions.splice(index, 1);
-        this.initializeQuestionOptions.splice(index, 1);
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
-    private clearQuestions() {
-        this.questionOptionsFormsStatusInvalid = [];
-
-        this.updateQuestions = [];
-        this.questions.clear();
-
-        this.getOptions = [];
-        this.initializeQuestionOptions = [];
+    get text() {
+        return this.questionForm.get('text');
     }
 
-    private clearQuestionsWithChildForms() {
-        this.deleteOptionsForms.next();
-        this.clearQuestions();
+    get hint() {
+        return this.questionForm.get('hint');
     }
 
-    private saveQuestionOptions(index: number, updateQuestionOptions: UpdateQuestionOptionDto[]) {
-        this.updateQuestions[index].testQuestionOptions = updateQuestionOptions;
+    get timeLimitSeconds() {
+        return this.questionForm.get('timeLimitSeconds');
     }
 
-    private saveQuestionOptionsFormStatusInvalid(index: number, questionOptionsFormStatusInvalid: boolean) {
-        this.questionOptionsFormsStatusInvalid[index] = questionOptionsFormStatusInvalid;
+    public addQuestionOption() {
+        this.updateQuestion.testQuestionOptions.push({} as UpdateQuestionOptionDto);
+        this.questionOptionsFormStatusInvalid.push(true);
+
+        this.updateQuestionOptionsFormStatus.next();
+    }
+
+    public deleteQuestionOption(index: number) {
+        this.updateQuestion.testQuestionOptions.splice(index, 1);
+        this.questionOptionsFormStatusInvalid.splice(index, 1);
+
+        this.updateQuestionOptionsFormStatus.next();
+
+        if (this.updateQuestion.testQuestionOptions.length === 0) {
+            this.addQuestionOption();
+        }
+    }
+
+    public setQuestionOption(index: number, updateQuestionOption: UpdateQuestionOptionDto) {
+        this.updateQuestion.testQuestionOptions[index] = updateQuestionOption;
+    }
+
+    public setQuestionOptionFormStatusInvalid(index: number, questionOptionFormStatusInvalid: boolean) {
+        this.questionOptionsFormStatusInvalid[index] = questionOptionFormStatusInvalid;
 
         this.updateQuestionOptionsFormStatus.next();
     }

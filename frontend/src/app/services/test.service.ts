@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInternalService } from 'src/app/http-internal.service';
+import { HttpInternalService } from 'src/app/services/http-internal.service';
 import { TestDto } from '../models/test/test-dto';
 import { NewTestDto } from '../models/test/new-test-dto';
 import { CreatedTestDto } from '../models/test/created-test-dto';
@@ -12,7 +12,7 @@ import { UrlDto } from '../models/url/url-dto';
     providedIn: 'root'
 })
 export class TestService {
-    public routePrefix = '/api/tests';
+    private routePrefix = '/api/tests';
 
     constructor(private httpService: HttpInternalService) { }
 

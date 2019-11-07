@@ -3,13 +3,14 @@ import { Subject } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ValidationRegexes } from 'src/app/shared/validators/validation-regexes';
-import { ValidControlMatcher } from 'src/app/shared/error-state-matchers/valid-control-matcher';
+import { ValidationRegexes } from 'src/app/core/validators/validation-regexes';
+import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateTestDto } from 'src/app/models/test/update-test-dto';
 import { TestDetailDto } from 'src/app/models/test/test-detail-dto';
 import { UpdateQuestionDto } from 'src/app/models/question/update-question-dto';
-import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-limit-validator';
+import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
+import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-question-option-dto';
 
 @Component({
     selector: 'app-test-edit',
@@ -18,17 +19,14 @@ import { FormatTimeLimitValidator } from 'src/app/shared/validators/format-time-
 })
 export class TestEditComponent implements OnInit {
     public updateTest: UpdateTestDto = {} as UpdateTestDto;
+    public questionsFormStatusInvalid: boolean[] = [];
 
     public errors: Error;
 
-    public questionsFormStatusInvalid: boolean;
+    public getQuestions: Subject<void> = new Subject<void>();
+    public passTestId: Subject<number> = new Subject<number>();
 
-    private deleteQuestionsForms: Subject<void> = new Subject<void>();
-    private getQuestions: Subject<void> = new Subject<void>();
-    private initializeQuestions: Subject<UpdateQuestionDto[]> = new Subject<UpdateQuestionDto[]>();
-    private passTestId: Subject<number> = new Subject<number>();
-
-    testForm: FormGroup;
+    public testForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
 
@@ -47,9 +45,9 @@ export class TestEditComponent implements OnInit {
         this.testService.getTestById(testId).subscribe(testDetailResp => {
             this.updateTest = testDetailResp.body as UpdateTestDto;
 
-            this.initializeQuestions.next(this.updateTest.testQuestions);
-
-            this.questionsFormStatusInvalid = false;
+            this.updateTest.testQuestions.forEach(() => {
+                this.questionsFormStatusInvalid.push(false);
+            });
 
             this.passTestId.next(testId);
         });
@@ -71,7 +69,7 @@ export class TestEditComponent implements OnInit {
         this.getQuestions.next();
 
         this.testService.updateTest(this.updateTest).subscribe(() => {
-            this.clearTestWithChildForms();
+            this.clearTest();
 
             this.router.navigate(['/tests']);
         },
@@ -81,34 +79,38 @@ export class TestEditComponent implements OnInit {
         );
     }
 
-    public clearTestWithChildForms() {
-        this.clearTest();
-        this.deleteQuestionsForms.next();
+    public addQuestion() {
+        this.updateTest.testQuestions.push({ testQuestionOptions: [{} as UpdateQuestionOptionDto] } as UpdateQuestionDto);
+        this.questionsFormStatusInvalid.push(true);
     }
 
-    private clearTest() {
-        const updateTestId = this.updateTest.id;
-        const updateTestAuthorId = this.updateTest.authorId;
-        const updateTestLastModifiedDate = this.updateTest.lastModifiedDate;
+    public deleteQuestion(index: number) {
+        this.updateTest.testQuestions.splice(index, 1);
+        this.questionsFormStatusInvalid.splice(index, 1);
+    }
 
-        this.updateTest = {} as UpdateTestDto;
-        this.updateTest.id = updateTestId;
-        this.updateTest.authorId = updateTestAuthorId;
-        this.updateTest.lastModifiedDate = updateTestLastModifiedDate;
+    public clearTest() {
+        this.updateTest = {
+            id: this.updateTest.id,
+            authorId: this.updateTest.authorId,
+            lastModifiedDate: this.updateTest.lastModifiedDate,
+            testQuestions: []
+        } as UpdateTestDto;
 
+        this.questionsFormStatusInvalid = [];
         this.errors = null;
         this.testForm.reset();
     }
 
-    private saveQuestions(updateQuestions: UpdateQuestionDto[]) {
-        this.updateTest.testQuestions = updateQuestions;
-    }
-
-    private setQuestionsFormStatusInvalid(statusInvalid: boolean) {
-        this.questionsFormStatusInvalid = statusInvalid;
-    }
-
     public checkFormsStatus() {
-        return this.testForm.invalid || this.questionsFormStatusInvalid;
+        return this.testForm.invalid || this.questionsFormStatusInvalid.some(value => value === true);
+    }
+
+    public setQuestion(index: number, updateQuestion: UpdateQuestionDto) {
+        this.updateTest.testQuestions[index] = updateQuestion;
+    }
+
+    public setQuestionFormStatusInvalid(index: number, statusInvalid: boolean) {
+        this.questionsFormStatusInvalid[index] = statusInvalid;
     }
 }

@@ -17,11 +17,11 @@ export class TestListComponent implements OnInit {
         this.getTests();
     }
 
-    public getTests() {
-        this.testService.getTests().subscribe(resp => this.tests = resp.body);
-    }
-
     public deleteTest(id: number) {
         this.testService.deleteTest(id).subscribe(() => this.getTests());
+    }
+
+    private getTests() {
+        this.testService.getTests().subscribe(resp => this.tests = resp.body);
     }
 }

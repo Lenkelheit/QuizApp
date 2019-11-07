@@ -17,7 +17,7 @@ export class UrlListComponent implements OnInit {
         this.getUrls();
     }
 
-    public getUrls() {
+    private getUrls() {
         this.urlService.getUrls().subscribe(resp => this.urls = resp.body);
     }
 }
