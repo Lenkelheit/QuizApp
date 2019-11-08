@@ -82,7 +82,7 @@
                     <div class="form-container">
                         <div *ngIf="!updateTest.testQuestions || updateTest.testQuestions?.length === 0">
                             <p>
-                                There is not any questions.
+                                There are not any questions.
                             </p>
                         </div>
 
@@ -117,6 +117,13 @@
         <div class="test-urls">
             <app-test-urls [getTestId$]="passTestId.asObservable()">
             </app-test-urls>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Test results">
+        <div class="test-results">
+            <app-test-results [getTestId$]="passTestId.asObservable()">
+            </app-test-results>
         </div>
     </mat-tab>
 </mat-tab-group>

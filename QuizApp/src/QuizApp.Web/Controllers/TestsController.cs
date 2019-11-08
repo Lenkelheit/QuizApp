@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.TestResult;
 using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
 
@@ -91,6 +92,12 @@ namespace QuizApp.Web.Controllers
         public ActionResult<IEnumerable<UrlDto>> GetUrlsByTestId(int testId)
         {
             return Ok(testService.GetUrlsByTestId(testId));
+        }
+
+        [HttpGet("{testId}/results")]
+        public ActionResult<IEnumerable<TestResultDto>> GetResultsByTestId(int testId)
+        {
+            return Ok(testService.GetResultsByTestId(testId));
         }
     }
 }

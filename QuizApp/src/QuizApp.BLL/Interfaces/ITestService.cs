@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.TestResult;
 using QuizApp.BLL.Dto.Url;
 
 namespace QuizApp.BLL.Interfaces
@@ -24,5 +25,7 @@ namespace QuizApp.BLL.Interfaces
         IEnumerable<TestQuestionDto> GetQuestionsByTestId(int testId);
 
         IEnumerable<UrlDto> GetUrlsByTestId(int testId);
+
+        IEnumerable<TestResultDto> GetResultsByTestId(int testId);
     }
 }
