@@ -61,7 +61,7 @@ namespace QuizApp.Web.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/options")]
+        [HttpGet("{resultAnswerId}/options")]
         public ActionResult<IEnumerable<ResultAnswerOptionDto>> GetAnswerOptionsByResultAnswerId(int resultAnswerId)
         {
             return Ok(resultAnswerService.GetAnswerOptionsByResultAnswerId(resultAnswerId));

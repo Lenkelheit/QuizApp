@@ -1,0 +1,19 @@
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.basic-container {
+  margin: 30px;
+}
+
+.mat-app-background {
+  background-color: white;
+}

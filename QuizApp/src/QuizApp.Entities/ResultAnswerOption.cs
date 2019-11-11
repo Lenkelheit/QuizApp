@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Entities
 {
-    public class ResultAnswerOption
+    public class ResultAnswerOption : IEntity<int>
     {
         public int Id { get; set; }
 

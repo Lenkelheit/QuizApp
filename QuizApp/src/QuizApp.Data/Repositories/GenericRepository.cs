@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 using QuizApp.Data.Interfaces;
+using QuizApp.Entities;
 
 namespace QuizApp.Data.Repositories
 {
-    public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity<int>
     {
         public GenericRepository(DbContext dbContext)
         {
@@ -51,9 +52,7 @@ namespace QuizApp.Data.Repositories
 
             if (includeProperties != null) query = includeProperties(query);
 
-            DbSet<TEntity> dbSet = query as DbSet<TEntity>;
-
-            return dbSet?.Find(id);
+            return query.AsNoTracking().FirstOrDefault(entity => entity.Id == (int)id);
         }
 
         public virtual async Task<TEntity> GetByIdAsync(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
@@ -62,9 +61,7 @@ namespace QuizApp.Data.Repositories
 
             if (includeProperties != null) query = includeProperties(query);
 
-            DbSet<TEntity> dbSet = query as DbSet<TEntity>;
-
-            return await dbSet?.FindAsync(id);
+            return await query.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == (int)id);
         }
 
         public virtual void Insert(TEntity entity)
@@ -79,11 +76,17 @@ namespace QuizApp.Data.Repositories
 
         public virtual void Update(TEntity entityToUpdate)
         {
-            if (DbContext.Entry(entityToUpdate).State == EntityState.Detached)
+            DbContext.ChangeTracker.TrackGraph(entityToUpdate, e =>
             {
-                DbSet.Attach(entityToUpdate);
-            }
-            DbContext.Entry(entityToUpdate).State = EntityState.Modified;
+                if (e.Entry.IsKeySet)
+                {
+                    e.Entry.State = EntityState.Modified;
+                }
+                else
+                {
+                    e.Entry.State = EntityState.Added;
+                }
+            });
         }
 
         public virtual void Delete(TEntity entityToDelete)

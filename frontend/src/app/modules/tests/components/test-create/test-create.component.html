@@ -1,0 +1,69 @@
+<h1 class="mat-h1">Test</h1>
+
+<div class="form-container">
+    <div *ngIf="errors">
+        <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
+            {{error}}
+        </div>
+    </div>
+
+    <form [formGroup]="testForm">
+        <mat-form-field>
+            <input formControlName="title" [(ngModel)]="newTest.title" name="title" type="text" matInput
+                placeholder="Title" [errorStateMatcher]="validControlMatcher" required />
+
+            <mat-error *ngIf="title.errors?.required && (title.touched || title.dirty)">
+                This field is required.
+            </mat-error>
+
+            <mat-error *ngIf="title.errors?.minlength && (title.touched || title.dirty)">
+                Title must be at least 4 characters long.
+            </mat-error>
+
+            <mat-error *ngIf="title.errors?.maxlength && (title.touched || title.dirty)">
+                Title must be less than 32 characters long.
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field>
+            <input formControlName="description" [(ngModel)]="newTest.description" name="description" type="text"
+                matInput placeholder="Description" />
+
+            <mat-error *ngIf="description.errors?.minlength && (description.touched || description.dirty)">
+                Description must be at least 4 characters long.
+            </mat-error>
+
+            <mat-error *ngIf="description.errors?.maxlength && (description.touched || description.dirty)">
+                Description must be less than 256 characters long.
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field>
+            <input formControlName="timeLimitSeconds" [(ngModel)]="newTest.timeLimitSeconds" name="timeLimitSeconds"
+                type="text" matInput placeholder="Time limit in seconds" [errorStateMatcher]="validControlMatcher"
+                required />
+
+            <mat-error
+                *ngIf="timeLimitSeconds.errors?.required && (timeLimitSeconds.touched || timeLimitSeconds.dirty)">
+                This field is required.
+            </mat-error>
+
+            <mat-error
+                *ngIf="timeLimitSeconds.errors?.formatTimeLimit && (timeLimitSeconds.touched || timeLimitSeconds.dirty)">
+                Invalid. Input time limit in such format: hh:mm:ss, where hh is from 00 to 23, mm - from 00 to 59, ss -
+                from 00 to 59.
+            </mat-error>
+
+        </mat-form-field>
+
+        <button mat-raised-button color="warn" (click)="clearTest()">
+            Clear
+        </button>
+
+        <button mat-raised-button color="primary" [disabled]="testForm.invalid" (click)="sendNewTest()">
+            Create
+        </button>
+    </form>
+</div>

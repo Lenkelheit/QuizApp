@@ -1,0 +1,56 @@
+<div class="basic-container">
+    <button mat-raised-button [routerLink]="['/urls/new']">
+        Create new url
+    </button>
+</div>
+
+<div *ngIf="!testUrls || testUrls?.length === 0; else testUrlsTable">
+    <p>
+        There is not any urls for this test.
+    </p>
+</div>
+
+<ng-template #testUrlsTable>
+    <table mat-table [dataSource]="testUrls" class="mat-elevation-z10">
+        <ng-container matColumnDef="intervieweeName">
+            <th mat-header-cell *matHeaderCellDef>Interviewee name</th>
+            <td mat-cell *matCellDef="let element">{{ element.intervieweeName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="numberOfRuns">
+            <th mat-header-cell *matHeaderCellDef>Number of runs</th>
+            <td mat-cell *matCellDef="let element">{{ element.numberOfRuns }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="validFromTime">
+            <th mat-header-cell *matHeaderCellDef>Valid from time</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.validFromTime | date: "MM/dd/yyyy, h:mm:ss a" }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="validUntilTime">
+            <th mat-header-cell *matHeaderCellDef>Valid until time</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.validUntilTime | date: "MM/dd/yyyy, h:mm:ss a" }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="urlId">
+            <th mat-header-cell *matHeaderCellDef>Url</th>
+            <td mat-cell *matCellDef="let element">{{ baseUrl + element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="update">
+            <th mat-header-cell *matHeaderCellDef>Update</th>
+            <td mat-cell *matCellDef="let element">
+                <a mat-button [routerLink]="['/urls',element.id]">
+                    <i class="material-icons">edit</i>
+                </a>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+    </table>
+</ng-template>

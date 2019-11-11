@@ -208,6 +208,15 @@ namespace QuizApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "john@gmail.com",
+                            Password = "1111",
+                            Username = "John"
+                        });
                 });
 
             modelBuilder.Entity("QuizApp.Entities.ResultAnswer", b =>

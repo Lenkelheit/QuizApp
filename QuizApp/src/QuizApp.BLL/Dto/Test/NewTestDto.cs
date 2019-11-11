@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.Url;
+
 namespace QuizApp.BLL.Dto.Test
 {
     public class NewTestDto

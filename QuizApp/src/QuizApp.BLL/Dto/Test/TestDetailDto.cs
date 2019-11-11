@@ -19,6 +19,8 @@ namespace QuizApp.BLL.Dto.Test
 
         public DateTime LastModifiedDate { get; set; }
 
+        public int AuthorId { get; set; }
+
 
         public ICollection<UrlDetailDto> Urls { get; set; } = new List<UrlDetailDto>();
 

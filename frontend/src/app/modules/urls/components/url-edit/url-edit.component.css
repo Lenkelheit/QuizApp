@@ -1,0 +1,35 @@
+.form-container {
+  margin: 2%;
+}
+
+h1,
+h2 {
+  text-align: center;
+  margin: 8px;
+}
+
+button,
+form,
+label {
+  margin: 30px 8px 8px 8px;
+}
+
+.mat-field-block {
+  margin: 8px;
+  width: 35%;
+  display: block;
+}
+
+.mat-field-oneline {
+  margin: 8px 15px 8px 8px;
+  width: 20%;
+}
+
+.error-container {
+  padding: 10px;
+  margin: 10px;
+  width: 45%;
+  display: block;
+  color: #721c24;
+  background-color: #f8d7da;
+}

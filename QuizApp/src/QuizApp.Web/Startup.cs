@@ -43,6 +43,8 @@ namespace QuizApp.Web
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddCustomServices();
 
+            services.AddCors();
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining(typeof(NewTestDtoValidator)));
@@ -56,6 +58,8 @@ namespace QuizApp.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:4200"));
 
             app.UseMvc();
         }

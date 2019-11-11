@@ -2,7 +2,7 @@
 
 namespace QuizApp.Entities
 {
-    public class TestQuestionOption
+    public class TestQuestionOption : IEntity<int>
     {
         public int Id { get; set; }
 

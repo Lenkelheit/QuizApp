@@ -1,0 +1,8 @@
+.form-container {
+  margin: 5px;
+}
+
+mat-form-field,
+button {
+  margin: 8px;
+}
