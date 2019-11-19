@@ -37,7 +37,12 @@ namespace QuizApp.BLL.Services
         {
             TestResult testResult = await testResultRepository.GetByIdAsync(id: testResultId, includeProperties: prop => prop
                 .Include(r => r.ResultAnswers)
-                    .ThenInclude(ra => ra.ResultAnswerOptions));
+                    .ThenInclude(ra => ra.ResultAnswerOptions)
+                .Include(r => r.ResultAnswers)
+                    .ThenInclude(ra => ra.Question)
+                        .ThenInclude(q => q.TestQuestionOptions)
+                .Include(r => r.Url)
+                    .ThenInclude(u => u.Test));
 
             return mapper.Map<TestResultDetailDto>(testResult);
         }

@@ -8,6 +8,7 @@ import { UpdateUrlDto } from 'src/app/models/url/update-url-dto';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Error } from 'src/app/models/error/error';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-url-edit',
@@ -16,10 +17,10 @@ import { Error } from 'src/app/models/error/error';
 })
 export class UrlEditComponent implements OnInit {
     public updateUrl: UpdateUrlDto = {} as UpdateUrlDto;
-
     public baseUrl: string = environment.baseUrl;
-
     public errors: Error;
+
+    public passUrlId: Subject<number> = new Subject<number>();
 
     public urlForm: FormGroup;
 
@@ -41,6 +42,8 @@ export class UrlEditComponent implements OnInit {
 
         this.urlService.getUrlById(urlId).subscribe(urlDetailResp => {
             this.updateUrl = urlDetailResp.body as UpdateUrlDto;
+
+            this.passUrlId.next(urlId);
         });
     }
 

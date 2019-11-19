@@ -7,11 +7,10 @@ import { TestFormComponent } from './components/test-form/test-form.component';
 import { QuestionFormComponent } from './components/question-form/question-form.component';
 import { QuestionOptionFormComponent } from './components/question-option-form/question-option-form.component';
 import { CounterDirective } from './directives/counter.directive';
-import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
 
 @NgModule({
     declarations: [TestPassComponent, UserIdentifyComponent, TestFormComponent,
-        QuestionFormComponent, QuestionOptionFormComponent, CounterDirective, TimeSecondsToHhMmSsPipe],
+        QuestionFormComponent, QuestionOptionFormComponent, CounterDirective],
     imports: [
         CommonModule,
         SharedModule

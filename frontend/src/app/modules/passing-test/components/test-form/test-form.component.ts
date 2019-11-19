@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { PassingTestService } from 'src/app/services/passing-test.service';
 import { ViewTestDto } from 'src/app/models/passing-test/view-test-dto';
-import { ViewQuestionDto } from 'src/app/models/passing-test/view-question-dto';
-import { TimeConverter } from '../../converters/time-converter';
+import { TimeConverter } from '../../../../core/converters/time-converter';
 import { TestEventService } from 'src/app/services/test-event.service';
 import { NewTestEventDto } from 'src/app/models/test-event/new-test-event-dto';
 import { EventType } from 'src/app/models/test-event/enums/event-type.enum';
@@ -22,12 +21,12 @@ export class TestFormComponent implements OnInit, OnDestroy {
 
     public viewTest: ViewTestDto = {} as ViewTestDto;
     public sessionId = '';
-    public isTestSent = false;
 
     public timeLimitSeconds: number;
     public timeLimitSecondsCounter = 0;
 
     @Input() getIdentityUrl$: Observable<IdentityUrlDto>;
+    @Output() passUpTestResultId: EventEmitter<number> = new EventEmitter<number>();
 
     public sendQuestion: Subject<void> = new Subject<void>();
 
@@ -75,9 +74,7 @@ export class TestFormComponent implements OnInit, OnDestroy {
         } as UserUrlDto;
 
         this.passingTestService.createTestResult(userUrl).subscribe(createdTestResultDtoResp => {
-            console.log(createdTestResultDtoResp.body);
+            this.passUpTestResultId.emit(createdTestResultDtoResp.body.id);
         });
-
-        this.isTestSent = true;
     }
 }

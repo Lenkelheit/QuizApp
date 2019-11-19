@@ -9,6 +9,8 @@ import { Subject, BehaviorSubject } from 'rxjs';
 })
 export class TestPassComponent {
     public isUserIdentified = false;
+    public istestSent = false;
+    public testResultId: number;
 
     public passIdentityUrl: BehaviorSubject<IdentityUrlDto>;
 
@@ -16,5 +18,10 @@ export class TestPassComponent {
         this.passIdentityUrl = new BehaviorSubject<IdentityUrlDto>(identityUrl);
 
         this.isUserIdentified = true;
+    }
+
+    public setTestResultId(testResultId: number) {
+        this.testResultId = testResultId;
+        this.istestSent = true;
     }
 }

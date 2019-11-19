@@ -12,9 +12,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
 
 @NgModule({
-    declarations: [TopBarComponent],
+    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe],
     imports: [
         CommonModule,
         RouterModule,
@@ -35,6 +36,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     ],
     exports: [
         TopBarComponent,
+        TimeSecondsToHhMmSsPipe,
         RouterModule,
         FormsModule,
         MatTableModule,

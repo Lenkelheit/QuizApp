@@ -1,0 +1,16 @@
+.question-option-text {
+  font-size: 115%;
+  color: black !important;
+}
+
+.right-option {
+  background-color: rgb(116, 240, 116);
+}
+
+.wrong-option {
+  background-color: rgb(255, 154, 154);
+}
+
+.option {
+  padding: 8px;
+}

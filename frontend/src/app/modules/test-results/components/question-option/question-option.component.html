@@ -1,0 +1,6 @@
+<div class="option"
+    [ngClass]="{'right-option': questionOption?.isRight, 'wrong-option': !questionOption?.isRight && answerOption}">
+    <mat-checkbox [checked]="answerOption" disabled>
+        <p class="question-option-text">{{questionOption?.text}}</p>
+    </mat-checkbox>
+</div>

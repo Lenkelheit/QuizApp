@@ -1,0 +1,24 @@
+<div>
+    <p>Lasted: {{answerTimeTakenSeconds | timeSecondsToHhMmSs}}.</p>
+
+    <div *ngIf="!answer?.question; else viewAnswerOptions">
+        <p class="info">
+            The question was deleted.
+        </p>
+    </div>
+
+    <ng-template #viewAnswerOptions>
+        <p class="question-text">{{answer?.question?.text}}</p>
+
+        <p>{{answer?.question?.hint}}</p>
+
+        <p class="question-time-limit-seconds">Question time limit: {{answer?.question?.timeLimitSeconds}}.</p>
+
+        <div class="question-option" *ngFor="let questionOption of answer.question.testQuestionOptions; let i=index">
+
+            <app-question-option [questionOption]="questionOption" [answerOption]="findAnswerOption(questionOption)">
+            </app-question-option>
+
+        </div>
+    </ng-template>
+</div>

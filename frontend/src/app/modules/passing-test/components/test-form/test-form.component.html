@@ -1,41 +1,35 @@
-<div class="form-container">
-    <div *ngIf="!isTestSent; else testSent" class="test-form">
+<div class="form-container test-form">
+    <h1>{{viewTest.title}}</h1>
 
-        <h1>{{viewTest.title}}</h1>
+    <h2>{{viewTest.description}}</h2>
 
-        <h2>{{viewTest.description}}</h2>
+    <p appCounter [counter]="timeLimitSeconds" [interval]="1000" (value)="timeLimitSecondsCounter = $event"
+        (counterCompleted)="sendTest()" class="test-time-limit-seconds">
+        {{timeLimitSecondsCounter | timeSecondsToHhMmSs}}
+    </p>
 
-        <p appCounter [counter]="timeLimitSeconds" [interval]="1000" (value)="timeLimitSecondsCounter = $event"
-            (counterCompleted)="sendTest()" class="test-time-limit-seconds">
-            {{timeLimitSecondsCounter | timeSecondsToHhMmSs}}</p>
+    <div *ngIf="viewTest.testQuestions?.length !== 0">
+        <mat-horizontal-stepper (selectionChange)="sendQuestion.next()" linear #stepper>
+            <mat-step *ngFor="let question of viewTest.testQuestions; let i = index" [editable]="false">
 
-        <div *ngIf="viewTest.testQuestions?.length !== 0">
-            <mat-horizontal-stepper (selectionChange)="sendQuestion.next()" linear #stepper>
-                <mat-step *ngFor="let question of viewTest.testQuestions; let i = index" [editable]="false">
+                <div *ngIf="stepper.selectedIndex === i" class="question mat-elevation-z7">
 
-                    <div *ngIf="stepper.selectedIndex === i" class="question mat-elevation-z7">
+                    <app-question-form [viewQuestion]="question" [sendQuestion$]="sendQuestion.asObservable()"
+                        [sessionId]="sessionId"
+                        (counterCompleted)="i === (viewTest.testQuestions.length - 1) ? sendTest() : stepper.next()">
+                    </app-question-form>
 
-                        <app-question-form [viewQuestion]="question" [sendQuestion$]="sendQuestion.asObservable()"
-                            [sessionId]="sessionId"
-                            (counterCompleted)="i === (viewTest.testQuestions.length - 1) ? sendTest() : stepper.next()">
-                        </app-question-form>
-
-                        <div>
-                            <button class="stepper-next-button" mat-raised-button matStepperNext
-                                [disabled]="i === viewTest.testQuestions.length - 1">Next</button>
-                        </div>
+                    <div>
+                        <button class="stepper-next-button" mat-raised-button matStepperNext
+                            [disabled]="i === viewTest.testQuestions.length - 1">Next</button>
                     </div>
+                </div>
 
-                </mat-step>
-            </mat-horizontal-stepper>
-        </div>
-
-        <button mat-raised-button color="primary" (click)="sendTest()">
-            Submit
-        </button>
+            </mat-step>
+        </mat-horizontal-stepper>
     </div>
 
-    <ng-template #testSent>
-        <p class="test-sent-container">Test ended and was successfully sent.</p>
-    </ng-template>
+    <button mat-raised-button color="primary" (click)="sendTest()">
+        Submit
+    </button>
 </div>

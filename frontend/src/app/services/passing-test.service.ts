@@ -11,8 +11,7 @@ import { CreatedTestResultDto } from '../models/passing-test/created-test-result
     providedIn: 'root'
 })
 export class PassingTestService {
-
-    public routePrefix = '/api/passing-test';
+    private routePrefix = '/api/passing-test';
 
     constructor(private httpService: HttpInternalService) { }
 
