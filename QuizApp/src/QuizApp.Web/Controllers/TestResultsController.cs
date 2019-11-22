@@ -24,6 +24,12 @@ namespace QuizApp.Web.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult<IEnumerable<TestResultDto>> Get(string intervieweeNameFilter)
+        {
+            return Ok(testResultService.GetTestResults(intervieweeNameFilter));
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TestResultDetailDto>> GetTestResultById(int id)
         {
@@ -62,9 +68,9 @@ namespace QuizApp.Web.Controllers
         }
 
         [HttpGet("{testResultId}/answers")]
-        public ActionResult<IEnumerable<ResultAnswerFromResultDto>> GetAnswersByResultId(int testResultId)
+        public ActionResult<ResultAnswersApiDto> GetAnswersByResultId(int testResultId, int page = 0, int amountAnswersPerPage = 3)
         {
-            return Ok(testResultService.GetAnswersByResultId(testResultId));
+            return Ok(testResultService.GetAnswersByResultId(testResultId, page, amountAnswersPerPage));
         }
     }
 }

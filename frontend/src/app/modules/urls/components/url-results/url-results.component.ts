@@ -11,7 +11,7 @@ import { UrlService } from 'src/app/services/url.service';
 export class UrlResultsComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
 
-    public columnsToDisplay: string[] = ['intervieweeName', 'passingStartTime', 'passingEndTime', 'score', 'read'];
+    public columnsToDisplay: string[] = ['id', 'intervieweeName', 'passingStartTime', 'passingEndTime', 'score', 'read'];
     public testResultsForUrl: TestResultDto[] = [];
 
     @Input() getUrlId$: Observable<number>;

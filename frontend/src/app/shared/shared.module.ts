@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
@@ -32,7 +33,8 @@ import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
         MatNativeDateModule,
         MatSelectModule,
         MatTabsModule,
-        MatStepperModule
+        MatStepperModule,
+        MatPaginatorModule
     ],
     exports: [
         TopBarComponent,
@@ -51,7 +53,8 @@ import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
         MatNativeDateModule,
         MatSelectModule,
         MatTabsModule,
-        MatStepperModule
+        MatStepperModule,
+        MatPaginatorModule
     ]
 })
 export class SharedModule { }

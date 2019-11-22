@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using AutoMapper;
 
 using QuizApp.BLL.Dto.ResultAnswer;
@@ -33,14 +34,18 @@ namespace QuizApp.BLL.Services
         }
 
 
+        public IEnumerable<TestResultDto> GetTestResults(string intervieweeNameFilter)
+        {
+            IEnumerable<TestResult> results = !string.IsNullOrWhiteSpace(intervieweeNameFilter) ?
+                    testResultRepository.Get(filter: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase)) :
+                    testResultRepository.Get();
+
+            return mapper.Map<IEnumerable<TestResultDto>>(results);
+        }
+
         public async Task<TestResultDetailDto> GetTestResultById(int testResultId)
         {
             TestResult testResult = await testResultRepository.GetByIdAsync(id: testResultId, includeProperties: prop => prop
-                .Include(r => r.ResultAnswers)
-                    .ThenInclude(ra => ra.ResultAnswerOptions)
-                .Include(r => r.ResultAnswers)
-                    .ThenInclude(ra => ra.Question)
-                        .ThenInclude(q => q.TestQuestionOptions)
                 .Include(r => r.Url)
                     .ThenInclude(u => u.Test));
 
@@ -71,11 +76,18 @@ namespace QuizApp.BLL.Services
             return mapper.Map<DeletedTestResultDto>(testResult);
         }
 
-        public IEnumerable<ResultAnswerFromResultDto> GetAnswersByResultId(int testResultId)
+        public ResultAnswersApiDto GetAnswersByResultId(int testResultId, int page, int amountAnswersPerPage)
         {
-            IEnumerable<ResultAnswer> resultAnswers = resultAnswerRepository.Get(filter: ra => ra.ResultId == testResultId);
+            ResultAnswersApiDto resultAnswersApi = new ResultAnswersApiDto();
+            IEnumerable<ResultAnswer> resultAnswers = resultAnswerRepository.GetPageWithAmount(filter: ra => ra.ResultId == testResultId, page, amountAnswersPerPage, includeProperties: prop => prop
+                .Include(ra => ra.ResultAnswerOptions)
+                .Include(ra => ra.Question)
+                    .ThenInclude(q => q.TestQuestionOptions)).ToList();
 
-            return mapper.Map<IEnumerable<ResultAnswerFromResultDto>>(resultAnswers);
+            resultAnswersApi.ResultAnswers = mapper.Map<List<ResultAnswerFromResultDto>>(resultAnswers);
+            resultAnswersApi.TotalCount = resultAnswerRepository.Count(predicate: ra => ra.ResultId == testResultId);
+
+            return resultAnswersApi;
         }
     }
 }

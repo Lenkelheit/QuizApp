@@ -9,5 +9,4 @@ export interface TestResultDetailDto {
     score: number;
 
     test: ResultTestDto;
-    resultAnswers: ResultAnswerDetailDto[];
 }

@@ -11,7 +11,7 @@ import { TestResultDto } from 'src/app/models/test-result/test-result-dto';
 export class TestResultsComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
 
-    public columnsToDisplay: string[] = ['intervieweeName', 'passingStartTime', 'passingEndTime', 'score', 'read'];
+    public columnsToDisplay: string[] = ['id', 'intervieweeName', 'passingStartTime', 'passingEndTime', 'score', 'read'];
     public testResults: TestResultDto[] = [];
 
     @Input() getTestId$: Observable<number>;

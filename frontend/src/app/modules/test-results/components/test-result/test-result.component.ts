@@ -3,6 +3,7 @@ import { TestResultDetailDto } from 'src/app/models/test-result/test-result-deta
 import { Subject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TestResultService } from 'src/app/services/test-result.service';
+import { ResultAnswersApiDto } from 'src/app/models/result-answer/result-answers-api-dto';
 
 @Component({
     selector: 'app-test-result',
@@ -11,6 +12,9 @@ import { TestResultService } from 'src/app/services/test-result.service';
 })
 export class TestResultComponent implements OnInit {
     public testResult: TestResultDetailDto = {} as TestResultDetailDto;
+    public resultAnswersApi: ResultAnswersApiDto = {} as ResultAnswersApiDto;
+    public pageSize = 3;
+    public pageSizeOptions: number[] = [this.pageSize, 5];
     public resultTimeTakenSeconds: number;
     public isTestChangedAfterTaken: boolean;
 
@@ -27,6 +31,15 @@ export class TestResultComponent implements OnInit {
 
             this.isTestChangedAfterTaken = new Date(this.testResult.test.lastModifiedDate).getTime() >
                 new Date(this.testResult.passingEndTime).getTime();
+
+            this.setResultAnswersPage(testResultId, 0, this.pageSize);
         });
+    }
+
+    public setResultAnswersPage(testResultId: number, pageIndex: number, pageSize: number) {
+        this.testResultService.getAnswersByResultId(testResultId, pageIndex, pageSize)
+            .subscribe(resultAnswersApiResp => {
+                this.resultAnswersApi = resultAnswersApiResp.body;
+            });
     }
 }

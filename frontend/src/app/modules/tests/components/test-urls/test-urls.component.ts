@@ -12,7 +12,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 export class TestUrlsComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
 
-    public columnsToDisplay: string[] = ['intervieweeName', 'numberOfRuns', 'validFromTime', 'validUntilTime', 'urlId', 'update'];
+    public columnsToDisplay: string[] = ['id', 'intervieweeName', 'numberOfRuns', 'validFromTime', 'validUntilTime', 'urlId', 'update'];
     public testUrls: UrlDto[] = [];
 
     public baseUrl: string = environment.baseUrl;

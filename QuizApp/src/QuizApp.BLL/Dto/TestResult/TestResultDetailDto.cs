@@ -21,7 +21,5 @@ namespace QuizApp.BLL.Dto.TestResult
 
 
         public ResultTestDto Test { get; set; }
-
-        public ICollection<ResultAnswerDetailDto> ResultAnswers { get; set; } = new List<ResultAnswerDetailDto>();
     }
 }

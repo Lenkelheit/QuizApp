@@ -29,19 +29,27 @@
         </ng-template>
 
         <div class="form-container">
-            <div *ngIf="!testResult.resultAnswers || testResult.resultAnswers?.length === 0">
+            <div
+                *ngIf="!resultAnswersApi.resultAnswers || resultAnswersApi.resultAnswers?.length === 0; else viewAnswers">
                 <p class="info">
                     There are not any questions and answers.
                 </p>
             </div>
 
-            <div class="answer-container mat-elevation-z10"
-                *ngFor="let answer of testResult.resultAnswers; let i=index">
+            <ng-template #viewAnswers>
+                <mat-paginator [length]="resultAnswersApi.totalCount" [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="setResultAnswersPage(testResult.id, $event.pageIndex, $event.pageSize)">
+                </mat-paginator>
 
-                <app-question-answer [answer]="answer">
-                </app-question-answer>
+                <div class="answer-container mat-elevation-z10"
+                    *ngFor="let answer of resultAnswersApi.resultAnswers; let i=index">
 
-            </div>
+                    <app-question-answer [answer]="answer">
+                    </app-question-answer>
+
+                </div>
+            </ng-template>
         </div>
 
     </div>

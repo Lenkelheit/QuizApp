@@ -10,12 +10,14 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface ITestResultService
     {
+        IEnumerable<TestResultDto> GetTestResults(string intervieweeNameFilter);
+
         Task<TestResultDetailDto> GetTestResultById(int testResultId);
 
         Task<CreatedTestResultDto> CreateTestResult(NewTestResultDto newTestResultDto);
 
         Task<DeletedTestResultDto> DeleteTestResult(int testResultId);
 
-        IEnumerable<ResultAnswerFromResultDto> GetAnswersByResultId(int testResultId);
+        ResultAnswersApiDto GetAnswersByResultId(int testResultId, int page, int amountAnswersPerPage);
     }
 }

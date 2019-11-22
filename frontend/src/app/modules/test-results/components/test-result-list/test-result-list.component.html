@@ -1,6 +1,17 @@
+<div class="basic-container">
+    <mat-form-field>
+        <input [(ngModel)]="intervieweeNameFilter" name="intervieweeNameFilter" type="text" matInput
+            placeholder="Interviewee name filter" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="getTestResults(intervieweeNameFilter)">
+        Search
+    </button>
+</div>
+
 <div *ngIf="!testResults || testResults?.length === 0; else testResultsTable">
     <p>
-        There are not any results of this test.
+        There are not any match with test results of tests.
     </p>
 </div>
 
