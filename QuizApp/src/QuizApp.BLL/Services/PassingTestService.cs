@@ -6,13 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using AutoMapper;
 using Newtonsoft.Json;
-using FluentValidation.Results;
 
 using QuizApp.BLL.Interfaces;
 using QuizApp.Data.Interfaces;
 using QuizApp.Entities;
 using QuizApp.BLL.Dto.PassingTest;
-using QuizApp.BLL.Validators.PassingTest;
 using QuizApp.Entities.Enums;
 using QuizApp.BLL.Dto.TestEvent.Payloads;
 using QuizApp.BLL.Settings;
@@ -24,8 +22,6 @@ namespace QuizApp.BLL.Services
         private readonly IUnitOfWork unitOfWork;
 
         private readonly ITestRepository testRepository;
-
-        private readonly IUrlRepository urlRepository;
 
         private readonly ITestEventRepository testEventRepository;
 
@@ -40,7 +36,6 @@ namespace QuizApp.BLL.Services
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>() ?? throw new NullReferenceException(nameof(testRepository));
-            this.urlRepository = unitOfWork.GetRepository<Url, IUrlRepository>() ?? throw new NullReferenceException(nameof(urlRepository));
             this.testEventRepository = unitOfWork.GetRepository<TestEvent, ITestEventRepository>() ?? throw new NullReferenceException(nameof(testEventRepository));
             this.testResultRepository = unitOfWork.GetRepository<TestResult, ITestResultRepository>() ?? throw new NullReferenceException(nameof(testResultRepository));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -48,69 +43,18 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public async Task<UrlValidationResultDto> CheckIsUrlValid(int urlId)
-        {
-            Url url = await urlRepository.GetByIdAsync(id: urlId);
-
-            UrlValidator urlValidator = new UrlValidator();
-            ValidationResult result = urlValidator.Validate(url);
-
-            return mapper.Map<UrlValidationResultDto>(result);
-        }
-
-        public async Task<UserIdentificationResultDto> IdentifyUser(IdentityUrlDto urlDto)
-        {
-            Url url = await urlRepository.GetByIdAsync(id: urlDto.Id);
-
-            UrlValidator urlValidator = new UrlValidator();
-            ValidationResult urlValidationResult = urlValidator.Validate(url);
-
-            UserIdentificationResultDto userIdentificationResult;
-
-            if (!urlValidationResult.IsValid)
-            {
-                userIdentificationResult = mapper.Map<UserIdentificationResultDto>(urlValidationResult);
-                userIdentificationResult.IsUrlValid = false;
-                return userIdentificationResult;
-            }
-
-            if (url.NumberOfRuns.HasValue && url.NumberOfRuns > 0)
-            {
-                --url.NumberOfRuns;
-                urlRepository.Update(url);
-                await unitOfWork.SaveAsync();
-            }
-
-            UrlIntervieweeNameValidator intervieweeNameValidator = new UrlIntervieweeNameValidator(urlDto.IntervieweeName);
-            ValidationResult intervieweeNameValidationResult = intervieweeNameValidator.Validate(url);
-
-            userIdentificationResult = mapper.Map<UserIdentificationResultDto>(intervieweeNameValidationResult);
-            userIdentificationResult.IsUrlValid = true;
-            return userIdentificationResult;
-        }
-
-        public async Task<ViewTestDto> GetTestById(int testId)
-        {
-            Test test = await testRepository.GetByIdAsync(id: testId, includeProperties: prop => prop
-                .Include(t => t.TestQuestions)
-                    .ThenInclude(q => q.TestQuestionOptions));
-
-            return mapper.Map<ViewTestDto>(test);
-        }
-
         public async Task<CreatedTestResultDto> CreateTestResult(UserUrlDto userUrlDto)
         {
-            IEnumerable<TestEvent> testEvents = testEventRepository.Get(e => e.SessionId == userUrlDto.SessionId);
+            var testEvents = testEventRepository.Get(e => e.SessionId == userUrlDto.SessionId);
 
-            List<TestEvent> eventsQuestionAnswered = testEvents.Where(e => e.EventType == EventType.QuestionAnswered).ToList();
-            List<PayloadQuestion> payloadQuestions = new List<PayloadQuestion>();
-            eventsQuestionAnswered.ForEach(eventQuestion => payloadQuestions.Add(JsonConvert.DeserializeObject<PayloadQuestion>(eventQuestion.Payload)));
+            var eventsQuestionAnswered = testEvents.Where(e => e.EventType == EventType.QuestionAnswered).ToList();
+            var payloadQuestions = eventsQuestionAnswered.Select(eventQuestion => JsonConvert.DeserializeObject<PayloadQuestion>(eventQuestion.Payload)).ToList();
 
-            TestEvent eventTestStarted = testEvents.First(e => e.EventType == EventType.TestStarted);
-            PayloadTest payloadTest = JsonConvert.DeserializeObject<PayloadTest>(eventTestStarted.Payload);
-            Test test = testRepository.GetById(id: payloadTest.TestId, includeProperties: prop => prop.Include(t => t.TestQuestions).ThenInclude(q => q.TestQuestionOptions));
+            var eventTestStarted = testEvents.First(e => e.EventType == EventType.TestStarted);
+            var payloadTest = JsonConvert.DeserializeObject<PayloadTest>(eventTestStarted.Payload);
+            var test = testRepository.GetById(id: payloadTest.TestId, includeProperties: prop => prop.Include(t => t.TestQuestions).ThenInclude(q => q.TestQuestionOptions));
 
-            TestResult testResult = new TestResult()
+            var testResult = new TestResult
             {
                 IntervieweeName = payloadTest.IntervieweeName,
                 PassingStartTime = eventTestStarted.StartTime,
@@ -118,11 +62,11 @@ namespace QuizApp.BLL.Services
                 UrlId = userUrlDto.UrlId
             };
 
-            foreach (TestQuestion question in test.TestQuestions)
+            foreach (var question in test.TestQuestions)
             {
-                int payloadQuestionIndex = payloadQuestions.FindIndex(q => q.QuestionId == question.Id);
+                var payloadQuestionIndex = payloadQuestions.FindIndex(q => q.QuestionId == question.Id);
 
-                ResultAnswer resultAnswer = CreateResultAnswerWithOptions(payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null,
+                var resultAnswer = CreateResultAnswerWithOptions(payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null,
                                                                           payloadQuestionIndex,
                                                                           eventsQuestionAnswered,
                                                                           eventTestStarted);
@@ -130,13 +74,14 @@ namespace QuizApp.BLL.Services
 
                 testResult.ResultAnswers.Add(resultAnswer);
 
-                testResult.Score += resultAnswer.TimeTakenSeconds <= question.TimeLimitSeconds
-                                    ? CalculateQuestionScore(question, payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null) : 0;
+                testResult.Score += IsResultAnswerInTime(question, resultAnswer)
+                                    ? CalculateQuestionScore(question, payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null)
+                                    : 0;
             }
 
-            testResult.Score = (test.TestQuestions.Count != 0
-                               && (testResult.PassingEndTime - testResult.PassingStartTime) <= (test.TimeLimitSeconds + timeErrorSetting.MarginOfErrorSeconds))
-                               ? testResult.Score / test.TestQuestions.Count * 100 : 0;
+            testResult.Score = IsAtLeastOneQuestionInTest(test) && IsTestResultInTime(test, testResult)
+                               ? GetPercentageTestResultScore(testResult)
+                               : 0;
 
             testEventRepository.Delete(testEvents);
             testResultRepository.Insert(testResult);
@@ -147,18 +92,15 @@ namespace QuizApp.BLL.Services
 
         private ResultAnswer CreateResultAnswerWithOptions(PayloadQuestion receivedQuestion, int receivedQuestionIndex, List<TestEvent> eventsQuestionAnswered, TestEvent eventTestStarted)
         {
-            ResultAnswer resultAnswer = new ResultAnswer();
+            var resultAnswer = new ResultAnswer();
 
             if (receivedQuestionIndex >= 0)
             {
-                resultAnswer.TimeTakenSeconds = receivedQuestionIndex == 0 ?
-                    eventsQuestionAnswered[receivedQuestionIndex].StartTime - eventTestStarted.StartTime :
-                    eventsQuestionAnswered[receivedQuestionIndex].StartTime - eventsQuestionAnswered[receivedQuestionIndex - 1].StartTime;
+                resultAnswer.TimeTakenSeconds = receivedQuestionIndex == 0
+                    ? eventsQuestionAnswered[receivedQuestionIndex].StartTime - eventTestStarted.StartTime
+                    : eventsQuestionAnswered[receivedQuestionIndex].StartTime - eventsQuestionAnswered[receivedQuestionIndex - 1].StartTime;
 
-                foreach (int selectedOptionId in receivedQuestion.SelectedOptionsId)
-                {
-                    resultAnswer.ResultAnswerOptions.Add(new ResultAnswerOption { OptionId = selectedOptionId });
-                }
+                resultAnswer.ResultAnswerOptions = receivedQuestion.SelectedOptionsId.Select(selectedOptionId => new ResultAnswerOption { OptionId = selectedOptionId }).ToList();
             }
             else
             {
@@ -172,17 +114,39 @@ namespace QuizApp.BLL.Services
         {
             if (receivedQuestion != null)
             {
-                IEnumerable<TestQuestionOption> rightQuestionOptions = originalQuestion.TestQuestionOptions.Where(o => o.IsRight);
+                var rightQuestionOptions = originalQuestion.TestQuestionOptions.Where(o => o.IsRight);
                 int rightOptionsAmount = rightQuestionOptions.Count(), selectedRightOptionsAmount = 0;
 
-                receivedQuestion.SelectedOptionsId.ToList()
-                    .ForEach(id => selectedRightOptionsAmount = rightQuestionOptions.Any(o => o.Id == id) ? ++selectedRightOptionsAmount : --selectedRightOptionsAmount);
+                foreach (var id in receivedQuestion.SelectedOptionsId)
+                {
+                    selectedRightOptionsAmount = rightQuestionOptions.Any(o => o.Id == id) ? ++selectedRightOptionsAmount : --selectedRightOptionsAmount;
+                }
 
-                // calculate question score
+                // Сalculate question score.
                 return selectedRightOptionsAmount >= 0 ? (rightOptionsAmount == 0 && selectedRightOptionsAmount == 0 ? 1 : (double)selectedRightOptionsAmount / rightOptionsAmount) : 0;
             }
 
             return 0;
+        }
+
+        private bool IsResultAnswerInTime(TestQuestion testQuestion, ResultAnswer resultAnswer)
+        {
+            return resultAnswer.TimeTakenSeconds <= testQuestion.TimeLimitSeconds;
+        }
+
+        private bool IsAtLeastOneQuestionInTest(Test test)
+        {
+            return test.TestQuestions.Count > 0;
+        }
+
+        private bool IsTestResultInTime(Test test, TestResult testResult)
+        {
+            return (testResult.PassingEndTime - testResult.PassingStartTime) <= (test.TimeLimitSeconds + timeErrorSetting.MarginOfErrorSeconds);
+        }
+
+        private double GetPercentageTestResultScore(TestResult testResult)
+        {
+            return testResult.Score / testResult.ResultAnswers.Count * 100;
         }
     }
 }

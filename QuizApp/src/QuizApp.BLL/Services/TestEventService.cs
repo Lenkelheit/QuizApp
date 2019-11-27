@@ -8,9 +8,6 @@ using AutoMapper;
 using QuizApp.BLL.Interfaces;
 using QuizApp.Data.Interfaces;
 using QuizApp.Entities;
-using QuizApp.BLL.Dto.PassingTest;
-using QuizApp.BLL.Validators.PassingTest;
-using FluentValidation.Results;
 using QuizApp.BLL.Dto.TestEvent;
 
 namespace QuizApp.BLL.Services

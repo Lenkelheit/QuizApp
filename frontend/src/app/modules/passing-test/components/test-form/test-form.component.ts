@@ -1,15 +1,16 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { PassingTestService } from 'src/app/services/passing-test.service';
-import { ViewTestDto } from 'src/app/models/passing-test/view-test-dto';
-import { ViewQuestionDto } from 'src/app/models/passing-test/view-question-dto';
+import { ViewTestDto } from 'src/app/models/test/view-test-dto';
+import { ViewQuestionDto } from 'src/app/models/question/view-question-dto';
 import { TimeConverter } from '../../converters/time-converter';
 import { TestEventService } from 'src/app/services/test-event.service';
 import { NewTestEventDto } from 'src/app/models/test-event/new-test-event-dto';
 import { EventType } from 'src/app/models/test-event/enums/event-type.enum';
 import { PayloadTest } from 'src/app/models/test-event/payloads/payload-test';
-import { IdentityUrlDto } from 'src/app/models/passing-test/identity-url-dto';
+import { IdentityUrlDto } from 'src/app/models/url-validator/identity-url-dto';
 import { UserUrlDto } from 'src/app/models/passing-test/user-url-dto';
+import { TestService } from 'src/app/services/test.service';
+import { PassingTestService } from 'src/app/services/passing-test.service';
 
 @Component({
     selector: 'app-test-form',
@@ -31,14 +32,16 @@ export class TestFormComponent implements OnInit, OnDestroy {
 
     public sendQuestion: Subject<void> = new Subject<void>();
 
-    constructor(private passingTestService: PassingTestService, private testEventService: TestEventService) { }
+    constructor(private testService: TestService, private testEventService: TestEventService,
+        // tslint:disable-next-line: align
+        private passingTestService: PassingTestService) { }
 
     ngOnInit() {
         this.subscription.add(
             this.getIdentityUrl$.subscribe(identityUrl => {
                 this.urlId = identityUrl.id;
 
-                this.passingTestService.getTestById(identityUrl.testId).subscribe(viewTestResp => {
+                this.testService.getPassingTestById(identityUrl.testId).subscribe(viewTestResp => {
                     this.viewTest = viewTestResp.body;
 
                     this.testEventService.generateSessionId().subscribe(sessionIdResp => {

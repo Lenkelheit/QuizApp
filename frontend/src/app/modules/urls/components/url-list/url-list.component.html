@@ -43,6 +43,15 @@
             </td>
         </ng-container>
 
+        <ng-container matColumnDef="copyLink">
+            <th mat-header-cell *matHeaderCellDef>Copy link</th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-button (click)="copyUrl(element.id)">
+                    <i class="material-icons">link</i>
+                </button>
+            </td>
+        </ng-container>
+
         <ng-container matColumnDef="update">
             <th mat-header-cell *matHeaderCellDef>Update</th>
             <td mat-cell *matCellDef="let element">

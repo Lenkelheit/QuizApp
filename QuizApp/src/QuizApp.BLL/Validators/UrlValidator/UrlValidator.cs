@@ -4,7 +4,7 @@ using System.Text;
 
 using FluentValidation;
 
-namespace QuizApp.BLL.Validators.PassingTest
+namespace QuizApp.BLL.Validators.UrlValidator
 {
     public class UrlValidator : AbstractValidator<Entities.Url>
     {
@@ -21,7 +21,7 @@ namespace QuizApp.BLL.Validators.PassingTest
                     .WithMessage("The test ended on {PropertyValue}.");
 
             RuleFor(url => url.NumberOfRuns)
-                .Must(numberOfRuns => numberOfRuns == null || numberOfRuns > 0)
+                .Must(numberOfRuns => !numberOfRuns.HasValue || numberOfRuns > 0)
                     .WithMessage("The number of runs of this test is over.");
         }
     }

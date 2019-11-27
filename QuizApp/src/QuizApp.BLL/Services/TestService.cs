@@ -109,5 +109,14 @@ namespace QuizApp.BLL.Services
 
             return mapper.Map<IEnumerable<UrlDto>>(urls);
         }
+
+        public async Task<ViewTestDto> GetPassingTestById(int testId)
+        {
+            var test = await testRepository.GetByIdAsync(id: testId, includeProperties: prop => prop
+                .Include(t => t.TestQuestions)
+                    .ThenInclude(q => q.TestQuestionOptions));
+
+            return mapper.Map<ViewTestDto>(test);
+        }
     }
 }

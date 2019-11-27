@@ -1,4 +1,4 @@
-import { ViewQuestionOptionDto } from './view-question-option-dto';
+import { ViewQuestionOptionDto } from '../question-option/view-question-option-dto';
 
 export interface ViewQuestionDto {
     id: number;

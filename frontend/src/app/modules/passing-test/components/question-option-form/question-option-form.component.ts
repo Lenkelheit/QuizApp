@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { ViewQuestionOptionDto } from 'src/app/models/passing-test/view-question-option-dto';
+import { ViewQuestionOptionDto } from 'src/app/models/question-option/view-question-option-dto';
 import { Observable, Subject, Subscription } from 'rxjs';
 
 @Component({

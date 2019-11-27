@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.Dto.PassingTest
+using QuizApp.BLL.Dto.TestQuestion;
+
+namespace QuizApp.BLL.Dto.Test
 {
     public class ViewTestDto
     {

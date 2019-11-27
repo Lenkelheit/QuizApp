@@ -12,9 +12,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { ClipboardSnackBarComponent } from './components/clipboard-snack-bar/clipboard-snack-bar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
-    declarations: [TopBarComponent],
+    declarations: [TopBarComponent, ClipboardSnackBarComponent],
+    entryComponents: [ClipboardSnackBarComponent],
     imports: [
         CommonModule,
         RouterModule,
@@ -31,10 +34,12 @@ import { MatStepperModule } from '@angular/material/stepper';
         MatNativeDateModule,
         MatSelectModule,
         MatTabsModule,
-        MatStepperModule
+        MatStepperModule,
+        MatSnackBarModule
     ],
     exports: [
         TopBarComponent,
+        ClipboardSnackBarComponent,
         RouterModule,
         FormsModule,
         MatTableModule,
@@ -49,7 +54,8 @@ import { MatStepperModule } from '@angular/material/stepper';
         MatNativeDateModule,
         MatSelectModule,
         MatTabsModule,
-        MatStepperModule
+        MatStepperModule,
+        MatSnackBarModule
     ]
 })
 export class SharedModule { }

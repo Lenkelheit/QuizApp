@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.Dto.PassingTest
+namespace QuizApp.BLL.Dto.UrlValidator
 {
     public class UserIdentificationResultDto
     {
