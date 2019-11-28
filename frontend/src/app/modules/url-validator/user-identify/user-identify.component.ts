@@ -1,13 +1,13 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { PassingTestService } from 'src/app/services/passing-test.service';
-import { IdentityUrlDto } from 'src/app/models/passing-test/identity-url-dto';
+import { IdentityUrlDto } from 'src/app/models/url-validator/identity-url-dto';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UrlService } from 'src/app/services/url.service';
 import { TestPreviewDto } from 'src/app/models/test/test-preview-dto';
 import { Error } from 'src/app/models/error/error';
-import { UrlValidationResultDto } from 'src/app/models/passing-test/url-validation-result-dto';
+import { UrlValidationResultDto } from 'src/app/models/url-validator/url-validation-result-dto';
+import { UrlValidatorService } from 'src/app/services/url-validator.service';
 
 @Component({
     selector: 'app-user-identify',
@@ -25,14 +25,14 @@ export class UserIdentifyComponent implements OnInit {
 
     public urlForm: FormGroup;
 
-    constructor(private passingTestService: PassingTestService, private urlService: UrlService, private formBuilder: FormBuilder,
+    constructor(private urlValidatorService: UrlValidatorService, private urlService: UrlService,
         // tslint:disable-next-line: align
-        private router: Router, private route: ActivatedRoute) { }
+        private formBuilder: FormBuilder, private route: ActivatedRoute) { }
 
     ngOnInit() {
         const urlId = parseInt(this.route.snapshot.paramMap.get('id'));
 
-        this.passingTestService.checkIsUrlValid(urlId).subscribe(urlValidationResultResp => {
+        this.urlValidatorService.checkIsUrlValid(urlId).subscribe(urlValidationResultResp => {
             this.urlValidationResult = urlValidationResultResp.body;
 
             if (this.urlValidationResult.isValid) {
@@ -56,7 +56,7 @@ export class UserIdentifyComponent implements OnInit {
     }
 
     public sendUrlOnValidation() {
-        this.passingTestService.identifyUser(this.identityUrl).subscribe(userIdentificationResultResp => {
+        this.urlValidatorService.identifyUser(this.identityUrl).subscribe(userIdentificationResultResp => {
             const userIdentificationResult = userIdentificationResultResp.body;
 
             if (userIdentificationResult.isUrlValid) {

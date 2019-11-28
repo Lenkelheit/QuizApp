@@ -20,6 +20,7 @@ namespace QuizApp.BLL.MappingProfiles
             CreateMap<TestQuestionOption, UpdatedTestQuestionOptionDto>();
             CreateMap<TestQuestionOption, DeletedTestQuestionOptionDto>();
             CreateMap<TestQuestionOption, ResultQuestionOptionDto>();
+            CreateMap<TestQuestionOption, ViewQuestionOptionDto>();
         }
     }
 }

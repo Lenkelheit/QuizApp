@@ -14,9 +14,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
+import { ClipboardSnackBarComponent } from './components/clipboard-snack-bar/clipboard-snack-bar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
-    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe],
+    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe, ClipboardSnackBarComponent],
+    entryComponents: [ClipboardSnackBarComponent],
     imports: [
         CommonModule,
         RouterModule,
@@ -34,11 +37,13 @@ import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
         MatSelectModule,
         MatTabsModule,
         MatStepperModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatSnackBarModule
     ],
     exports: [
         TopBarComponent,
         TimeSecondsToHhMmSsPipe,
+        ClipboardSnackBarComponent,
         RouterModule,
         FormsModule,
         MatTableModule,
@@ -54,7 +59,8 @@ import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
         MatSelectModule,
         MatTabsModule,
         MatStepperModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatSnackBarModule
     ]
 })
 export class SharedModule { }

@@ -27,5 +27,7 @@ namespace QuizApp.BLL.Interfaces
         IEnumerable<UrlDto> GetUrlsByTestId(int testId);
 
         IEnumerable<TestResultDto> GetResultsByTestId(int testId);
+
+        Task<ViewTestDto> GetPassingTestById(int testId);
     }
 }

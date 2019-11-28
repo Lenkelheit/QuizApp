@@ -4,7 +4,7 @@ using System.Text;
 
 using FluentValidation;
 
-namespace QuizApp.BLL.Validators.PassingTest
+namespace QuizApp.BLL.Validators.UrlValidator
 {
     public class UrlIntervieweeNameValidator : AbstractValidator<Entities.Url>
     {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IdentityUrlDto } from 'src/app/models/passing-test/identity-url-dto';
+import { IdentityUrlDto } from 'src/app/models/url-validator/identity-url-dto';
 import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({

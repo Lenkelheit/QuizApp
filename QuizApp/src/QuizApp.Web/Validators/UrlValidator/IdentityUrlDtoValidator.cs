@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 
-using QuizApp.BLL.Dto.PassingTest;
+using QuizApp.BLL.Dto.UrlValidator;
 
-namespace QuizApp.Web.Validators.PassingTest
+namespace QuizApp.Web.Validators.UrlValidator
 {
     public class IdentityUrlDtoValidator : AbstractValidator<IdentityUrlDto>
     {

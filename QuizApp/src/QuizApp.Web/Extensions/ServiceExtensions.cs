@@ -20,11 +20,12 @@ namespace QuizApp.Web.Extensions
             services.AddScoped<IUrlService, UrlService>();
             services.AddScoped<IPassingTestService, PassingTestService>();
             services.AddScoped<ITestEventService, TestEventService>();
+            services.AddScoped<IUrlValidatorService, UrlValidatorService>();
         }
 
         public static void ConfigureCustomValidationErrors(this IServiceCollection services)
         {
-            // override ModelState
+            // Override ModelState.
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (context) =>

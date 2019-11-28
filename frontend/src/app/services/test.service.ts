@@ -8,6 +8,7 @@ import { UpdatedTestDto } from '../models/test/updated-test-dto';
 import { TestDetailDto } from '../models/test/test-detail-dto';
 import { UrlDto } from '../models/url/url-dto';
 import { TestResultDto } from '../models/test-result/test-result-dto';
+import { ViewTestDto } from '../models/test/view-test-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -43,5 +44,9 @@ export class TestService {
 
     public getResultsByTestId(id: number) {
         return this.httpService.getRequest<TestResultDto[]>(`${this.routePrefix}/${id}/results`);
+    }
+
+    public getPassingTestById(testId: number) {
+        return this.httpService.getRequest<ViewTestDto>(`${this.routePrefix}/passing-test/${testId}`);
     }
 }
