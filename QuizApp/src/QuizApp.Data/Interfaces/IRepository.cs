@@ -15,6 +15,11 @@ namespace QuizApp.Data.Interfaces
                                  Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                                  Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null);
 
+        IEnumerable<TEntity> GetPageWithAmount(Expression<Func<TEntity, bool>> filter = null,
+                                 int page = 0,
+                                 int amountPerPage = 10,
+                                 Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null);
+
         TEntity GetById(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null);
 
         Task<TEntity> GetByIdAsync(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null);

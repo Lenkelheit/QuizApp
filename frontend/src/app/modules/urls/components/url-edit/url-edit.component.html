@@ -36,14 +36,14 @@
                         See test
                     </button>
 
-                    <div>
-                        <label>
-                            Your url —
-                        </label>
+                    <div class="url-block">
+                        <p class="url">
+                            Your url — {{baseUrl+updateUrl.id}}
+                        </p>
 
-                        <mat-form-field class="mat-field-oneline">
-                            <input [value]="baseUrl+updateUrl.id" type="text" matInput disabled />
-                        </mat-form-field>
+                        <button type="button" mat-raised-button (click)="copyUrl(updateUrl.id)">
+                            Copy link
+                        </button>
                     </div>
 
                     <mat-form-field class="mat-field-block">

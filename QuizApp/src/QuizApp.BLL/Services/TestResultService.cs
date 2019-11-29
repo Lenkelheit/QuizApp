@@ -34,13 +34,19 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public IEnumerable<TestResultDto> GetTestResults(string intervieweeNameFilter)
+        public TestResultsApiDto GetTestResults(string intervieweeNameFilter, int page, int amountResultsPerPage)
         {
-            IEnumerable<TestResult> results = !string.IsNullOrWhiteSpace(intervieweeNameFilter) ?
-                    testResultRepository.Get(filter: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase)) :
-                    testResultRepository.Get();
+            var results = !string.IsNullOrWhiteSpace(intervieweeNameFilter)
+                ? testResultRepository.GetPageWithAmount(filter: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase), page, amountResultsPerPage)
+                : testResultRepository.GetPageWithAmount(page: page, amountPerPage: amountResultsPerPage);
 
-            return mapper.Map<IEnumerable<TestResultDto>>(results);
+            return new TestResultsApiDto
+            {
+                TestResults = mapper.Map<List<TestResultDto>>(results),
+                TotalCount = !string.IsNullOrWhiteSpace(intervieweeNameFilter)
+                    ? testResultRepository.Count(predicate: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase))
+                    : testResultRepository.Count()
+            };
         }
 
         public async Task<TestResultDetailDto> GetTestResultById(int testResultId)
@@ -78,16 +84,16 @@ namespace QuizApp.BLL.Services
 
         public ResultAnswersApiDto GetAnswersByResultId(int testResultId, int page, int amountAnswersPerPage)
         {
-            ResultAnswersApiDto resultAnswersApi = new ResultAnswersApiDto();
-            IEnumerable<ResultAnswer> resultAnswers = resultAnswerRepository.GetPageWithAmount(filter: ra => ra.ResultId == testResultId, page, amountAnswersPerPage, includeProperties: prop => prop
+            var resultAnswers = resultAnswerRepository.GetPageWithAmount(filter: ra => ra.ResultId == testResultId, page, amountAnswersPerPage, includeProperties: prop => prop
                 .Include(ra => ra.ResultAnswerOptions)
                 .Include(ra => ra.Question)
                     .ThenInclude(q => q.TestQuestionOptions)).ToList();
 
-            resultAnswersApi.ResultAnswers = mapper.Map<List<ResultAnswerFromResultDto>>(resultAnswers);
-            resultAnswersApi.TotalCount = resultAnswerRepository.Count(predicate: ra => ra.ResultId == testResultId);
-
-            return resultAnswersApi;
+            return new ResultAnswersApiDto
+            {
+                ResultAnswers = mapper.Map<List<ResultAnswerFromResultDto>>(resultAnswers),
+                TotalCount = resultAnswerRepository.Count(predicate: ra => ra.ResultId == testResultId)
+            };
         }
     }
 }

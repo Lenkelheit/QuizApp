@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from 'src/app/services/http-internal.service';
-import { TestDto } from '../models/test/test-dto';
 import { NewTestDto } from '../models/test/new-test-dto';
 import { CreatedTestDto } from '../models/test/created-test-dto';
 import { UpdateTestDto } from '../models/test/update-test-dto';
 import { UpdatedTestDto } from '../models/test/updated-test-dto';
 import { TestDetailDto } from '../models/test/test-detail-dto';
-import { UrlDto } from '../models/url/url-dto';
-import { TestResultDto } from '../models/test-result/test-result-dto';
 import { ViewTestDto } from '../models/test/view-test-dto';
+import { TestsApiDto } from '../models/test/tests-api-dto';
+import { UrlsApiDto } from '../models/url/urls-api-dto';
+import { TestResultsApiDto } from '../models/test-result/test-results-api-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +18,11 @@ export class TestService {
 
     constructor(private httpService: HttpInternalService) { }
 
-    public getTests() {
-        return this.httpService.getRequest<TestDto[]>(`${this.routePrefix}`);
+    public getTests(page: number, amountTestsPerPage: number) {
+        return this.httpService.getRequest<TestsApiDto>(`${this.routePrefix}`, {
+            page,
+            amountTestsPerPage
+        });
     }
 
     public getTestById(id: number) {
@@ -38,12 +41,18 @@ export class TestService {
         return this.httpService.deleteRequest<void>(`${this.routePrefix}/${id}`);
     }
 
-    public getUrlsByTestId(id: number) {
-        return this.httpService.getRequest<UrlDto[]>(`${this.routePrefix}/${id}/urls`);
+    public getUrlsByTestId(id: number, page: number, amountUrlsPerPage: number) {
+        return this.httpService.getRequest<UrlsApiDto>(`${this.routePrefix}/${id}/urls`, {
+            page,
+            amountUrlsPerPage
+        });
     }
 
-    public getResultsByTestId(id: number) {
-        return this.httpService.getRequest<TestResultDto[]>(`${this.routePrefix}/${id}/results`);
+    public getResultsByTestId(id: number, page: number, amountResultsPerPage: number) {
+        return this.httpService.getRequest<TestResultsApiDto>(`${this.routePrefix}/${id}/results`, {
+            page,
+            amountResultsPerPage
+        });
     }
 
     public getPassingTestById(testId: number) {

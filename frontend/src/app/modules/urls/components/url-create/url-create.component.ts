@@ -28,7 +28,8 @@ export class UrlCreateComponent implements OnInit {
     public confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
     constructor(private urlService: UrlService, private testService: TestService,
-                private formBuilder: FormBuilder, private router: Router) { }
+        // tslint:disable-next-line: align
+        private formBuilder: FormBuilder, private router: Router) { }
 
     ngOnInit() {
         this.urlForm = this.formBuilder.group({
@@ -41,7 +42,8 @@ export class UrlCreateComponent implements OnInit {
             validators: EndDateLessStartDateValidator.validate
         });
 
-        this.testService.getTests().subscribe(resp => this.tests = resp.body);
+        // Get all tests.
+        this.testService.getTests(0, -1).subscribe(testsApiResp => this.tests = testsApiResp.body.tests);
     }
 
     get testId() {

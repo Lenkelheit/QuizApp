@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from './http-internal.service';
 import { TestResultDetailDto } from '../models/test-result/test-result-detail-dto';
-import { TestResultDto } from '../models/test-result/test-result-dto';
 import { ResultAnswersApiDto } from '../models/result-answer/result-answers-api-dto';
+import { TestResultsApiDto } from '../models/test-result/test-results-api-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +12,11 @@ export class TestResultService {
 
     constructor(private httpService: HttpInternalService) { }
 
-    public getTestResults(intervieweeNameFilter: string) {
-        return this.httpService.getRequest<TestResultDto[]>(`${this.routePrefix}`, {
-            intervieweeNameFilter
+    public getTestResults(intervieweeNameFilter: string, page: number, amountResultsPerPage: number) {
+        return this.httpService.getRequest<TestResultsApiDto>(`${this.routePrefix}`, {
+            intervieweeNameFilter,
+            page,
+            amountResultsPerPage
         });
     }
 

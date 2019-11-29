@@ -12,7 +12,7 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface ITestService
     {
-        IEnumerable<TestDto> GetTests();
+        TestsApiDto GetTests(int page, int amountTestsPerPage);
 
         Task<TestDetailDto> GetTestById(int testId);
 
@@ -24,9 +24,9 @@ namespace QuizApp.BLL.Interfaces
 
         IEnumerable<TestQuestionDto> GetQuestionsByTestId(int testId);
 
-        IEnumerable<UrlDto> GetUrlsByTestId(int testId);
+        UrlsApiDto GetUrlsByTestId(int testId, int page, int amountUrlsPerPage);
 
-        IEnumerable<TestResultDto> GetResultsByTestId(int testId);
+        TestResultsApiDto GetResultsByTestId(int testId, int page, int amountResultsPerPage);
 
         Task<ViewTestDto> GetPassingTestById(int testId);
     }

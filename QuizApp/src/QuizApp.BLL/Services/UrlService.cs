@@ -38,11 +38,15 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public IEnumerable<UrlDto> GetUrls()
+        public UrlsApiDto GetUrls(int page, int amountUrlsPerPage)
         {
-            IEnumerable<Url> urls = urlRepository.Get();
+            var urls = urlRepository.GetPageWithAmount(page: page, amountPerPage: amountUrlsPerPage);
 
-            return mapper.Map<IEnumerable<UrlDto>>(urls);
+            return new UrlsApiDto
+            {
+                Urls = mapper.Map<List<UrlDto>>(urls),
+                TotalCount = urlRepository.Count()
+            };
         }
 
         public async Task<UrlDetailDto> GetUrlById(int urlId)
@@ -87,11 +91,15 @@ namespace QuizApp.BLL.Services
             return mapper.Map<TestPreviewDto>(testByUrlId);
         }
 
-        public IEnumerable<TestResultDto> GetTestResultsByUrlId(int urlId)
+        public TestResultsApiDto GetTestResultsByUrlId(int urlId, int page, int amountResultsPerPage)
         {
-            IEnumerable<TestResult> testResults = testResultRepository.Get(filter: r => r.UrlId == urlId);
+            var testResults = testResultRepository.GetPageWithAmount(filter: r => r.UrlId == urlId, page: page, amountPerPage: amountResultsPerPage);
 
-            return mapper.Map<IEnumerable<TestResultDto>>(testResults);
+            return new TestResultsApiDto
+            {
+                TestResults = mapper.Map<List<TestResultDto>>(testResults),
+                TotalCount = testResultRepository.Count(predicate: r => r.UrlId == urlId)
+            };
         }
     }
 }

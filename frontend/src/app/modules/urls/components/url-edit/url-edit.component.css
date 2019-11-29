@@ -8,9 +8,16 @@ h1 {
 }
 
 button,
-form,
-label {
+form {
   margin: 30px 8px 8px 8px;
+}
+
+.url-block {
+  margin: 8px 8px 10px 8px;
+}
+
+.url {
+  display: inline-block;
 }
 
 .test-results {

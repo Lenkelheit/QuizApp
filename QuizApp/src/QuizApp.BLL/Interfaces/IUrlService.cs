@@ -10,7 +10,7 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface IUrlService
     {
-        IEnumerable<UrlDto> GetUrls();
+        UrlsApiDto GetUrls(int page, int amountUrlsPerPage);
 
         Task<UrlDetailDto> GetUrlById(int urlId);
 
@@ -20,6 +20,6 @@ namespace QuizApp.BLL.Interfaces
 
         TestPreviewDto GetTestByUrlId(int urlId);
 
-        IEnumerable<TestResultDto> GetTestResultsByUrlId(int urlId);
+        TestResultsApiDto GetTestResultsByUrlId(int urlId, int page, int amountResultsPerPage);
     }
 }

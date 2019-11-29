@@ -25,9 +25,9 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<TestResultDto>> Get(string intervieweeNameFilter)
+        public ActionResult<TestResultsApiDto> Get(string intervieweeNameFilter, int page = 0, int amountResultsPerPage = 10)
         {
-            return Ok(testResultService.GetTestResults(intervieweeNameFilter));
+            return Ok(testResultService.GetTestResults(intervieweeNameFilter, page, amountResultsPerPage));
         }
 
         [HttpGet("{id}")]

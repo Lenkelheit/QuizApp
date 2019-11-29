@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TestResultService } from 'src/app/services/test-result.service';
-import { TestResultDto } from 'src/app/models/test-result/test-result-dto';
+import { TestResultsApiDto } from 'src/app/models/test-result/test-results-api-dto';
 
 @Component({
     selector: 'app-test-result-list',
@@ -9,18 +9,23 @@ import { TestResultDto } from 'src/app/models/test-result/test-result-dto';
 })
 export class TestResultListComponent implements OnInit {
     public columnsToDisplay: string[] = ['id', 'intervieweeName', 'passingStartTime', 'passingEndTime', 'score', 'read'];
-    public testResults: TestResultDto[] = [];
+    public testResultsApi: TestResultsApiDto = {} as TestResultsApiDto;
     public intervieweeNameFilter = '';
+    public currentPageIndex = 0;
+    public pageSize = 15;
+    public pageSizeOptions: number[] = [this.pageSize, 10, 20];
 
     constructor(private testResultService: TestResultService) { }
 
     ngOnInit() {
-        this.getTestResults(this.intervieweeNameFilter);
+        this.setTestResultsPageWithFilter(this.currentPageIndex, this.pageSize);
     }
 
-    private getTestResults(intervieweeNameFilter: string) {
-        this.testResultService.getTestResults(intervieweeNameFilter).subscribe(resultsResp => {
-            this.testResults = resultsResp.body;
+    public setTestResultsPageWithFilter(pageIndex: number, pageSize: number) {
+        this.currentPageIndex = pageIndex;
+        this.pageSize = pageSize;
+        this.testResultService.getTestResults(this.intervieweeNameFilter, pageIndex, pageSize).subscribe(resultsApiResp => {
+            this.testResultsApi = resultsApiResp.body;
         });
     }
 }
