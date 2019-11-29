@@ -10,8 +10,9 @@ import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-q
     styleUrls: ['./question-option-create-edit.component.css']
 })
 export class QuestionOptionCreateEditComponent implements OnInit, OnDestroy {
-    @Input() updateQuestionOption: UpdateQuestionOptionDto;
+    private subscription: Subscription = new Subscription();
 
+    @Input() updateQuestionOption: UpdateQuestionOptionDto;
     @Input() getOption$: Observable<void>;
     @Output() passUpUpdateQuestionOption: EventEmitter<UpdateQuestionOptionDto> = new EventEmitter<UpdateQuestionOptionDto>();
     @Output() passUpQuestionOptionFormStatusInvalid: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -20,8 +21,6 @@ export class QuestionOptionCreateEditComponent implements OnInit, OnDestroy {
     public questionOptionForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
-
-    private subscription: Subscription = new Subscription();
 
     constructor(private formBuilder: FormBuilder) { }
 

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TestDto } from 'src/app/models/test/test-dto';
 import { TestService } from 'src/app/services/test.service';
+import { Error } from 'src/app/models/error/error';
 import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
 
 @Component({
@@ -21,7 +22,7 @@ export class UrlCreateComponent implements OnInit {
 
     public errors: Error;
 
-    public urlsForm: FormGroup;
+    public urlForm: FormGroup;
 
     public validControlMatcher = new ValidControlMatcher();
     public confirmValidParentMatcher = new ConfirmValidParentMatcher();
@@ -30,7 +31,7 @@ export class UrlCreateComponent implements OnInit {
                 private formBuilder: FormBuilder, private router: Router) { }
 
     ngOnInit() {
-        this.urlsForm = this.formBuilder.group({
+        this.urlForm = this.formBuilder.group({
             testId: ['', Validators.required],
             numberOfRuns: ['', [Validators.min(0)]],
             validFromTime: ['', [Validators.required]],
@@ -44,23 +45,23 @@ export class UrlCreateComponent implements OnInit {
     }
 
     get testId() {
-        return this.urlsForm.get('testId');
+        return this.urlForm.get('testId');
     }
 
     get numberOfRuns() {
-        return this.urlsForm.get('numberOfRuns');
+        return this.urlForm.get('numberOfRuns');
     }
 
     get validFromTime() {
-        return this.urlsForm.get('validFromTime');
+        return this.urlForm.get('validFromTime');
     }
 
     get validUntilTime() {
-        return this.urlsForm.get('validUntilTime');
+        return this.urlForm.get('validUntilTime');
     }
 
     get intervieweeName() {
-        return this.urlsForm.get('intervieweeName');
+        return this.urlForm.get('intervieweeName');
     }
 
     public sendNewUrls() {
@@ -78,6 +79,6 @@ export class UrlCreateComponent implements OnInit {
     public clearUrl() {
         this.newUrl = {} as NewUrlDto;
         this.errors = null;
-        this.urlsForm.reset();
+        this.urlForm.reset();
     }
 }

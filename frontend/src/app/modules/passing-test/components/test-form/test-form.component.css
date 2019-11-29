@@ -1,0 +1,41 @@
+.form-container {
+  margin: 2%;
+}
+
+button,
+p,
+.test-form {
+  margin: 8px;
+}
+
+h1 {
+  text-align: center;
+}
+
+h1,
+h2 {
+  margin: 8px;
+  font-weight: normal;
+}
+
+.test-time-limit-seconds {
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.test-sent-container {
+  text-align: center;
+  font-size: x-large;
+  padding: 10px;
+  margin: 10px;
+}
+
+.question {
+  padding: 30px;
+  margin: 20px;
+}
+
+.stepper-next-button {
+  background-color: #3f51b5;
+  color: white;
+}

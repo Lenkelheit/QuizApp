@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestResult;
 using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
+using QuizApp.Entities;
 
 namespace QuizApp.Web.Controllers
 {
@@ -65,6 +66,19 @@ namespace QuizApp.Web.Controllers
             }
 
             return Ok(updatedUrlDto);
+        }
+
+        [HttpGet("{urlId}/test")]
+        public ActionResult<TestPreviewDto> GetTestByUrlId(int urlId)
+        {
+            TestPreviewDto testPreviewDto = urlService.GetTestByUrlId(urlId);
+
+            if (testPreviewDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(testPreviewDto);
         }
 
         [HttpGet("{urlId}/results")]

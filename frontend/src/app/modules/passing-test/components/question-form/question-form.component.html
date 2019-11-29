@@ -1,0 +1,16 @@
+<div>
+    <p class="question-text">{{viewQuestion.text}}</p>
+    <p>{{viewQuestion.hint}}</p>
+    <p appCounter [counter]="questionTimeLimitSeconds" [interval]="1000"
+        (value)="questionTimeLimitSecondsCounter = $event" (counterCompleted)="counterCompleted.emit()"
+        class="question-time-limit-seconds">
+        {{questionTimeLimitSecondsCounter | timeSecondsToHhMmSs}}</p>
+
+    <div *ngFor="let questionOption of viewQuestion.testQuestionOptions; let i = index">
+
+        <app-question-option-form [viewQuestionOption]="questionOption" [getOption$]="getOptions.asObservable()"
+            (passUpOption)="setOption(i, $event)">
+        </app-question-option-form>
+    </div>
+
+</div>

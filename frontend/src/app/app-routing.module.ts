@@ -6,6 +6,7 @@ import { TestEditComponent } from './modules/tests/components/test-edit/test-edi
 import { UrlListComponent } from './modules/urls/components/url-list/url-list.component';
 import { UrlCreateComponent } from './modules/urls/components/url-create/url-create.component';
 import { UrlEditComponent } from './modules/urls/components/url-edit/url-edit.component';
+import { TestPassComponent } from './modules/passing-test/components/test-pass/test-pass.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'tests', pathMatch: 'full' },
@@ -15,6 +16,9 @@ const routes: Routes = [
     { path: 'urls', component: UrlListComponent },
     { path: 'urls/new', component: UrlCreateComponent },
     { path: 'urls/:id', component: UrlEditComponent },
+
+    { path: 'passing-test/:id', component: TestPassComponent },
+
     { path: '**', redirectTo: '' }
 ];
 

@@ -92,5 +92,18 @@ namespace QuizApp.Web.Controllers
         {
             return Ok(testService.GetUrlsByTestId(testId));
         }
+
+        [HttpGet("passing-test/{testId}")]
+        public async Task<ActionResult<ViewTestDto>> GetPassingTestById(int testId)
+        {
+            var viewTestDto = await testService.GetPassingTestById(testId);
+
+            if (viewTestDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(viewTestDto);
+        }
     }
 }

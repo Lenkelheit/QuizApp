@@ -10,9 +10,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { TopBarComponent } from './components/top-bar/top-bar.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { ClipboardSnackBarComponent } from './components/clipboard-snack-bar/clipboard-snack-bar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
-    declarations: [],
+    declarations: [TopBarComponent, ClipboardSnackBarComponent],
+    entryComponents: [ClipboardSnackBarComponent],
     imports: [
         CommonModule,
         RouterModule,
@@ -28,9 +33,13 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
-        MatTabsModule
+        MatTabsModule,
+        MatStepperModule,
+        MatSnackBarModule
     ],
     exports: [
+        TopBarComponent,
+        ClipboardSnackBarComponent,
         RouterModule,
         FormsModule,
         MatTableModule,
@@ -44,7 +53,9 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
-        MatTabsModule
+        MatTabsModule,
+        MatStepperModule,
+        MatSnackBarModule
     ]
 })
 export class SharedModule { }

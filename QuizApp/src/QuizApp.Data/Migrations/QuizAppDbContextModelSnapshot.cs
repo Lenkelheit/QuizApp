@@ -88,6 +88,26 @@ namespace QuizApp.Data.Migrations
                     b.ToTable("Test");
                 });
 
+            modelBuilder.Entity("QuizApp.Entities.TestEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EventType");
+
+                    b.Property<string>("Payload");
+
+                    b.Property<Guid>("SessionId");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestEvent");
+                });
+
             modelBuilder.Entity("QuizApp.Entities.TestQuestion", b =>
                 {
                     b.Property<int>("Id")
@@ -150,7 +170,7 @@ namespace QuizApp.Data.Migrations
                     b.Property<DateTime>("PassingStartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Score");
+                    b.Property<double>("Score");
 
                     b.Property<int>("UrlId");
 

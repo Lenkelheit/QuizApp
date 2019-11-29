@@ -12,7 +12,7 @@ namespace QuizApp.BLL.Dto.TestResult
 
         public DateTime PassingEndTime { get; set; }
 
-        public int Score { get; set; }
+        public double Score { get; set; }
 
         public int UrlId { get; set; }
     }

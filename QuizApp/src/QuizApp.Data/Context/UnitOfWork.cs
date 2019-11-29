@@ -66,6 +66,7 @@ namespace QuizApp.Data.Context
             RegisterRepository<TestQuestionOption, ITestQuestionOptionRepository, TestQuestionOptionRepository>();
             RegisterRepository<ResultAnswer, IResultAnswerRepository, ResultAnswerRepository>();
             RegisterRepository<ResultAnswerOption, IResultAnswerOptionRepository, ResultAnswerOptionRepository>();
+            RegisterRepository<TestEvent, ITestEventRepository, TestEventRepository>();
         }
     }
 }

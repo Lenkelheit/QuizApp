@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +11,15 @@ using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
 using QuizApp.Data.Interfaces;
 using QuizApp.Entities;
+using QuizApp.BLL.Dto.Test;
 
 namespace QuizApp.BLL.Services
 {
     public class UrlService : IUrlService
     {
         private readonly IUnitOfWork unitOfWork;
+
+        private readonly ITestRepository testRepository;
 
         private readonly IUrlRepository urlRepository;
 
@@ -27,6 +31,7 @@ namespace QuizApp.BLL.Services
         public UrlService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>() ?? throw new NullReferenceException(nameof(testRepository));
             this.urlRepository = unitOfWork.GetRepository<Url, IUrlRepository>() ?? throw new NullReferenceException(nameof(urlRepository));
             this.testResultRepository = unitOfWork.GetRepository<TestResult, ITestResultRepository>() ?? throw new NullReferenceException(nameof(testResultRepository));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -73,6 +78,13 @@ namespace QuizApp.BLL.Services
             await unitOfWork.SaveAsync();
 
             return mapper.Map<UpdatedUrlDto>(url);
+        }
+
+        public TestPreviewDto GetTestByUrlId(int urlId)
+        {
+            Test testByUrlId = testRepository.Get(filter: test => test.Urls.Any(url => url.Id == urlId)).FirstOrDefault();
+
+            return mapper.Map<TestPreviewDto>(testByUrlId);
         }
 
         public IEnumerable<TestResultDto> GetTestResultsByUrlId(int urlId)

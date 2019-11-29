@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ValidationRegexes } from 'src/app/core/validators/validation-regexes';
 import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
 import { Router } from '@angular/router';
+import { Error } from 'src/app/models/error/error';
 import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
 
 @Component({

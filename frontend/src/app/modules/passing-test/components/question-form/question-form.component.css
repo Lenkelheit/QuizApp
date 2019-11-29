@@ -1,0 +1,9 @@
+.question-text {
+  font-size: 150%;
+}
+
+.question-time-limit-seconds {
+  font-size: 105%;
+  font-weight: bold;
+  text-align: right;
+}
