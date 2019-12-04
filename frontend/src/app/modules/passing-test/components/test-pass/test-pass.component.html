@@ -1,12 +1,24 @@
-<mat-toolbar color="primary" class="mat-elevation-z6">
-    <img class="quiz-logo" src="../../../../assets/quizLogo.png">
-</mat-toolbar>
-
 <div *ngIf="!isUserIdentified; else userIdentified">
     <app-user-identify (passUpIdentityUrl)="setIdentityUrl($event)">
     </app-user-identify>
 </div>
 
 <ng-template #userIdentified>
-    <app-test-form [getIdentityUrl$]="passIdentityUrl.asObservable()"></app-test-form>
+
+    <div *ngIf="!istestSent; else testSent">
+        <app-test-form [getIdentityUrl$]="passIdentityUrl.asObservable()"
+            (passUpTestResultId)="setTestResultId($event)">
+        </app-test-form>
+    </div>
+
+    <ng-template #testSent>
+        <div>
+            <p class="test-sent-container">Test ended and was successfully sent.</p>
+
+            <a class="link" [routerLink]="['/passing-test/test-result',testResultId]">
+                See test result
+            </a>
+        </div>
+    </ng-template>
+
 </ng-template>

@@ -1,0 +1,59 @@
+<div>
+    <h1 class="mat-h1">Test</h1>
+
+    <div class="form-container">
+        <div class="block-container mat-elevation-z10">
+            <p>Interviewee name: {{testResult?.intervieweeName}}</p>
+
+            <p>Score: {{testResult?.score}}%</p>
+
+            <p>Test started at {{testResult?.passingStartTime | date: 'MM/dd/yyyy, h:mm:ss a'}} and ended at
+                {{testResult?.passingEndTime | date: 'MM/dd/yyyy, h:mm:ss a'}}, it lasted
+                {{resultTimeTakenSeconds | timeSecondsToHhMmSs}}.</p>
+
+            <div *ngIf="testResult?.test && isTestChangedAfterTaken">
+                <p class="warn">
+                    Test has been changed since it was taken.
+                </p>
+            </div>
+        </div>
+
+        <div *ngIf="!testResult?.test; else viewTest">
+            <p class="info">
+                Test was deleted.
+            </p>
+        </div>
+
+        <ng-template #viewTest>
+            <div class="block-container">
+                <app-test [test]="testResult?.test">
+                </app-test>
+            </div>
+        </ng-template>
+
+        <div class="form-container">
+            <div
+                *ngIf="!resultAnswersApi.resultAnswers || resultAnswersApi.resultAnswers?.length === 0; else viewAnswers">
+                <p class="info">
+                    There are not any questions and answers.
+                </p>
+            </div>
+
+            <ng-template #viewAnswers>
+                <mat-paginator [length]="resultAnswersApi.totalCount" [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="setResultAnswersPage(testResult.id, $event.pageIndex, $event.pageSize)">
+                </mat-paginator>
+
+                <div class="block-container mat-elevation-z10"
+                    *ngFor="let answer of resultAnswersApi.resultAnswers; let i=index">
+
+                    <app-question-answer [answer]="answer">
+                    </app-question-answer>
+
+                </div>
+            </ng-template>
+        </div>
+
+    </div>
+</div>

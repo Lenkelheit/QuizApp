@@ -13,10 +13,10 @@ namespace QuizApp.BLL.MappingProfiles
         public TestResultProfile()
         {
             CreateMap<TestResult, TestResultDto>();
-            CreateMap<TestResult, TestResultDetailDto>();
             CreateMap<NewTestResultDto, TestResult>();
             CreateMap<TestResult, CreatedTestResultDto>();
             CreateMap<TestResult, DeletedTestResultDto>();
+            CreateMap<TestResult, TestResultDetailDto>().ForMember(dest => dest.Test, opt => opt.MapFrom(src => src.Url.Test));
         }
     }
 }

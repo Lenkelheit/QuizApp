@@ -1,19 +1,21 @@
-<app-top-bar></app-top-bar>
-
 <div class="basic-container">
     <button mat-raised-button [routerLink]="['/tests/new']">
         Create new test
     </button>
 </div>
 
-<div *ngIf="!tests || tests?.length === 0; else testsTable">
+<div *ngIf="!testsApi.tests || testsApi.tests?.length === 0; else testsTable">
     <p>
-        There is not any tests.
+        There are not any tests.
     </p>
 </div>
 
 <ng-template #testsTable>
-    <table mat-table [dataSource]="tests" class="mat-elevation-z10">
+    <mat-paginator [length]="testsApi.totalCount" [pageIndex]="currentPageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        (page)="setTestsPage($event.pageIndex, $event.pageSize)">
+    </mat-paginator>
+
+    <table mat-table [dataSource]="testsApi.tests" class="mat-elevation-z10">
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>Id</th>
             <td mat-cell *matCellDef="let element">{{ element.id }}</td>

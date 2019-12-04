@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestQuestion;
+using QuizApp.BLL.Dto.TestResult;
 using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
 
@@ -26,9 +27,9 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<TestDto>> Get()
+        public ActionResult<TestsApiDto> Get(int page = 0, int amountTestsPerPage = 10)
         {
-            return Ok(testService.GetTests());
+            return Ok(testService.GetTests(page, amountTestsPerPage));
         }
 
         [HttpGet("{id}")]
@@ -88,9 +89,15 @@ namespace QuizApp.Web.Controllers
         }
 
         [HttpGet("{testId}/urls")]
-        public ActionResult<IEnumerable<UrlDto>> GetUrlsByTestId(int testId)
+        public ActionResult<UrlsApiDto> GetUrlsByTestId(int testId, int page = 0, int amountUrlsPerPage = 10)
         {
-            return Ok(testService.GetUrlsByTestId(testId));
+            return Ok(testService.GetUrlsByTestId(testId, page, amountUrlsPerPage));
+        }
+
+        [HttpGet("{testId}/results")]
+        public ActionResult<TestResultsApiDto> GetResultsByTestId(int testId, int page = 0, int amountResultsPerPage = 10)
+        {
+            return Ok(testService.GetResultsByTestId(testId, page, amountResultsPerPage));
         }
 
         [HttpGet("passing-test/{testId}")]

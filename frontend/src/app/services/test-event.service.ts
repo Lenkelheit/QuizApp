@@ -7,7 +7,7 @@ import { CreatedTestEventDto } from '../models/test-event/created-test-event-dto
     providedIn: 'root'
 })
 export class TestEventService {
-    public routePrefix = '/api/test-event';
+    private routePrefix = '/api/test-event';
 
     constructor(private httpService: HttpInternalService) { }
 

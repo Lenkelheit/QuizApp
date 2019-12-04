@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using AutoMapper;
 
 using QuizApp.BLL.Interfaces;
@@ -11,6 +12,7 @@ using QuizApp.Entities;
 using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestQuestion;
 using QuizApp.BLL.Dto.Url;
+using QuizApp.BLL.Dto.TestResult;
 
 namespace QuizApp.BLL.Services
 {
@@ -24,6 +26,8 @@ namespace QuizApp.BLL.Services
 
         private readonly IUrlRepository urlRepository;
 
+        private readonly ITestResultRepository testResultRepository;
+
         private readonly IMapper mapper;
 
 
@@ -33,15 +37,20 @@ namespace QuizApp.BLL.Services
             this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>() ?? throw new NullReferenceException(nameof(testRepository));
             this.testQuestionRepository = unitOfWork.GetRepository<TestQuestion, ITestQuestionRepository>() ?? throw new NullReferenceException(nameof(testQuestionRepository));
             this.urlRepository = unitOfWork.GetRepository<Url, IUrlRepository>() ?? throw new NullReferenceException(nameof(urlRepository));
+            this.testResultRepository = unitOfWork.GetRepository<TestResult, ITestResultRepository>() ?? throw new NullReferenceException(nameof(testResultRepository));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
 
-        public IEnumerable<TestDto> GetTests()
+        public TestsApiDto GetTests(int page, int amountTestsPerPage)
         {
-            IEnumerable<Test> tests = testRepository.Get();
+            var tests = testRepository.GetPageWithAmount(page: page, amountPerPage: amountTestsPerPage);
 
-            return mapper.Map<IEnumerable<TestDto>>(tests);
+            return new TestsApiDto
+            {
+                Tests = mapper.Map<List<TestDto>>(tests),
+                TotalCount = testRepository.Count()
+            };
         }
 
         public async Task<TestDetailDto> GetTestById(int testId)
@@ -103,11 +112,26 @@ namespace QuizApp.BLL.Services
             return mapper.Map<IEnumerable<TestQuestionDto>>(testQuestions);
         }
 
-        public IEnumerable<UrlDto> GetUrlsByTestId(int testId)
+        public UrlsApiDto GetUrlsByTestId(int testId, int page, int amountUrlsPerPage)
         {
-            IEnumerable<Url> urls = urlRepository.Get(filter: u => u.TestId == testId);
+            var urls = urlRepository.GetPageWithAmount(filter: u => u.TestId == testId, page: page, amountPerPage: amountUrlsPerPage);
 
-            return mapper.Map<IEnumerable<UrlDto>>(urls);
+            return new UrlsApiDto
+            {
+                Urls = mapper.Map<List<UrlDto>>(urls),
+                TotalCount = urlRepository.Count(predicate: u => u.TestId == testId)
+            };
+        }
+
+        public TestResultsApiDto GetResultsByTestId(int testId, int page, int amountResultsPerPage)
+        {
+            var testResults = testResultRepository.GetPageWithAmount(filter: r => r.Url.TestId == testId, page: page, amountPerPage: amountResultsPerPage);
+
+            return new TestResultsApiDto
+            {
+                TestResults = mapper.Map<List<TestResultDto>>(testResults),
+                TotalCount = testResultRepository.Count(predicate: r => r.Url.TestId == testId)
+            };
         }
 
         public async Task<ViewTestDto> GetPassingTestById(int testId)

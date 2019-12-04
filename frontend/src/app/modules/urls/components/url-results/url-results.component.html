@@ -1,0 +1,54 @@
+<div *ngIf="!testResultsApi.testResults || testResultsApi.testResults?.length === 0; else testResultsForUrlTable">
+    <p>
+        There are not any test results related with this url.
+    </p>
+</div>
+
+<ng-template #testResultsForUrlTable>
+    <mat-paginator [length]="testResultsApi.totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        (page)="setTestResultsPage(urlId, $event.pageIndex, $event.pageSize)">
+    </mat-paginator>
+
+    <table mat-table [dataSource]="testResultsApi.testResults" class="mat-elevation-z10">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="intervieweeName">
+            <th mat-header-cell *matHeaderCellDef>Interviewee name</th>
+            <td mat-cell *matCellDef="let element">{{ element.intervieweeName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="passingStartTime">
+            <th mat-header-cell *matHeaderCellDef>Passing start time</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.passingStartTime | date: "MM/dd/yyyy, h:mm:ss a" }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="passingEndTime">
+            <th mat-header-cell *matHeaderCellDef>Passing end time</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.passingEndTime | date: "MM/dd/yyyy, h:mm:ss a" }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let element">{{ element.score }} %</td>
+        </ng-container>
+
+        <ng-container matColumnDef="read">
+            <th mat-header-cell *matHeaderCellDef>Read</th>
+            <td mat-cell *matCellDef="let element">
+                <a mat-button [routerLink]="['/test-results',element.id]">
+                    <i class="material-icons">open_in_new</i>
+                </a>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+    </table>
+</ng-template>

@@ -1,0 +1,25 @@
+.form-container {
+  margin: 2%;
+}
+
+h1 {
+  text-align: center;
+  margin: 8px;
+  font-weight: normal;
+}
+
+.block-container {
+  padding: 20px;
+  margin: 15px;
+}
+
+.info {
+  text-align: center;
+  font-size: x-large;
+  padding: 10px;
+  margin: 10px;
+}
+
+.warn {
+  color: rgb(194, 78, 0);
+}

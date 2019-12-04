@@ -46,6 +46,22 @@ namespace QuizApp.Data.Repositories
             return query;
         }
 
+        public virtual IEnumerable<TEntity> GetPageWithAmount(Expression<Func<TEntity, bool>> filter = null,
+                                        int page = 0,
+                                        int amountPerPage = 10,
+                                        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
+        {
+            IQueryable<TEntity> query = DbSet;
+
+            if (filter != null) query = query.Where(filter);
+
+            if (page >= 0 && amountPerPage >= 0) query = query.Skip(page * amountPerPage).Take(amountPerPage);
+
+            if (includeProperties != null) query = includeProperties(query);
+
+            return query;
+        }
+
         public virtual TEntity GetById(object id, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includeProperties = null)
         {
             IQueryable<TEntity> query = DbSet;

@@ -1,11 +1,20 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
-    <a mat-button [routerLink]="['/']">
-        <img class="quiz-logo" src="../../../../assets/quizLogo.png">
-    </a>
-    <a mat-button [routerLink]="['/tests']">
-        Tests
-    </a>
-    <a mat-button [routerLink]="['/urls']">
-        Urls
-    </a>
+    <div *ngIf="isUserTopBar; else adminTopBar">
+        <img class="quiz-logo image-align" src="../../../../assets/quizLogo.png">
+    </div>
+
+    <ng-template #adminTopBar>
+        <a mat-button [routerLink]="['/']">
+            <img class="quiz-logo" src="../../../../assets/quizLogo.png">
+        </a>
+        <a mat-button [routerLink]="['/tests']">
+            Tests
+        </a>
+        <a mat-button [routerLink]="['/urls']">
+            Urls
+        </a>
+        <a mat-button [routerLink]="['/test-results']">
+            Test results
+        </a>
+    </ng-template>
 </mat-toolbar>

@@ -26,9 +26,9 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<UrlDto>> Get()
+        public ActionResult<UrlsApiDto> Get(int page = 0, int amountUrlsPerPage = 10)
         {
-            return Ok(urlService.GetUrls());
+            return Ok(urlService.GetUrls(page, amountUrlsPerPage));
         }
 
         [HttpGet("{id}")]
@@ -82,9 +82,9 @@ namespace QuizApp.Web.Controllers
         }
 
         [HttpGet("{urlId}/results")]
-        public ActionResult<IEnumerable<TestResultDto>> GetTestResultsByUrlId(int urlId)
+        public ActionResult<TestResultsApiDto> GetTestResultsByUrlId(int urlId, int page = 0, int amountResultsPerPage = 10)
         {
-            return Ok(urlService.GetTestResultsByUrlId(urlId));
+            return Ok(urlService.GetTestResultsByUrlId(urlId, page, amountResultsPerPage));
         }
     }
 }

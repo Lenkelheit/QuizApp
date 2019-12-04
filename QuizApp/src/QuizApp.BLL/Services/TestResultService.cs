@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using AutoMapper;
 
 using QuizApp.BLL.Dto.ResultAnswer;
@@ -33,11 +34,26 @@ namespace QuizApp.BLL.Services
         }
 
 
+        public TestResultsApiDto GetTestResults(string intervieweeNameFilter, int page, int amountResultsPerPage)
+        {
+            var results = !string.IsNullOrWhiteSpace(intervieweeNameFilter)
+                ? testResultRepository.GetPageWithAmount(filter: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase), page, amountResultsPerPage)
+                : testResultRepository.GetPageWithAmount(page: page, amountPerPage: amountResultsPerPage);
+
+            return new TestResultsApiDto
+            {
+                TestResults = mapper.Map<List<TestResultDto>>(results),
+                TotalCount = !string.IsNullOrWhiteSpace(intervieweeNameFilter)
+                    ? testResultRepository.Count(predicate: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase))
+                    : testResultRepository.Count()
+            };
+        }
+
         public async Task<TestResultDetailDto> GetTestResultById(int testResultId)
         {
             TestResult testResult = await testResultRepository.GetByIdAsync(id: testResultId, includeProperties: prop => prop
-                .Include(r => r.ResultAnswers)
-                    .ThenInclude(ra => ra.ResultAnswerOptions));
+                .Include(r => r.Url)
+                    .ThenInclude(u => u.Test));
 
             return mapper.Map<TestResultDetailDto>(testResult);
         }
@@ -66,11 +82,18 @@ namespace QuizApp.BLL.Services
             return mapper.Map<DeletedTestResultDto>(testResult);
         }
 
-        public IEnumerable<ResultAnswerFromResultDto> GetAnswersByResultId(int testResultId)
+        public ResultAnswersApiDto GetAnswersByResultId(int testResultId, int page, int amountAnswersPerPage)
         {
-            IEnumerable<ResultAnswer> resultAnswers = resultAnswerRepository.Get(filter: ra => ra.ResultId == testResultId);
+            var resultAnswers = resultAnswerRepository.GetPageWithAmount(filter: ra => ra.ResultId == testResultId, page, amountAnswersPerPage, includeProperties: prop => prop
+                .Include(ra => ra.ResultAnswerOptions)
+                .Include(ra => ra.Question)
+                    .ThenInclude(q => q.TestQuestionOptions)).ToList();
 
-            return mapper.Map<IEnumerable<ResultAnswerFromResultDto>>(resultAnswers);
+            return new ResultAnswersApiDto
+            {
+                ResultAnswers = mapper.Map<List<ResultAnswerFromResultDto>>(resultAnswers),
+                TotalCount = resultAnswerRepository.Count(predicate: ra => ra.ResultId == testResultId)
+            };
         }
     }
 }

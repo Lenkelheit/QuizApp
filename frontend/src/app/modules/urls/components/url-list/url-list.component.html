@@ -1,19 +1,21 @@
-<app-top-bar></app-top-bar>
-
 <div class="basic-container">
     <button mat-raised-button [routerLink]="['/urls/new']">
         Create new url
     </button>
 </div>
 
-<div *ngIf="!urls || urls?.length === 0; else urlsTable">
+<div *ngIf="!urlsApi.urls || urlsApi.urls?.length === 0; else urlsTable">
     <p>
-        There is not any urls.
+        There are not any urls.
     </p>
 </div>
 
 <ng-template #urlsTable>
-    <table mat-table [dataSource]="urls" class="mat-elevation-z10">
+    <mat-paginator [length]="urlsApi.totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        (page)="setUrlsPage($event.pageIndex, $event.pageSize)">
+    </mat-paginator>
+
+    <table mat-table [dataSource]="urlsApi.urls" class="mat-elevation-z10">
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>Id</th>
             <td mat-cell *matCellDef="let element">{{ element.id }}</td>

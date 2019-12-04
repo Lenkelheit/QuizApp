@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using QuizApp.BLL.Dto.ResultAnswer;
+using QuizApp.BLL.Dto.Test;
 
 namespace QuizApp.BLL.Dto.TestResult
 {
@@ -19,6 +20,6 @@ namespace QuizApp.BLL.Dto.TestResult
         public double Score { get; set; }
 
 
-        public ICollection<ResultAnswerDetailDto> ResultAnswers { get; set; } = new List<ResultAnswerDetailDto>();
+        public ResultTestDto Test { get; set; }
     }
 }

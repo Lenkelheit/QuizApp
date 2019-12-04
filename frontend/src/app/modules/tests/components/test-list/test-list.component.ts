@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TestService } from '../../../../services/test.service';
-import { TestDto } from '../../../../models/test/test-dto';
+import { TestsApiDto } from 'src/app/models/test/tests-api-dto';
 
 @Component({
     selector: 'app-test-list',
@@ -9,19 +9,28 @@ import { TestDto } from '../../../../models/test/test-dto';
 })
 export class TestListComponent implements OnInit {
     public columnsToDisplay: string[] = ['id', 'title', 'description', 'timeLimitSeconds', 'lastModifiedDate', 'update', 'delete'];
-    public tests: TestDto[] = [];
+    public testsApi: TestsApiDto = {} as TestsApiDto;
+    public currentPageIndex = 0;
+    public pageSize = 15;
+    public pageSizeOptions: number[] = [this.pageSize, 10, 20];
 
     constructor(private testService: TestService) { }
 
     ngOnInit() {
-        this.getTests();
+        this.setTestsPage(this.currentPageIndex, this.pageSize);
     }
 
     public deleteTest(id: number) {
-        this.testService.deleteTest(id).subscribe(() => this.getTests());
+        this.testService.deleteTest(id).subscribe(() => {
+            this.setTestsPage(this.testsApi.tests.length === 1
+                ? ((this.currentPageIndex - 1) >= 0 ? (this.currentPageIndex - 1) : 0)
+                : this.currentPageIndex,
+                this.pageSize);
+        });
     }
 
-    private getTests() {
-        this.testService.getTests().subscribe(resp => this.tests = resp.body);
+    public setTestsPage(pageIndex: number, pageSize: number) {
+        this.currentPageIndex = pageIndex;
+        this.testService.getTests(pageIndex, pageSize).subscribe(testsApiResp => this.testsApi = testsApiResp.body);
     }
 }

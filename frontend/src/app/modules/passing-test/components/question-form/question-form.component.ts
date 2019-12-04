@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angu
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { ViewQuestionDto } from 'src/app/models/question/view-question-dto';
 import { ViewQuestionOptionDto } from 'src/app/models/question-option/view-question-option-dto';
-import { TimeConverter } from '../../converters/time-converter';
+import { TimeConverter } from 'src/app/core/converters/time-converter';
 import { TestEventService } from 'src/app/services/test-event.service';
 import { EventType } from 'src/app/models/test-event/enums/event-type.enum';
 import { PayloadQuestion } from 'src/app/models/test-event/payloads/payload-question';

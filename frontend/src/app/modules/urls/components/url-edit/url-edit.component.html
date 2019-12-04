@@ -1,117 +1,133 @@
-<app-top-bar></app-top-bar>
-
-<h1 class="mat-h1">Url</h1>
-
-<div class="form-container">
-    <div *ngIf="errors">
-        <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
-            {{error}}
-        </div>
-    </div>
-
-    <form [formGroup]="urlForm">
-
+<mat-tab-group mat-stretch-tabs>
+    <mat-tab label="Url">
         <div>
-            <mat-form-field class="mat-field-oneline">
-                <input [value]="updateUrl.test?.id" name="testId" type="text" matInput placeholder="Test id" disabled />
-            </mat-form-field>
+            <h1 class="mat-h1">Url</h1>
 
-            <mat-form-field class="mat-field-oneline">
-                <input [value]="updateUrl.test?.title" name="testTitle" type="text" matInput placeholder="Test title"
-                    disabled />
-            </mat-form-field>
+            <div class="form-container">
+                <div *ngIf="errors">
+                    <div class="error-container mat-elevation-z10" *ngFor="let error of errors.errors">
+                        {{error}}
+                    </div>
+                </div>
 
-            <mat-form-field class="mat-field-oneline">
-                <input [value]="updateUrl.test?.lastModifiedDate | date: 'MM/dd/yyyy, h:mm:ss a'"
-                    name="testLastModifiedDate" type="text" matInput placeholder="Last test modified date" disabled />
-            </mat-form-field>
+                <form [formGroup]="urlForm">
 
-        </div>
+                    <div>
+                        <mat-form-field class="mat-field-oneline">
+                            <input [value]="updateUrl.test?.id" name="testId" type="text" matInput placeholder="Test id"
+                                disabled />
+                        </mat-form-field>
 
-        <button type="button" mat-raised-button color="primary" [routerLink]="['/tests',updateUrl.testId]"
-            [disabled]="!updateUrl.test">
-            See test
-        </button>
+                        <mat-form-field class="mat-field-oneline">
+                            <input [value]="updateUrl.test?.title" name="testTitle" type="text" matInput
+                                placeholder="Test title" disabled />
+                        </mat-form-field>
 
-        <div>
-            <label>
-                Your url —
-            </label>
+                        <mat-form-field class="mat-field-oneline">
+                            <input [value]="updateUrl.test?.lastModifiedDate | date: 'MM/dd/yyyy, h:mm:ss a'"
+                                name="testLastModifiedDate" type="text" matInput placeholder="Last test modified date"
+                                disabled />
+                        </mat-form-field>
 
-            <mat-form-field class="mat-field-oneline">
-                <input [value]="baseUrl+updateUrl.id" type="text" matInput disabled />
-            </mat-form-field>
-        </div>
+                    </div>
 
-        <mat-form-field class="mat-field-block">
-            <input formControlName="intervieweeName" [(ngModel)]="updateUrl.intervieweeName" name="intervieweeName"
-                type="text" matInput placeholder="Interviewee name" />
+                    <button type="button" mat-raised-button color="primary" [routerLink]="['/tests',updateUrl.testId]"
+                        [disabled]="!updateUrl.test">
+                        See test
+                    </button>
 
-            <mat-error *ngIf="intervieweeName.errors?.minlength && (intervieweeName.touched || intervieweeName.dirty)">
-                Interviewee name must be at least 4 characters long.
-            </mat-error>
+                    <div class="url-block">
+                        <p class="url">
+                            Your url — {{baseUrl+updateUrl.id}}
+                        </p>
 
-            <mat-error *ngIf="intervieweeName.errors?.maxlength && (intervieweeName.touched || intervieweeName.dirty)">
-                Interviewee name must be less than 32 characters long.
-            </mat-error>
+                        <button type="button" mat-raised-button (click)="copyUrl(updateUrl.id)">
+                            Copy link
+                        </button>
+                    </div>
 
-        </mat-form-field>
+                    <mat-form-field class="mat-field-block">
+                        <input formControlName="intervieweeName" [(ngModel)]="updateUrl.intervieweeName"
+                            name="intervieweeName" type="text" matInput placeholder="Interviewee name" />
 
-        <mat-form-field class="mat-field-block">
-            <input formControlName="numberOfRuns" [(ngModel)]="updateUrl.numberOfRuns" name="numberOfRuns" type="number"
-                matInput placeholder="Number of runs" />
+                        <mat-error
+                            *ngIf="intervieweeName.errors?.minlength && (intervieweeName.touched || intervieweeName.dirty)">
+                            Interviewee name must be at least 4 characters long.
+                        </mat-error>
 
-            <mat-error *ngIf="numberOfRuns.errors?.min && (numberOfRuns.touched || numberOfRuns.dirty)">
-                Number of runs must be equal or more than 0.
-            </mat-error>
+                        <mat-error
+                            *ngIf="intervieweeName.errors?.maxlength && (intervieweeName.touched || intervieweeName.dirty)">
+                            Interviewee name must be less than 32 characters long.
+                        </mat-error>
 
-        </mat-form-field>
+                    </mat-form-field>
 
-        <div>
-            <mat-form-field class="mat-field-oneline">
-                <input formControlName="validFromTime" [(ngModel)]="updateUrl.validFromTime" name="validFromTime"
-                    matInput [matDatepicker]="pickerFromTime" placeholder="Valid from time"
-                    [errorStateMatcher]="confirmValidParentMatcher" required />
-                <mat-datepicker-toggle matSuffix [for]="pickerFromTime"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFromTime></mat-datepicker>
+                    <mat-form-field class="mat-field-block">
+                        <input formControlName="numberOfRuns" [(ngModel)]="updateUrl.numberOfRuns" name="numberOfRuns"
+                            type="number" matInput placeholder="Number of runs" />
 
-                <mat-error *ngIf="(validFromTime.errors?.required || validFromTime.errors?.matDatepickerParse)
+                        <mat-error *ngIf="numberOfRuns.errors?.min && (numberOfRuns.touched || numberOfRuns.dirty)">
+                            Number of runs must be equal or more than 0.
+                        </mat-error>
+
+                    </mat-form-field>
+
+                    <div>
+                        <mat-form-field class="mat-field-oneline">
+                            <input formControlName="validFromTime" [(ngModel)]="updateUrl.validFromTime"
+                                name="validFromTime" matInput [matDatepicker]="pickerFromTime"
+                                placeholder="Valid from time" [errorStateMatcher]="confirmValidParentMatcher"
+                                required />
+                            <mat-datepicker-toggle matSuffix [for]="pickerFromTime"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerFromTime></mat-datepicker>
+
+                            <mat-error *ngIf="(validFromTime.errors?.required || validFromTime.errors?.matDatepickerParse)
                             && (validFromTime.touched || validFromTime.dirty)">
-                    This field is empty or not valid.
-                </mat-error>
+                                This field is empty or not valid.
+                            </mat-error>
 
-                <mat-error *ngIf="urlForm.errors?.endDateLessThanStartDate">
-                    Valid from time must be earlier than valid until time in url.
-                </mat-error>
+                            <mat-error *ngIf="urlForm.errors?.endDateLessThanStartDate">
+                                Valid from time must be earlier than valid until time in url.
+                            </mat-error>
 
-            </mat-form-field>
+                        </mat-form-field>
 
-            <mat-form-field class="mat-field-oneline">
-                <input formControlName="validUntilTime" [(ngModel)]="updateUrl.validUntilTime" name="validUntilTime"
-                    matInput [matDatepicker]="pickerUntilTime" placeholder="Valid until time"
-                    [errorStateMatcher]="confirmValidParentMatcher" required />
-                <mat-datepicker-toggle matSuffix [for]="pickerUntilTime"></mat-datepicker-toggle>
-                <mat-datepicker #pickerUntilTime></mat-datepicker>
+                        <mat-form-field class="mat-field-oneline">
+                            <input formControlName="validUntilTime" [(ngModel)]="updateUrl.validUntilTime"
+                                name="validUntilTime" matInput [matDatepicker]="pickerUntilTime"
+                                placeholder="Valid until time" [errorStateMatcher]="confirmValidParentMatcher"
+                                required />
+                            <mat-datepicker-toggle matSuffix [for]="pickerUntilTime"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerUntilTime></mat-datepicker>
 
-                <mat-error *ngIf="(validUntilTime.errors?.required || validUntilTime.errors?.matDatepickerParse) 
+                            <mat-error *ngIf="(validUntilTime.errors?.required || validUntilTime.errors?.matDatepickerParse) 
                             && (validUntilTime.touched || validUntilTime.dirty)">
-                    This field is empty or not valid.
-                </mat-error>
+                                This field is empty or not valid.
+                            </mat-error>
 
-                <mat-error *ngIf="urlForm.errors?.endDateLessThanStartDate">
-                    Valid until time must be later than valid from time in url.
-                </mat-error>
+                            <mat-error *ngIf="urlForm.errors?.endDateLessThanStartDate">
+                                Valid until time must be later than valid from time in url.
+                            </mat-error>
 
-            </mat-form-field>
+                        </mat-form-field>
 
+                    </div>
+
+                    <button mat-raised-button color="warn" (click)="clearUrl()">
+                        Clear
+                    </button>
+
+                    <button mat-raised-button color="primary" [disabled]="urlForm.invalid" (click)="sendUpdateUrl()">
+                        Update
+                    </button>
+                </form>
+            </div>
         </div>
-
-        <button mat-raised-button color="warn" (click)="clearUrl()">
-            Clear
-        </button>
-
-        <button mat-raised-button color="primary" [disabled]="urlForm.invalid" (click)="sendUpdateUrl()">
-            Update
-        </button>
-    </form>
-</div>
+    </mat-tab>
+    <mat-tab label="Related test results">
+        <div class="test-results">
+            <app-url-results [getUrlId$]="passUrlId.asObservable()">
+            </app-url-results>
+        </div>
+    </mat-tab>
+</mat-tab-group>

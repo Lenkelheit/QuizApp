@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UrlDto } from 'src/app/models/url/url-dto';
 import { UrlService } from 'src/app/services/url.service';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material';
 import { ClipboardSnackBarComponent } from 'src/app/shared/components/clipboard-snack-bar/clipboard-snack-bar.component';
+import { UrlsApiDto } from 'src/app/models/url/urls-api-dto';
+import { ClipboardManager } from 'src/app/core/clipboard-manager';
 
 @Component({
     selector: 'app-url-list',
@@ -12,29 +13,24 @@ import { ClipboardSnackBarComponent } from 'src/app/shared/components/clipboard-
 })
 export class UrlListComponent implements OnInit {
     public columnsToDisplay: string[] = ['id', 'intervieweeName', 'numberOfRuns', 'validFromTime', 'validUntilTime', 'copyLink', 'update'];
-    public urls: UrlDto[] = [];
+    public urlsApi: UrlsApiDto = {} as UrlsApiDto;
+    public pageSize = 15;
+    public pageSizeOptions: number[] = [this.pageSize, 10, 20];
 
     constructor(private urlService: UrlService, public snackBar: MatSnackBar) { }
 
     ngOnInit() {
-        this.getUrls();
+        this.setUrlsPage(0, this.pageSize);
+    }
+
+    public setUrlsPage(pageIndex: number, pageSize: number) {
+        this.urlService.getUrls(pageIndex, pageSize).subscribe(urlsApiResp => this.urlsApi = urlsApiResp.body);
     }
 
     public copyUrl(urlId: number) {
         const url = environment.baseUrl + urlId;
 
-        const selectedBox = document.createElement('textarea');
-        selectedBox.style.position = 'fixed';
-        selectedBox.style.left = '0';
-        selectedBox.style.top = '0';
-        selectedBox.style.opacity = '0';
-        selectedBox.value = url;
-        document.body.appendChild(selectedBox);
-        selectedBox.focus();
-        selectedBox.select();
-        document.execCommand('copy');
-        document.body.removeChild(selectedBox);
-
+        ClipboardManager.copyUrl(url);
         this.openClipboardSnackBar();
     }
 
@@ -43,9 +39,5 @@ export class UrlListComponent implements OnInit {
             duration: 10000,
             horizontalPosition: 'start'
         });
-    }
-
-    private getUrls() {
-        this.urlService.getUrls().subscribe(resp => this.urls = resp.body);
     }
 }

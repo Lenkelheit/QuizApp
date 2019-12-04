@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from 'src/app/services/http-internal.service';
-import { UrlDto } from '../models/url/url-dto';
 import { NewUrlDto } from '../models/url/new-url-dto';
 import { CreatedUrlDto } from '../models/url/created-url-dto';
 import { UpdateUrlDto } from '../models/url/update-url-dto';
 import { UpdatedUrlDto } from '../models/url/updated-url-dto';
 import { UrlDetailDto } from '../models/url/url-detail-dto';
 import { TestPreviewDto } from '../models/test/test-preview-dto';
+import { UrlsApiDto } from '../models/url/urls-api-dto';
+import { TestResultsApiDto } from '../models/test-result/test-results-api-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -16,8 +17,11 @@ export class UrlService {
 
     constructor(private httpService: HttpInternalService) { }
 
-    public getUrls() {
-        return this.httpService.getRequest<UrlDto[]>(`${this.routePrefix}`);
+    public getUrls(page: number, amountUrlsPerPage: number) {
+        return this.httpService.getRequest<UrlsApiDto>(`${this.routePrefix}`, {
+            page,
+            amountUrlsPerPage
+        });
     }
 
     public getUrlById(id: number) {
@@ -34,5 +38,12 @@ export class UrlService {
 
     public getTestByUrlId(urlId: number) {
         return this.httpService.getRequest<TestPreviewDto>(`${this.routePrefix}/${urlId}/test`);
+    }
+
+    public getTestResultsByUrlId(id: number, page: number, amountResultsPerPage: number) {
+        return this.httpService.getRequest<TestResultsApiDto>(`${this.routePrefix}/${id}/results`, {
+            page,
+            amountResultsPerPage
+        });
     }
 }

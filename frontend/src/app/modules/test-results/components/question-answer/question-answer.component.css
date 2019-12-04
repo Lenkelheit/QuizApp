@@ -1,0 +1,19 @@
+.question-text {
+  font-size: 150%;
+}
+
+.question-time {
+  font-size: 105%;
+  text-align: right;
+}
+
+.info {
+  text-align: center;
+  font-size: x-large;
+  padding: 10px;
+  margin: 10px;
+}
+
+.question-option {
+  margin: 8px 0px 8px 0px;
+}

@@ -13,7 +13,8 @@
   width: 35%;
 }
 
-.test-urls {
+.test-urls,
+.test-results {
   margin: 25px;
 }
 

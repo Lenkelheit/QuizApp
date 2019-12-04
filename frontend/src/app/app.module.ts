@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { TestsModule } from './modules/tests/tests.module';
 import { PassingTestModule } from './modules/passing-test/passing-test.module';
+import { TestResultsModule } from './modules/test-results/test-results.module';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { PassingTestModule } from './modules/passing-test/passing-test.module';
         HttpClientModule,
         BrowserAnimationsModule,
         SharedModule,
-        PassingTestModule
+        PassingTestModule,
+        TestResultsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

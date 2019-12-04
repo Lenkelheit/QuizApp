@@ -25,7 +25,7 @@ namespace QuizApp.Web.Extensions
 
         public static void ConfigureCustomValidationErrors(this IServiceCollection services)
         {
-            // override ModelState
+            // Override ModelState.
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (context) =>
