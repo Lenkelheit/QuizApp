@@ -4,11 +4,11 @@
 }
 
 .right-option {
-  background-color: rgb(116, 240, 116);
+  background-color: #d8ecdd;
 }
 
 .wrong-option {
-  background-color: rgb(255, 154, 154);
+  background-color: #ecd9db;
 }
 
 .option {

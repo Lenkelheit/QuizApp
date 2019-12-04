@@ -1,7 +1,7 @@
 <div>
-    <p>Lasted: {{answerTimeTakenSeconds | timeSecondsToHhMmSs}}.</p>
-
     <div *ngIf="!answer?.question; else viewAnswerOptions">
+        <p>Time used: {{answerTimeTakenSeconds | timeSecondsToHhMmSs}}.</p>
+
         <p class="info">
             The question was deleted.
         </p>
@@ -12,7 +12,8 @@
 
         <p>{{answer?.question?.hint}}</p>
 
-        <p class="question-time-limit-seconds">Question time limit: {{answer?.question?.timeLimitSeconds}}.</p>
+        <p class="question-time">Question time limit: {{answer?.question?.timeLimitSeconds}}.</p>
+        <p class="question-time">Time used: {{answerTimeTakenSeconds | timeSecondsToHhMmSs}}.</p>
 
         <div class="question-option" *ngFor="let questionOption of answer.question.testQuestionOptions; let i=index">
 

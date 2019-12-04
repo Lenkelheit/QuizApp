@@ -15,8 +15,6 @@ export class TestResultComponent implements OnInit {
     public resultAnswersApi: ResultAnswersApiDto = {} as ResultAnswersApiDto;
     public pageSize = 3;
     public pageSizeOptions: number[] = [this.pageSize, 5];
-    public resultTimeTakenSeconds: number;
-    public isTestChangedAfterTaken: boolean;
 
     constructor(private testResultService: TestResultService, private route: ActivatedRoute) { }
 
@@ -26,14 +24,18 @@ export class TestResultComponent implements OnInit {
         this.testResultService.getTestResultById(testResultId).subscribe(testResultResp => {
             this.testResult = testResultResp.body;
 
-            this.resultTimeTakenSeconds = Math.round((new Date(this.testResult.passingEndTime).getTime() / 1000) -
-                (new Date(this.testResult.passingStartTime).getTime() / 1000));
-
-            this.isTestChangedAfterTaken = new Date(this.testResult.test.lastModifiedDate).getTime() >
-                new Date(this.testResult.passingEndTime).getTime();
-
             this.setResultAnswersPage(testResultId, 0, this.pageSize);
         });
+    }
+
+    get resultTimeTakenSeconds() {
+        return Math.round((new Date(this.testResult.passingEndTime).getTime() / 1000) -
+            (new Date(this.testResult.passingStartTime).getTime() / 1000));
+    }
+
+    get isTestChangedAfterTaken() {
+        return new Date(this.testResult.test.lastModifiedDate).getTime() >
+            new Date(this.testResult.passingEndTime).getTime();
     }
 
     public setResultAnswersPage(testResultId: number, pageIndex: number, pageSize: number) {

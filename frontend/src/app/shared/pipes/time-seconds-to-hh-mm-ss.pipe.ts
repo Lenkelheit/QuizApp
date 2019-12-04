@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TimeSecondsToHhMmSsPipe implements PipeTransform {
     transform(timeSeconds: number): string {
-        if (timeSeconds == null) {
+        if (!timeSeconds) {
             timeSeconds = 0;
         }
 
