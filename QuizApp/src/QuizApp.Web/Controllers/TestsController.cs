@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace QuizApp.Web.Controllers
         }
 
 
+        [Authorize]
         [HttpGet]
         public ActionResult<TestsApiDto> Get(int page = 0, int amountTestsPerPage = 10)
         {

@@ -1,0 +1,29 @@
+<h1 class="mat-h1">Log in to Quiz</h1>
+
+<div class="form-container">
+
+    <div class="flex-container">
+        <div *ngIf="userAuthenticationResult?.errors" class="errors-container">
+            <div class="error mat-elevation-z10" *ngFor="let error of userAuthenticationResult.errors">
+                {{error}}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-container">
+        <form class="mat-elevation-z10">
+            <mat-form-field class="mat-field-block">
+                <input [(ngModel)]="userLogin.email" name="email" type="text" matInput placeholder="Email" />
+            </mat-form-field>
+
+            <mat-form-field class="mat-field-block">
+                <input [(ngModel)]="userLogin.password" name="password" type="password" matInput
+                    placeholder="Password" />
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" (click)="loginUser()">
+                Log in
+            </button>
+        </form>
+    </div>
+</div>

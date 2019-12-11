@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { TestsModule } from './modules/tests/tests.module';
 import { PassingTestModule } from './modules/passing-test/passing-test.module';
 import { TestResultsModule } from './modules/test-results/test-results.module';
+import { AuthenticationModule } from './modules/authentication/authentication.module';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { TestResultsModule } from './modules/test-results/test-results.module';
         BrowserAnimationsModule,
         SharedModule,
         PassingTestModule,
-        TestResultsModule
+        TestResultsModule,
+        AuthenticationModule
     ],
     providers: [],
     bootstrap: [AppComponent]
