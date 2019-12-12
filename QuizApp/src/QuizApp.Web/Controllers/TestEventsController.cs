@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using QuizApp.BLL.Dto.PassingTest;
 using QuizApp.BLL.Dto.TestEvent;
 using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
+    [AllowAnonymous]
     [Route("api/test-event")]
     [ApiController]
     public class TestEventsController : ControllerBase

@@ -6,3 +6,7 @@
   vertical-align: middle;
   padding: 0px 16px;
 }
+
+.right-block {
+  margin-left: auto;
+}

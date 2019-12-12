@@ -11,7 +11,15 @@ export class AuthenticationService {
 
     constructor(private httpService: HttpInternalService) { }
 
+    public checkUserAuthentication() {
+        return this.httpService.getRequest<boolean>(`${this.routePrefix}`);
+    }
+
     public login(userLoginDto: UserLoginDto) {
-        return this.httpService.postRequest<UserAuthenticationResultDto>(`${this.routePrefix}`, userLoginDto);
+        return this.httpService.postRequest<UserAuthenticationResultDto>(`${this.routePrefix}/login`, userLoginDto);
+    }
+
+    public logout() {
+        return this.httpService.getRequest<void>(`${this.routePrefix}/logout`);
     }
 }

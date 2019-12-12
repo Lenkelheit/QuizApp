@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.ResultAnswer;
@@ -12,6 +12,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
+    [Authorize]
     [Route("api/questions")]
     [ApiController]
     public class TestQuestionsController : ControllerBase

@@ -12,7 +12,7 @@ import { TestResultListComponent } from './modules/test-results/components/test-
 import { UserLoginComponent } from './modules/authentication/components/user-login/user-login.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'tests', pathMatch: 'full' },
     { path: 'login', component: UserLoginComponent },
 
     { path: 'tests', component: TestListComponent },

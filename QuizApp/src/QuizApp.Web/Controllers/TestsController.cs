@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.Test;
@@ -14,6 +13,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TestsController : ControllerBase
@@ -27,7 +27,6 @@ namespace QuizApp.Web.Controllers
         }
 
 
-        [Authorize]
         [HttpGet]
         public ActionResult<TestsApiDto> Get(int page = 0, int amountTestsPerPage = 10)
         {
@@ -102,6 +101,7 @@ namespace QuizApp.Web.Controllers
             return Ok(testService.GetResultsByTestId(testId, page, amountResultsPerPage));
         }
 
+        [AllowAnonymous]
         [HttpGet("passing-test/{testId}")]
         public async Task<ActionResult<ViewTestDto>> GetPassingTestById(int testId)
         {

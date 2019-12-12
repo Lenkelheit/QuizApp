@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -28,14 +28,16 @@ export class HttpInternalService {
 
     public putRequest<T>(url: string, payload: object): Observable<HttpResponse<T>> {
         return this.http.put<T>(this.baseUrl + url, payload, {
-            observe: 'response'
+            observe: 'response',
+            withCredentials: true
         });
     }
 
     public deleteRequest<T>(url: string, httpParams?: any): Observable<HttpResponse<T>> {
         return this.http.delete<T>(this.baseUrl + url, {
             observe: 'response',
-            params: httpParams
+            params: httpParams,
+            withCredentials: true
         });
     }
 }

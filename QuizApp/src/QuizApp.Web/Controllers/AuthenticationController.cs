@@ -15,6 +15,7 @@ using IAuthenticationService = QuizApp.BLL.Interfaces.IAuthenticationService;
 
 namespace QuizApp.Web.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -28,7 +29,13 @@ namespace QuizApp.Web.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
+        public ActionResult<bool> CheckUserAuthentication()
+        {
+            return User.Identity.IsAuthenticated;
+        }
+
+        [HttpPost("login")]
         public async Task<ActionResult<UserAuthenticationResultDto>> Login([FromBody] UserLoginDto userLoginDto)
         {
             if (userLoginDto == null)
@@ -43,6 +50,14 @@ namespace QuizApp.Web.Controllers
                 await Authenticate(userLoginDto.Email);
             }
             return Ok(userAuthenticationResult);
+        }
+
+        [Authorize]
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok();
         }
 
         private async Task Authenticate(string userName)
