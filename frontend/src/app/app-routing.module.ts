@@ -9,9 +9,12 @@ import { UrlEditComponent } from './modules/urls/components/url-edit/url-edit.co
 import { TestPassComponent } from './modules/passing-test/components/test-pass/test-pass.component';
 import { TestResultComponent } from './modules/test-results/components/test-result/test-result.component';
 import { TestResultListComponent } from './modules/test-results/components/test-result-list/test-result-list.component';
+import { UserLoginComponent } from './modules/authentication/components/user-login/user-login.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'tests', pathMatch: 'full' },
+    { path: 'login', component: UserLoginComponent },
+
     { path: 'tests', component: TestListComponent },
     { path: 'tests/new', component: TestCreateComponent },
     { path: 'tests/:id', component: TestEditComponent },

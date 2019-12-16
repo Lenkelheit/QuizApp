@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +34,7 @@ namespace QuizApp.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<TimeErrorSetting>(Configuration.GetSection(nameof(TimeErrorSetting)));
+            services.Configure<UserLogin>(Configuration.GetSection(nameof(UserLogin)));
 
             services.AddDbContext<QuizAppDbContext>(options =>
             {
@@ -47,6 +47,8 @@ namespace QuizApp.Web
             services.AddCustomServices();
 
             services.AddCors();
+
+            services.AddCustomAuthentication(Configuration);
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -62,7 +64,9 @@ namespace QuizApp.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:4200"));
+            app.UseCors(builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200"));
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }

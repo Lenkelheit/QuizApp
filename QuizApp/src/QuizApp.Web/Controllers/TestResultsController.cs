@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.ResultAnswer;
@@ -11,6 +11,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
+    [Authorize]
     [Route("api/results")]
     [ApiController]
     public class TestResultsController : ControllerBase
@@ -30,6 +31,7 @@ namespace QuizApp.Web.Controllers
             return Ok(testResultService.GetTestResults(intervieweeNameFilter, page, amountResultsPerPage));
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<TestResultDetailDto>> GetTestResultById(int id)
         {
@@ -67,6 +69,7 @@ namespace QuizApp.Web.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpGet("{testResultId}/answers")]
         public ActionResult<ResultAnswersApiDto> GetAnswersByResultId(int testResultId, int page = 0, int amountAnswersPerPage = 3)
         {

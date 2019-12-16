@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using QuizApp.BLL.Dto.Test;
 using QuizApp.BLL.Dto.TestResult;
 using QuizApp.BLL.Dto.Url;
 using QuizApp.BLL.Interfaces;
-using QuizApp.Entities;
 
 namespace QuizApp.Web.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UrlsController : ControllerBase
@@ -68,6 +69,7 @@ namespace QuizApp.Web.Controllers
             return Ok(updatedUrlDto);
         }
 
+        [AllowAnonymous]
         [HttpGet("{urlId}/test")]
         public ActionResult<TestPreviewDto> GetTestByUrlId(int urlId)
         {
