@@ -1,9 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using QuizApp.BLL.Interfaces;
 using QuizApp.BLL.Services;
+using AuthenticationService = QuizApp.BLL.Services.AuthenticationService;
+using IAuthenticationService = QuizApp.BLL.Interfaces.IAuthenticationService;
 
 namespace QuizApp.Web.Extensions
 {
@@ -22,6 +30,17 @@ namespace QuizApp.Web.Extensions
             services.AddScoped<ITestEventService, TestEventService>();
             services.AddScoped<IUrlValidatorService, UrlValidatorService>();
             services.AddScoped<ITestCalculationService, TestCalculationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+        }
+
+        public static void AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.ExpireTimeSpan = configuration.GetValue<TimeSpan>("CookieExpiration");
+                options.Events.OnRedirectToAccessDenied = ReplaceRedirector(HttpStatusCode.Forbidden);
+                options.Events.OnRedirectToLogin = ReplaceRedirector(HttpStatusCode.Unauthorized);
+            });
         }
 
         public static void ConfigureCustomValidationErrors(this IServiceCollection services)
@@ -41,6 +60,15 @@ namespace QuizApp.Web.Extensions
                     return new BadRequestObjectResult(result);
                 };
             });
+        }
+
+        private static Func<RedirectContext<CookieAuthenticationOptions>, Task> ReplaceRedirector(HttpStatusCode statusCode)
+        {
+            return context =>
+            {
+                context.Response.StatusCode = (int)statusCode;
+                return Task.CompletedTask;
+            };
         }
     }
 }

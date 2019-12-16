@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.UrlValidator;
@@ -10,6 +10,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
+    [AllowAnonymous]
     [Route("api/url-validator")]
     [ApiController]
     public class UrlValidatorController : ControllerBase

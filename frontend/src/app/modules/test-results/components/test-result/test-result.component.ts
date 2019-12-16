@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TestResultService } from 'src/app/services/test-result.service';
 import { ResultAnswersApiDto } from 'src/app/models/result-answer/result-answers-api-dto';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
     selector: 'app-test-result',
@@ -16,9 +17,16 @@ export class TestResultComponent implements OnInit {
     public pageSize = 3;
     public pageSizeOptions: number[] = [this.pageSize, 5];
 
-    constructor(private testResultService: TestResultService, private route: ActivatedRoute) { }
+    constructor(private testResultService: TestResultService, private authenticationService: AuthenticationService,
+        private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
+        this.authenticationService.checkUserAuthentication().subscribe(isUserAuthenticatedResp => {
+            if (!this.router.url.includes('passing-test') && !isUserAuthenticatedResp.body) {
+                this.router.navigate(['/login']);
+            }
+        });
+
         const testResultId = parseInt(this.route.snapshot.paramMap.get('id'));
 
         this.testResultService.getTestResultById(testResultId).subscribe(testResultResp => {

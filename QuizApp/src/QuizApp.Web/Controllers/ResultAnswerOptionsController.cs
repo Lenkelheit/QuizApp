@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using QuizApp.BLL.Dto.ResultAnswerOption;
@@ -10,6 +10,7 @@ using QuizApp.BLL.Interfaces;
 
 namespace QuizApp.Web.Controllers
 {
+    [Authorize]
     [Route("api/answer-options")]
     [ApiController]
     public class ResultAnswerOptionsController : ControllerBase

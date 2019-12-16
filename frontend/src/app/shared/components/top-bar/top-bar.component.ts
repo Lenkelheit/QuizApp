@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
     selector: 'app-top-bar',
@@ -8,7 +10,18 @@ import { Component, OnInit } from '@angular/core';
 export class TopBarComponent implements OnInit {
     public isUserTopBar = false;
 
+    constructor(private authenticationService: AuthenticationService, private router: Router) { }
+
     ngOnInit() {
-        this.isUserTopBar = location.pathname.includes('passing-test');
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                this.isUserTopBar = event.url.includes('passing-test') || event.url.includes('login');
+            }
+        });
+    }
+
+    public logout() {
+        this.authenticationService.logout().subscribe();
+        this.router.navigate(['/login']);
     }
 }
