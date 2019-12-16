@@ -3,8 +3,8 @@
 <div class="form-container">
 
     <div class="flex-container">
-        <div *ngIf="userAuthenticationResult?.errors" class="errors-container">
-            <div class="error mat-elevation-z10" *ngFor="let error of userAuthenticationResult.errors">
+        <div *ngIf="errors" class="errors-container">
+            <div class="error mat-elevation-z10" *ngFor="let error of errors.errors">
                 {{error}}
             </div>
         </div>

@@ -12,7 +12,6 @@ using QuizApp.Entities;
 using Microsoft.Extensions.Options;
 using QuizApp.BLL.Settings;
 using QuizApp.BLL.Dto.Authentication;
-using QuizApp.BLL.Validators.AuthenticationValidator;
 
 namespace QuizApp.BLL.Services
 {
@@ -36,14 +35,9 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public UserAuthenticationResultDto AuthenticateUser(UserLoginDto userLoginDto)
+        public UserLoggedinDto GetAuthenticatedUser()
         {
-            var userLoginValidator = new UserLoginValidator(userLogin);
-            var userLoginValidationResult = userLoginValidator.Validate(userLoginDto);
-
-            var userAuthenticationResult = mapper.Map<UserAuthenticationResultDto>(userLoginValidationResult);
-            userAuthenticationResult.UserLoggedin = userLoginValidationResult.IsValid ? mapper.Map<UserLoggedinDto>(userLogin) : null;
-            return userAuthenticationResult;
+            return mapper.Map<UserLoggedinDto>(userLogin);
         }
     }
 }

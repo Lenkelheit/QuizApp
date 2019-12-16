@@ -8,6 +8,6 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface IAuthenticationService
     {
-        UserAuthenticationResultDto AuthenticateUser(UserLoginDto userLoginDto);
+        UserLoggedinDto GetAuthenticatedUser();
     }
 }

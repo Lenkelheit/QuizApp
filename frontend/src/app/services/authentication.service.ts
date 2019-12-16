@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from './http-internal.service';
 import { UserLoginDto } from '../models/authentication/user-login-dto';
-import { UserAuthenticationResultDto } from '../models/authentication/user-authentication-result-dto';
+import { UserLoggedinDto } from '../models/authentication/user-loggedin-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +16,7 @@ export class AuthenticationService {
     }
 
     public login(userLoginDto: UserLoginDto) {
-        return this.httpService.postRequest<UserAuthenticationResultDto>(`${this.routePrefix}/login`, userLoginDto);
+        return this.httpService.postRequest<UserLoggedinDto>(`${this.routePrefix}/login`, userLoginDto);
     }
 
     public logout() {

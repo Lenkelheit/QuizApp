@@ -36,20 +36,19 @@ namespace QuizApp.Web.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserAuthenticationResultDto>> Login([FromBody] UserLoginDto userLoginDto)
+        public async Task<ActionResult<UserLoggedinDto>> Login([FromBody] UserLoginDto userLoginDto)
         {
             if (userLoginDto == null)
             {
                 return BadRequest();
             }
 
-            var userAuthenticationResult = authenticationService.AuthenticateUser(userLoginDto);
-
-            if (userAuthenticationResult.IsValid && !User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
                 await Authenticate(userLoginDto.Email);
             }
-            return Ok(userAuthenticationResult);
+
+            return Ok(authenticationService.GetAuthenticatedUser());
         }
 
         [Authorize]
