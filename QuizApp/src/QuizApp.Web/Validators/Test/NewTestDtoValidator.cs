@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using QuizApp.BLL.Dto.Test;
-using QuizApp.Web.Validators.TestQuestion;
-using QuizApp.Web.Validators.Url;
 
 namespace QuizApp.Web.Validators.Test
 {

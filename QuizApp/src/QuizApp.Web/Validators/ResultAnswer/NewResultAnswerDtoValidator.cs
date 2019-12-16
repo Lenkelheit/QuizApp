@@ -14,7 +14,7 @@ namespace QuizApp.Web.Validators.ResultAnswer
         {
             RuleFor(answer => answer.TimeTakenSeconds)
                 .NotEmpty()
-                    .WithMessage("{PropertyName} is mandatory.");
+                    .WithMessage("{PropertyName} is mandatory in result answer.");
         }
     }
 }

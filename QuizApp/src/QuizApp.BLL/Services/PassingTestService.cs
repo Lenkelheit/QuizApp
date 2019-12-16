@@ -27,12 +27,14 @@ namespace QuizApp.BLL.Services
 
         private readonly ITestResultRepository testResultRepository;
 
+        private readonly ITestCalculationService testCalculationService;
+
         private readonly IMapper mapper;
 
         private readonly TimeErrorSetting timeErrorSetting;
 
 
-        public PassingTestService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<TimeErrorSetting> timeErrorSetting)
+        public PassingTestService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<TimeErrorSetting> timeErrorSetting, ITestCalculationService testCalculationService)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>() ?? throw new NullReferenceException(nameof(testRepository));
@@ -40,6 +42,7 @@ namespace QuizApp.BLL.Services
             this.testResultRepository = unitOfWork.GetRepository<TestResult, ITestResultRepository>() ?? throw new NullReferenceException(nameof(testResultRepository));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.timeErrorSetting = timeErrorSetting?.Value ?? throw new ArgumentNullException(nameof(timeErrorSetting));
+            this.testCalculationService = testCalculationService ?? throw new ArgumentNullException(nameof(testCalculationService));
         }
 
 
@@ -74,13 +77,13 @@ namespace QuizApp.BLL.Services
 
                 testResult.ResultAnswers.Add(resultAnswer);
 
-                testResult.Score += IsResultAnswerInTime(question, resultAnswer)
-                                    ? CalculateQuestionScore(question, payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null)
+                testResult.Score += testCalculationService.IsResultAnswerInTime(question, resultAnswer)
+                                    ? testCalculationService.CalculateQuestionScore(question, payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null)
                                     : 0;
             }
 
-            testResult.Score = IsAtLeastOneQuestionInTest(test) && IsTestResultInTime(test, testResult)
-                               ? GetPercentageTestResultScore(testResult)
+            testResult.Score = testCalculationService.IsAtLeastOneQuestionInTest(test) && testCalculationService.IsTestResultInTime(test, testResult, timeErrorSetting)
+                               ? testCalculationService.GetPercentageTestResultScore(testResult)
                                : 0;
 
             testEventRepository.Delete(testEvents);
@@ -108,45 +111,6 @@ namespace QuizApp.BLL.Services
             }
 
             return resultAnswer;
-        }
-
-        private double CalculateQuestionScore(TestQuestion originalQuestion, PayloadQuestion receivedQuestion)
-        {
-            if (receivedQuestion != null)
-            {
-                var rightQuestionOptions = originalQuestion.TestQuestionOptions.Where(o => o.IsRight);
-                int rightOptionsAmount = rightQuestionOptions.Count(), selectedRightOptionsAmount = 0;
-
-                foreach (var id in receivedQuestion.SelectedOptionsId)
-                {
-                    selectedRightOptionsAmount = rightQuestionOptions.Any(o => o.Id == id) ? ++selectedRightOptionsAmount : --selectedRightOptionsAmount;
-                }
-
-                // Сalculate question score.
-                return selectedRightOptionsAmount >= 0 ? (rightOptionsAmount == 0 && selectedRightOptionsAmount == 0 ? 1 : (double)selectedRightOptionsAmount / rightOptionsAmount) : 0;
-            }
-
-            return 0;
-        }
-
-        private bool IsResultAnswerInTime(TestQuestion testQuestion, ResultAnswer resultAnswer)
-        {
-            return resultAnswer.TimeTakenSeconds <= testQuestion.TimeLimitSeconds;
-        }
-
-        private bool IsAtLeastOneQuestionInTest(Test test)
-        {
-            return test.TestQuestions.Count > 0;
-        }
-
-        private bool IsTestResultInTime(Test test, TestResult testResult)
-        {
-            return (testResult.PassingEndTime - testResult.PassingStartTime) <= (test.TimeLimitSeconds + timeErrorSetting.MarginOfErrorSeconds);
-        }
-
-        private double GetPercentageTestResultScore(TestResult testResult)
-        {
-            return testResult.Score / testResult.ResultAnswers.Count * 100;
         }
     }
 }
