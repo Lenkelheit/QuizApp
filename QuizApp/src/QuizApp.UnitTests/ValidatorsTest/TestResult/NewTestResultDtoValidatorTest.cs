@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,7 +12,7 @@ namespace QuizApp.UnitTests.ValidatorsTest.TestResult
     public class NewTestResultDtoValidatorTest
     {
         [TestMethod]
-        public void Validate_TestResultPropertiesAreDefault_ReturnsErrors()
+        public void Validate_TestResultPropertiesAreDefault_IsNotValid()
         {
             var newTestResultDto = new NewTestResultDto
             {
@@ -23,64 +22,44 @@ namespace QuizApp.UnitTests.ValidatorsTest.TestResult
                 Score = default
             };
             var newTestResultDtoValidator = new NewTestResultDtoValidator();
-            var expectedErrorMessages = new string[]
-            {
-                "Interviewee Name is mandatory in test result.",
-                "Passing Start Time is mandatory in test result.",
-                "Passing End Time is mandatory in test result.",
-                "PassingEndTime must be later than PassingStartTime in test result."
-            };
 
             var validationResult = newTestResultDtoValidator.Validate(newTestResultDto);
-            var actualErrorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
 
             Assert.IsFalse(validationResult.IsValid);
-            CollectionAssert.AreEqual(expected: expectedErrorMessages, actualErrorMessages);
         }
 
         [TestMethod]
-        public void Validate_TestResultPropertiesHaveDifferentErrors_ReturnsErrors()
+        public void Validate_TestResultPropertiesHaveDifferentErrors_IsNotValid()
         {
             var newTestResultDto = new NewTestResultDto
             {
                 IntervieweeName = "i",
-                PassingStartTime = new DateTime(1, 1, 3),
-                PassingEndTime = new DateTime(1, 1, 2),
+                PassingStartTime = DateTime.Now.AddHours(3),
+                PassingEndTime = DateTime.Now,
                 Score = 120
             };
             var newTestResultDtoValidator = new NewTestResultDtoValidator();
-            var expectedErrorMessages = new string[]
-            {
-                "Interviewee Name must be from 4 to 128 characters in test result.",
-                "PassingEndTime must be later than PassingStartTime in test result.",
-                "Score must be between 0 and 100 in test result."
-            };
 
             var validationResult = newTestResultDtoValidator.Validate(newTestResultDto);
-            var actualErrorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
 
             Assert.IsFalse(validationResult.IsValid);
-            CollectionAssert.AreEqual(expected: expectedErrorMessages, actualErrorMessages);
         }
 
         [TestMethod]
-        public void Validate_TestResultPropertiesAreWithoutErrors_NotReturnErrors()
+        public void Validate_TestResultPropertiesAreWithoutErrors_IsValid()
         {
             var newTestResultDto = new NewTestResultDto
             {
                 IntervieweeName = "IntervieweeName",
-                PassingStartTime = new DateTime(1, 1, 2),
-                PassingEndTime = new DateTime(1, 1, 3),
+                PassingStartTime = DateTime.Now,
+                PassingEndTime = DateTime.Now.AddHours(3),
                 Score = 100
             };
             var newTestResultDtoValidator = new NewTestResultDtoValidator();
-            var expectedErrorMessagesCount = 0;
 
             var validationResult = newTestResultDtoValidator.Validate(newTestResultDto);
-            var actualErrorMessagesCount = validationResult.Errors.Select(e => e.ErrorMessage).Count();
 
             Assert.IsTrue(validationResult.IsValid);
-            Assert.AreEqual(expected: expectedErrorMessagesCount, actualErrorMessagesCount);
         }
     }
 }

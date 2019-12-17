@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,7 +11,7 @@ namespace QuizApp.UnitTests.ValidatorsTest.UrlValidator
     public class UrlIntervieweeNameValidatorTest
     {
         [TestMethod]
-        public void Validate_UrlPropertiesAreDefault_NotReturnErrors()
+        public void Validate_UrlPropertiesAreDefault_IsValid()
         {
             var url = new Entities.Url
             {
@@ -20,17 +19,14 @@ namespace QuizApp.UnitTests.ValidatorsTest.UrlValidator
             };
             var actualIntervieweeName = "IntervieweeName";
             var urlIntervieweeNameValidator = new UrlIntervieweeNameValidator(actualIntervieweeName);
-            var expectedErrorMessagesCount = 0;
 
             var validationResult = urlIntervieweeNameValidator.Validate(url);
-            var actualErrorMessagesCount = validationResult.Errors.Select(e => e.ErrorMessage).Count();
 
             Assert.IsTrue(validationResult.IsValid);
-            Assert.AreEqual(expected: expectedErrorMessagesCount, actualErrorMessagesCount);
         }
 
         [TestMethod]
-        public void Validate_IntervieweeNamesAreDifferent_ReturnsErrors()
+        public void Validate_IntervieweeNamesAreDifferent_IsNotValid()
         {
             var url = new Entities.Url
             {
@@ -38,34 +34,25 @@ namespace QuizApp.UnitTests.ValidatorsTest.UrlValidator
             };
             var actualIntervieweeName = "Second IntervieweeName";
             var urlIntervieweeNameValidator = new UrlIntervieweeNameValidator(actualIntervieweeName);
-            var expectedErrorMessages = new string[]
-            {
-                "Interviewee name is wrong."
-            };
 
             var validationResult = urlIntervieweeNameValidator.Validate(url);
-            var actualErrorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
 
             Assert.IsFalse(validationResult.IsValid);
-            CollectionAssert.AreEqual(expected: expectedErrorMessages, actualErrorMessages);
         }
 
         [TestMethod]
-        public void Validate_IntervieweeNamesAreTheSame_NotReturnErrors()
+        public void Validate_IntervieweeNamesAreTheSame_IsValid()
         {
+            var intervieweeName = "IntervieweeName";
             var url = new Entities.Url
             {
-                IntervieweeName = "IntervieweeName"
+                IntervieweeName = intervieweeName
             };
-            var actualIntervieweeName = "IntervieweeName";
-            var urlIntervieweeNameValidator = new UrlIntervieweeNameValidator(actualIntervieweeName);
-            var expectedErrorMessagesCount = 0;
+            var urlIntervieweeNameValidator = new UrlIntervieweeNameValidator(actualIntervieweeName: intervieweeName);
 
             var validationResult = urlIntervieweeNameValidator.Validate(url);
-            var actualErrorMessagesCount = validationResult.Errors.Select(e => e.ErrorMessage).Count();
 
             Assert.IsTrue(validationResult.IsValid);
-            Assert.AreEqual(expected: expectedErrorMessagesCount, actualErrorMessagesCount);
         }
     }
 }

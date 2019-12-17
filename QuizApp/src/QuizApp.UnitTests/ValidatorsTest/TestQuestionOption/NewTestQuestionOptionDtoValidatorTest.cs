@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,7 +12,7 @@ namespace QuizApp.UnitTests.ValidatorsTest.TestQuestionOption
     public class NewTestQuestionOptionDtoValidatorTest
     {
         [TestMethod]
-        public void Validate_QuestionOptionPropertiesAreDefault_ReturnsErrors()
+        public void Validate_QuestionOptionPropertiesAreDefault_IsNotValid()
         {
             var newTestQuestionOptionDto = new NewTestQuestionOptionDto
             {
@@ -21,20 +20,14 @@ namespace QuizApp.UnitTests.ValidatorsTest.TestQuestionOption
                 IsRight = default
             };
             var newTestQuestionOptionDtoValidator = new NewTestQuestionOptionDtoValidator();
-            var expectedErrorMessages = new string[]
-            {
-                "Text is mandatory in question option."
-            };
 
             var validationResult = newTestQuestionOptionDtoValidator.Validate(newTestQuestionOptionDto);
-            var actualErrorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
 
             Assert.IsFalse(validationResult.IsValid);
-            CollectionAssert.AreEqual(expected: expectedErrorMessages, actualErrorMessages);
         }
 
         [TestMethod]
-        public void Validate_QuestionOptionPropertiesAreNotDefaultButHaveBadLength_ReturnsErrors()
+        public void Validate_QuestionOptionPropertiesAreNotDefaultButHaveBadLength_IsNotValid()
         {
             var newTestQuestionOptionDto = new NewTestQuestionOptionDto
             {
@@ -42,20 +35,14 @@ namespace QuizApp.UnitTests.ValidatorsTest.TestQuestionOption
                 IsRight = true
             };
             var newTestQuestionOptionDtoValidator = new NewTestQuestionOptionDtoValidator();
-            var expectedErrorMessages = new string[]
-            {
-                "Text must be from 4 to 256 characters in question option."
-            };
 
             var validationResult = newTestQuestionOptionDtoValidator.Validate(newTestQuestionOptionDto);
-            var actualErrorMessages = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
 
             Assert.IsFalse(validationResult.IsValid);
-            CollectionAssert.AreEqual(expected: expectedErrorMessages, actualErrorMessages);
         }
 
         [TestMethod]
-        public void Validate_QuestionOptionPropertiesAreNotDefaultAndHaveGoodLength_NotReturnErrors()
+        public void Validate_QuestionOptionPropertiesAreNotDefaultAndHaveGoodLength_IsValid()
         {
             var newTestQuestionOptionDto = new NewTestQuestionOptionDto
             {
@@ -63,13 +50,10 @@ namespace QuizApp.UnitTests.ValidatorsTest.TestQuestionOption
                 IsRight = true
             };
             var newTestQuestionOptionDtoValidator = new NewTestQuestionOptionDtoValidator();
-            var expectedErrorMessagesCount = 0;
 
             var validationResult = newTestQuestionOptionDtoValidator.Validate(newTestQuestionOptionDto);
-            var actualErrorMessagesCount = validationResult.Errors.Select(e => e.ErrorMessage).Count();
 
             Assert.IsTrue(validationResult.IsValid);
-            Assert.AreEqual(expected: expectedErrorMessagesCount, actualErrorMessagesCount);
         }
     }
 }

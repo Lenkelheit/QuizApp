@@ -5,7 +5,6 @@ using System.Linq;
 using QuizApp.BLL.Interfaces;
 using QuizApp.Entities;
 using QuizApp.BLL.Dto.TestEvent.Payloads;
-using QuizApp.BLL.Settings;
 
 namespace QuizApp.BLL.Services
 {
@@ -30,37 +29,6 @@ namespace QuizApp.BLL.Services
             }
 
             return 0;
-        }
-
-        public bool IsResultAnswerInTime(TestQuestion testQuestion, ResultAnswer resultAnswer)
-        {
-            if (testQuestion == null) throw new ArgumentNullException(nameof(testQuestion));
-            if (resultAnswer == null) throw new ArgumentNullException(nameof(resultAnswer));
-
-            return resultAnswer.TimeTakenSeconds <= testQuestion.TimeLimitSeconds;
-        }
-
-        public bool IsAtLeastOneQuestionInTest(Test test)
-        {
-            if (test == null) throw new ArgumentNullException(nameof(test));
-
-            return test.TestQuestions.Count > 0;
-        }
-
-        public bool IsTestResultInTime(Test test, TestResult testResult, TimeErrorSetting timeErrorSetting)
-        {
-            if (test == null) throw new ArgumentNullException(nameof(test));
-            if (testResult == null) throw new ArgumentNullException(nameof(testResult));
-            if (timeErrorSetting == null) throw new ArgumentNullException(nameof(timeErrorSetting));
-
-            return (testResult.PassingEndTime - testResult.PassingStartTime) <= (test.TimeLimitSeconds + timeErrorSetting.MarginOfErrorSeconds);
-        }
-
-        public double GetPercentageTestResultScore(TestResult testResult)
-        {
-            if (testResult == null) throw new ArgumentNullException(nameof(testResult));
-
-            return testResult.Score / testResult.ResultAnswers.Count * 100.0;
         }
     }
 }

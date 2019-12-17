@@ -77,13 +77,13 @@ namespace QuizApp.BLL.Services
 
                 testResult.ResultAnswers.Add(resultAnswer);
 
-                testResult.Score += testCalculationService.IsResultAnswerInTime(question, resultAnswer)
+                testResult.Score += resultAnswer.IsInTime(question)
                                     ? testCalculationService.CalculateQuestionScore(question, payloadQuestionIndex >= 0 ? payloadQuestions[payloadQuestionIndex] : null)
                                     : 0;
             }
 
-            testResult.Score = testCalculationService.IsAtLeastOneQuestionInTest(test) && testCalculationService.IsTestResultInTime(test, testResult, timeErrorSetting)
-                               ? testCalculationService.GetPercentageTestResultScore(testResult)
+            testResult.Score = test.HasAtLeastOneQuestion && testResult.IsInTime(test, timeErrorSetting.MarginOfErrorSeconds)
+                               ? testResult.PercentageScore
                                : 0;
 
             testEventRepository.Delete(testEvents);

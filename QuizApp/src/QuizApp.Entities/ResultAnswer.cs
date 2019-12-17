@@ -19,5 +19,13 @@ namespace QuizApp.Entities
         public TestResult Result { get; set; }
 
         public ICollection<ResultAnswerOption> ResultAnswerOptions { get; set; } = new List<ResultAnswerOption>();
+
+
+        public bool IsInTime(TestQuestion testQuestion)
+        {
+            if (testQuestion == null) throw new ArgumentNullException(nameof(testQuestion));
+
+            return TimeTakenSeconds <= testQuestion.TimeLimitSeconds;
+        }
     }
 }
