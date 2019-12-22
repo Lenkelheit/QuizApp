@@ -18,6 +18,7 @@ export class TestResultComponent implements OnInit {
     public pageSizeOptions: number[] = [this.pageSize, 5];
 
     constructor(private testResultService: TestResultService, private authenticationService: AuthenticationService,
+        // tslint:disable-next-line: align
         private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {

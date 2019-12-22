@@ -10,7 +10,7 @@
     <form [formGroup]="urlForm">
         <mat-form-field class="mat-field-block">
             <mat-label>Test</mat-label>
-            <mat-select formControlName="testId" [(value)]="newUrl.testId" [errorStateMatcher]="validControlMatcher"
+            <mat-select formControlName="testId" [(ngModel)]="newUrl.testId" [errorStateMatcher]="validControlMatcher"
                 required>
                 <mat-option>None</mat-option>
                 <mat-option *ngFor="let test of tests" [value]="test.id">
@@ -91,7 +91,7 @@
             Clear
         </button>
 
-        <button mat-raised-button color="primary" [disabled]="urlForm.invalid" (click)="sendNewUrls()">
+        <button mat-raised-button color="primary" [disabled]="urlForm.invalid" (click)="sendNewUrl()">
             Create
         </button>
     </form>

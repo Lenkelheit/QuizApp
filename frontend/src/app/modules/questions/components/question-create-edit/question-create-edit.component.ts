@@ -14,8 +14,7 @@ import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-li
 })
 export class QuestionCreateEditComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
-
-    public questionOptionsFormStatusInvalid: boolean[] = [];
+    private questionOptionsFormStatusInvalid: boolean[] = [];
 
     @Input() updateQuestion: UpdateQuestionDto;
     @Input() getQuestion$: Observable<void>;

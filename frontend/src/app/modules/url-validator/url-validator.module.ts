@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserIdentifyComponent } from './user-identify/user-identify.component';
+import { UserIdentifyComponent } from './components/user-identify/user-identify.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({

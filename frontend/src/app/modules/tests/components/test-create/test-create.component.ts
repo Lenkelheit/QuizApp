@@ -60,8 +60,8 @@ export class TestCreateComponent implements OnInit {
     }
 
     public clearTest() {
+        this.testForm.reset();
         this.newTest = {} as NewTestDto;
         this.errors = null;
-        this.testForm.reset();
     }
 }
