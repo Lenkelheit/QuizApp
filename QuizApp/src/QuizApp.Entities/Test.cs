@@ -17,6 +17,8 @@ namespace QuizApp.Entities
 
         public int AuthorId { get; set; }
 
+        public bool HasAtLeastOneQuestion => TestQuestions?.Count > 0;
+
 
         public User Author { get; set; }
 

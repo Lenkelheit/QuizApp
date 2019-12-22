@@ -29,6 +29,7 @@ namespace QuizApp.Web.Extensions
             services.AddScoped<IPassingTestService, PassingTestService>();
             services.AddScoped<ITestEventService, TestEventService>();
             services.AddScoped<IUrlValidatorService, UrlValidatorService>();
+            services.AddScoped<ITestCalculationService, TestCalculationService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 

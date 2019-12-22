@@ -48,6 +48,9 @@ Generated\ Files/
 # Don't ignore folder "TestResult" because it contains Dto validators of TestResult
 !QuizApp/src/QuizApp.Web/Validators/TestResult/
 
+# Don't ignore folder "TestResult" because it contains unit tests of TestResult validators
+!QuizApp/src/QuizApp.UnitTests/ValidatorsTest/TestResult/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml
