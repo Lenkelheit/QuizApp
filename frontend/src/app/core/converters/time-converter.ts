@@ -1,5 +1,8 @@
 export class TimeConverter {
     public static convertStringTimeToSeconds(time: string) {
+        if (!time) {
+            return 0;
+        }
         // time has format 'hh:mm:ss'
         const colons = time.split(':');
 

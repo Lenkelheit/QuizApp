@@ -81,6 +81,7 @@ export class UrlEditComponent implements OnInit {
     }
 
     public clearUrl() {
+        this.urlForm.reset();
         this.updateUrl = {
             id: this.updateUrl.id,
             test: this.updateUrl.test,
@@ -88,7 +89,6 @@ export class UrlEditComponent implements OnInit {
         } as UpdateUrlDto;
 
         this.errors = null;
-        this.urlForm.reset();
     }
 
     public copyUrl(urlId: number) {

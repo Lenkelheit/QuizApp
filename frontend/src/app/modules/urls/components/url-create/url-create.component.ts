@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NewUrlDto } from 'src/app/models/url/new-url-dto';
 import { EndDateLessStartDateValidator } from '../../validators/end-date-less-start-date-validator';
 import { ConfirmValidParentMatcher } from '../../error-state-matchers/confirm-valid-parent-matcher';
@@ -33,7 +33,7 @@ export class UrlCreateComponent implements OnInit {
 
     ngOnInit() {
         this.urlForm = this.formBuilder.group({
-            testId: ['', Validators.required],
+            testId: ['', [Validators.required]],
             numberOfRuns: ['', [Validators.min(0)]],
             validFromTime: ['', [Validators.required]],
             validUntilTime: ['', [Validators.required]],
@@ -66,7 +66,7 @@ export class UrlCreateComponent implements OnInit {
         return this.urlForm.get('intervieweeName');
     }
 
-    public sendNewUrls() {
+    public sendNewUrl() {
         this.urlService.createUrl(this.newUrl).subscribe(createdUrlResp => {
             this.clearUrl();
 
@@ -79,8 +79,8 @@ export class UrlCreateComponent implements OnInit {
     }
 
     public clearUrl() {
+        this.urlForm.reset();
         this.newUrl = {} as NewUrlDto;
         this.errors = null;
-        this.urlForm.reset();
     }
 }

@@ -19,8 +19,9 @@ import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-q
     styleUrls: ['./test-edit.component.css']
 })
 export class TestEditComponent implements OnInit {
+    private questionsFormStatusInvalid: boolean[] = [];
+
     public updateTest: UpdateTestDto = {} as UpdateTestDto;
-    public questionsFormStatusInvalid: boolean[] = [];
 
     public errors: Error;
 
@@ -32,7 +33,8 @@ export class TestEditComponent implements OnInit {
     public validControlMatcher = new ValidControlMatcher();
 
     constructor(private testService: TestService, private formBuilder: FormBuilder,
-                private router: Router, private route: ActivatedRoute) { }
+        // tslint:disable-next-line: align
+        private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.testForm = this.formBuilder.group({
@@ -91,6 +93,7 @@ export class TestEditComponent implements OnInit {
     }
 
     public clearTest() {
+        this.testForm.reset();
         this.updateTest = {
             id: this.updateTest.id,
             authorId: this.updateTest.authorId,
@@ -100,7 +103,6 @@ export class TestEditComponent implements OnInit {
 
         this.questionsFormStatusInvalid = [];
         this.errors = null;
-        this.testForm.reset();
     }
 
     public checkFormsStatus() {
