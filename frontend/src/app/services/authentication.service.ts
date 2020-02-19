@@ -11,8 +11,8 @@ export class AuthenticationService {
 
     constructor(private httpService: HttpInternalService) { }
 
-    public checkUserAuthentication() {
-        return this.httpService.getRequest<boolean>(`${this.routePrefix}`);
+    public getCurrentUser() {
+        return this.httpService.getRequest<UserLoggedinDto>(`${this.routePrefix}`);
     }
 
     public login(userLoginDto: UserLoginDto) {

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Validators\Authentication\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -34,7 +34,6 @@ namespace QuizApp.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<TimeErrorSetting>(Configuration.GetSection(nameof(TimeErrorSetting)));
-            services.Configure<UserLogin>(Configuration.GetSection(nameof(UserLogin)));
 
             services.AddDbContext<QuizAppDbContext>(options =>
             {

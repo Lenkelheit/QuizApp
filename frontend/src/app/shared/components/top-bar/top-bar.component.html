@@ -16,7 +16,10 @@
         <a mat-button [routerLink]="['/test-results']">
             Test results
         </a>
-        <button class="right-block" mat-button (click)="logout()">
+        <div class="right-block" *ngIf="userService.currentUser">
+            {{userService.currentUser.username}}
+        </div>
+        <button mat-button (click)="logout()">
             Log out
         </button>
     </ng-template>

@@ -22,8 +22,8 @@ export class TestResultComponent implements OnInit {
         private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.authenticationService.checkUserAuthentication().subscribe(isUserAuthenticatedResp => {
-            if (!this.router.url.includes('passing-test') && !isUserAuthenticatedResp.body) {
+        this.authenticationService.getCurrentUser().subscribe(userLoggedinResp => {
+            if (!this.router.url.includes('passing-test') && !userLoggedinResp.body) {
                 this.router.navigate(['/login']);
             }
         });

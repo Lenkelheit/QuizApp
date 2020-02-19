@@ -30,7 +30,7 @@ namespace QuizApp.Web.Controllers
         [HttpGet]
         public ActionResult<TestsApiDto> Get(int page = 0, int amountTestsPerPage = 10)
         {
-            return Ok(testService.GetTests(page, amountTestsPerPage));
+            return Ok(testService.GetTests(page, amountTestsPerPage, User.Identity.Name));
         }
 
         [HttpGet("{id}")]

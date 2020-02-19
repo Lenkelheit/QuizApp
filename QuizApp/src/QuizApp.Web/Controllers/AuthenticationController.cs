@@ -30,25 +30,42 @@ namespace QuizApp.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult<bool> CheckUserAuthentication()
+        public ActionResult<UserLoggedinDto> GetCurrentUser()
         {
-            return User.Identity.IsAuthenticated;
+            return Ok(authenticationService.GetUserByEmail(User.Identity.Name));
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserLoggedinDto>> Login([FromBody] UserLoginDto userLoginDto)
         {
-            if (userLoginDto == null)
+            UserLoggedinDto userLoggedin;
+            if (User.Identity.IsAuthenticated)
             {
-                return BadRequest();
+                userLoggedin = authenticationService.GetUserByEmail(User.Identity.Name);
             }
-
-            if (!User.Identity.IsAuthenticated)
+            else
             {
+                if (userLoginDto == null)
+                {
+                    return BadRequest();
+                }
+
+                userLoggedin = authenticationService.GetUser(userLoginDto);
+                if (userLoggedin == null)
+                {
+                    var result = new
+                    {
+                        Message = "Validation errors",
+                        Errors = new List<string> { "Incorrect email or password." }
+                    };
+
+                    return new BadRequestObjectResult(result);
+                }
+
                 await Authenticate(userLoginDto.Email);
             }
 
-            return Ok(authenticationService.GetAuthenticatedUser());
+            return Ok(userLoggedin);
         }
 
         [Authorize]
