@@ -12,6 +12,7 @@ import { UpdateQuestionDto } from 'src/app/models/question/update-question-dto';
 import { Error } from 'src/app/models/error/error';
 import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
 import { UpdateQuestionOptionDto } from 'src/app/models/question-option/update-question-option-dto';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-test-edit',
@@ -34,9 +35,11 @@ export class TestEditComponent implements OnInit {
 
     constructor(private testService: TestService, private formBuilder: FormBuilder,
         // tslint:disable-next-line: align
-        private router: Router, private route: ActivatedRoute) { }
+        private router: Router, private route: ActivatedRoute, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Edit test - QuizTest');
+
         this.testForm = this.formBuilder.group({
             title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(64)]],
             description: ['', [Validators.minLength(4), Validators.maxLength(256)]],

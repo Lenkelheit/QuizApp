@@ -10,6 +10,7 @@ import { TestDto } from 'src/app/models/test/test-dto';
 import { TestService } from 'src/app/services/test.service';
 import { Error } from 'src/app/models/error/error';
 import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-control-matcher';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-url-create',
@@ -29,9 +30,11 @@ export class UrlCreateComponent implements OnInit {
 
     constructor(private urlService: UrlService, private testService: TestService,
         // tslint:disable-next-line: align
-        private formBuilder: FormBuilder, private router: Router) { }
+        private formBuilder: FormBuilder, private router: Router, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Create url - QuizTest');
+
         this.urlForm = this.formBuilder.group({
             testId: ['', [Validators.required]],
             numberOfRuns: ['', [Validators.min(0)]],

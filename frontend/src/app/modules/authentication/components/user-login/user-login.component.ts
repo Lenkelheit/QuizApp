@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Error } from 'src/app/models/error/error';
 import { UserService } from 'src/app/services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-user-login',
@@ -16,9 +17,13 @@ export class UserLoginComponent implements OnInit {
 
     public errors: Error;
 
-    constructor(private userService: UserService, private authenticationService: AuthenticationService, private router: Router) { }
+    constructor(private userService: UserService, private authenticationService: AuthenticationService,
+        // tslint:disable-next-line: align
+        private router: Router, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Log in - QuizTest');
+
         if (this.userService.currentUser) {
             this.router.navigate(['/tests']);
         } else {

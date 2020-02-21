@@ -18,8 +18,6 @@ namespace QuizApp.Data.Configuration
             builder.Property(u => u.Password).IsRequired().HasMaxLength(256);
 
             builder.HasMany(u => u.CreatedTests).WithOne(t => t.Author).HasForeignKey(t => t.AuthorId);
-
-            builder.HasData(new User { Id = 1, Username = "John", Email = "john@gmail.com", Password = "1111" });
         }
     }
 }

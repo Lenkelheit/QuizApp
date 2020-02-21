@@ -30,6 +30,31 @@ namespace QuizApp.BLL.Services
         }
 
 
+        public bool IsUserExist(UserRegisterDto userRegisterDto)
+        {
+            var user = userRepository.Get(filter: u => u.Email == userRegisterDto.Email).FirstOrDefault();
+
+            return user != null;
+        }
+
+        public bool TryRegisterUser(UserRegisterDto userRegisterDto, out UserRegisteredDto userRegisteredDto)
+        {
+            userRegisteredDto = null;
+
+            if (!IsUserExist(userRegisterDto))
+            {
+                var user = mapper.Map<User>(userRegisterDto);
+
+                userRepository.Insert(user);
+                unitOfWork.Save();
+
+                userRegisteredDto = mapper.Map<UserRegisteredDto>(user);
+                return true;
+            }
+
+            return false;
+        }
+
         public UserLoggedinDto GetUser(UserLoginDto userLoginDto)
         {
             var userLogin = userRepository.Get(filter: user => user.Email == userLoginDto.Email && user.Password == userLoginDto.Password).FirstOrDefault();

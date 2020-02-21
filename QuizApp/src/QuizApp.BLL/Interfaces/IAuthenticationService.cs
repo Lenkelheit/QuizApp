@@ -8,6 +8,10 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface IAuthenticationService
     {
+        bool IsUserExist(UserRegisterDto userRegisterDto);
+
+        bool TryRegisterUser(UserRegisterDto userRegisterDto, out UserRegisteredDto userRegisteredDto);
+
         UserLoggedinDto GetUser(UserLoginDto userLoginDto);
 
         UserLoggedinDto GetUserByEmail(string userEmail);

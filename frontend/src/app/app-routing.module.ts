@@ -11,10 +11,13 @@ import { TestResultComponent } from './modules/test-results/components/test-resu
 import { TestResultListComponent } from './modules/test-results/components/test-result-list/test-result-list.component';
 import { UserLoginComponent } from './modules/authentication/components/user-login/user-login.component';
 import { AuthGuard } from './services/auth.guard';
+import { UserSignupComponent } from './modules/authentication/components/user-signup/user-signup.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'tests', pathMatch: 'full' },
     { path: 'login', component: UserLoginComponent },
+    { path: 'register', component: UserSignupComponent },
 
     { path: 'tests', component: TestListComponent, canActivate: [AuthGuard] },
     { path: 'tests/new', component: TestCreateComponent, canActivate: [AuthGuard] },
@@ -29,7 +32,8 @@ const routes: Routes = [
     { path: 'test-results', component: TestResultListComponent, canActivate: [AuthGuard] },
     { path: 'test-results/:id', component: TestResultComponent, canActivate: [AuthGuard] },
 
-    { path: '**', redirectTo: '' }
+    { path: '404', component: PageNotFoundComponent },
+    { path: '**', redirectTo: '404' }
 ];
 
 @NgModule({

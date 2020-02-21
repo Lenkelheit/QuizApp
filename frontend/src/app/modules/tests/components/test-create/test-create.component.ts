@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Error } from 'src/app/models/error/error';
 import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
 import { UserService } from 'src/app/services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-test-create',
@@ -26,9 +27,11 @@ export class TestCreateComponent implements OnInit {
 
     constructor(private userService: UserService, private testService: TestService,
         // tslint:disable-next-line: align
-        private formBuilder: FormBuilder, private router: Router) { }
+        private formBuilder: FormBuilder, private router: Router, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Create test - QuizTest');
+
         this.testForm = this.formBuilder.group({
             title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(64)]],
             description: ['', [Validators.minLength(4), Validators.maxLength(256)]],

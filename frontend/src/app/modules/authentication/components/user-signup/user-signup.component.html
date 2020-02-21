@@ -1,0 +1,79 @@
+<h1 class="mat-h1">Join QuizTest</h1>
+
+<div class="form-container">
+
+    <div class="flex-container">
+        <div *ngIf="errors" class="errors-container">
+            <div class="error mat-elevation-z10" *ngFor="let error of errors.errors">
+                {{error}}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-container">
+        <form class="mat-elevation-z10" [formGroup]="signupForm">
+            <mat-form-field class="mat-field-block">
+                <input formControlName="username" [(ngModel)]="userRegister.username" name="username" type="text"
+                    matInput placeholder="Username" required />
+
+                <mat-error *ngIf="username.errors?.required && (username.touched || username.dirty)">
+                    This field is required.
+                </mat-error>
+
+                <mat-error *ngIf="username.errors?.minlength && (username.touched || username.dirty)">
+                    Username must be at least 4 characters long.
+                </mat-error>
+
+                <mat-error *ngIf="username.errors?.maxlength && (username.touched || username.dirty)">
+                    Username must be less than 64 characters long.
+                </mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field class="mat-field-block">
+                <input formControlName="email" [(ngModel)]="userRegister.email" name="email" type="text" matInput
+                    placeholder="Email" required />
+
+                <mat-error *ngIf="email.errors?.required && (email.touched || email.dirty)">
+                    This field is required.
+                </mat-error>
+
+                <mat-error *ngIf="email.errors?.email && (email.touched || email.dirty)">
+                    Invalid email format.
+                </mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field class="mat-field-block">
+                <input formControlName="password" [(ngModel)]="userRegister.password" name="password" type="password"
+                    matInput placeholder="Password" required />
+
+                <mat-error *ngIf="password.errors?.required && (password.touched || password.dirty)">
+                    This field is required.
+                </mat-error>
+
+                <mat-error *ngIf="password.errors?.minlength && (password.touched || password.dirty)">
+                    Password must be at least 8 characters long.
+                </mat-error>
+
+                <mat-error *ngIf="password.errors?.maxlength && (password.touched || password.dirty)">
+                    Password must be less than 64 characters long.
+                </mat-error>
+
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" [disabled]="signupForm.invalid" (click)="signupUser()">
+                Sign up
+            </button>
+        </form>
+    </div>
+
+    <div class="flex-container">
+        <div class="mat-elevation-z10 login-block">
+            Have an account?
+            <a [routerLink]="['/login']">
+                Log in.
+            </a>
+        </div>
+    </div>
+</div>

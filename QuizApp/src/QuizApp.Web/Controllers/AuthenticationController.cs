@@ -35,6 +35,30 @@ namespace QuizApp.Web.Controllers
             return Ok(authenticationService.GetUserByEmail(User.Identity.Name));
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<UserRegisteredDto>> Register([FromBody] UserRegisterDto userRegisterDto)
+        {
+            if (userRegisterDto == null)
+            {
+                return BadRequest();
+            }
+
+            if (!authenticationService.TryRegisterUser(userRegisterDto, out var userRegisteredDto))
+            {
+                var result = new
+                {
+                    Message = "Validation errors",
+                    Errors = new List<string> { "User with such email already exists." }
+                };
+
+                return new BadRequestObjectResult(result);
+            }
+
+            await Authenticate(userRegisteredDto.Email);
+
+            return Ok(userRegisteredDto);
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<UserLoggedinDto>> Login([FromBody] UserLoginDto userLoginDto)
         {

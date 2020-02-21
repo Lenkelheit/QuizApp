@@ -1,11 +1,19 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
-    <div *ngIf="isUserTopBar; else adminTopBar">
-        <img class="quiz-logo image-align" src="../../../../assets/quizLogo.png">
-    </div>
+    <ng-container *ngIf="!userService.currentUser; else adminTopBar">
+        <img class="quiz-test-logo image-align" src="../../../../assets/quiz-test-logo.png">
+
+        <a class="right-block" mat-button [routerLink]="['/login']">
+            Log in
+        </a>
+
+        <a mat-button [routerLink]="['/register']">
+            Sign up
+        </a>
+    </ng-container>
 
     <ng-template #adminTopBar>
         <a mat-button [routerLink]="['/']">
-            <img class="quiz-logo" src="../../../../assets/quizLogo.png">
+            <img class="quiz-test-logo" src="../../../../assets/quiz-test-logo.png">
         </a>
         <a mat-button [routerLink]="['/tests']">
             Tests

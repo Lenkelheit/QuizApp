@@ -14,6 +14,8 @@ namespace QuizApp.BLL.MappingProfiles
         public AuthenticationProfile()
         {
             CreateMap<User, UserLoggedinDto>();
+            CreateMap<UserRegisterDto, User>();
+            CreateMap<User, UserRegisteredDto>();
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TestResultService } from 'src/app/services/test-result.service';
 import { TestResultsApiDto } from 'src/app/models/test-result/test-results-api-dto';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-test-result-list',
@@ -15,9 +16,11 @@ export class TestResultListComponent implements OnInit {
     public pageSize = 15;
     public pageSizeOptions: number[] = [this.pageSize, 10, 20];
 
-    constructor(private testResultService: TestResultService) { }
+    constructor(private testResultService: TestResultService, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Test results - QuizTest');
+
         this.setTestResultsPageWithFilter(this.currentPageIndex, this.pageSize);
     }
 

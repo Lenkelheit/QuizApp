@@ -16,9 +16,10 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
 import { ClipboardSnackBarComponent } from './components/clipboard-snack-bar/clipboard-snack-bar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
-    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe, ClipboardSnackBarComponent],
+    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe, ClipboardSnackBarComponent, PageNotFoundComponent],
     entryComponents: [ClipboardSnackBarComponent],
     imports: [
         CommonModule,
