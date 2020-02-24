@@ -17,9 +17,10 @@ import { TimeSecondsToHhMmSsPipe } from './pipes/time-seconds-to-hh-mm-ss.pipe';
 import { ClipboardSnackBarComponent } from './components/clipboard-snack-bar/clipboard-snack-bar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
-    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe, ClipboardSnackBarComponent, PageNotFoundComponent],
+    declarations: [TopBarComponent, TimeSecondsToHhMmSsPipe, ClipboardSnackBarComponent, PageNotFoundComponent, FooterComponent],
     entryComponents: [ClipboardSnackBarComponent],
     imports: [
         CommonModule,
@@ -43,6 +44,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     ],
     exports: [
         TopBarComponent,
+        FooterComponent,
         TimeSecondsToHhMmSsPipe,
         ClipboardSnackBarComponent,
         RouterModule,
