@@ -33,15 +33,11 @@ describe('TopBarComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should tell Router to navigate when "logout" is called', () => {
+    it('should check that "logout" is called', () => {
         authenticationServiceSpy.logout.and.returnValue(of());
-        const router = TestBed.get(Router);
-        spyOn(router, 'navigate');
 
         component.logout();
 
         expect(authenticationServiceSpy.logout).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['/login']);
     });
 });

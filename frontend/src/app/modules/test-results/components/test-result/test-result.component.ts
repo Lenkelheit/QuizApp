@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TestResultService } from 'src/app/services/test-result.service';
 import { ResultAnswersApiDto } from 'src/app/models/result-answer/result-answers-api-dto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { UserService } from 'src/app/services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-test-result',
@@ -17,13 +19,18 @@ export class TestResultComponent implements OnInit {
     public pageSize = 3;
     public pageSizeOptions: number[] = [this.pageSize, 5];
 
-    constructor(private testResultService: TestResultService, private authenticationService: AuthenticationService,
+    constructor(private userService: UserService, private testResultService: TestResultService,
         // tslint:disable-next-line: align
-        private router: Router, private route: ActivatedRoute) { }
+        private authenticationService: AuthenticationService, private router: Router,
+        // tslint:disable-next-line: align
+        private route: ActivatedRoute, private titleService: Title) { }
 
     ngOnInit() {
-        this.authenticationService.checkUserAuthentication().subscribe(isUserAuthenticatedResp => {
-            if (!this.router.url.includes('passing-test') && !isUserAuthenticatedResp.body) {
+        this.titleService.setTitle('Test result - QuizTest');
+
+        this.authenticationService.getCurrentUser().subscribe(userLoggedinResp => {
+            this.userService.currentUser = userLoggedinResp.body;
+            if (!this.router.url.includes('passing-test') && !userLoggedinResp.body) {
                 this.router.navigate(['/login']);
             }
         });

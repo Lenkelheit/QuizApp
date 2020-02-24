@@ -10,7 +10,7 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface ITestResultService
     {
-        TestResultsApiDto GetTestResults(string intervieweeNameFilter, int page, int amountResultsPerPage);
+        TestResultsApiDto GetTestResults(string intervieweeNameFilter, int page, int amountResultsPerPage, string userEmail);
 
         Task<TestResultDetailDto> GetTestResultById(int testResultId);
 

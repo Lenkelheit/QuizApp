@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TestService } from '../../../../services/test.service';
 import { TestsApiDto } from 'src/app/models/test/tests-api-dto';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-test-list',
@@ -14,9 +15,11 @@ export class TestListComponent implements OnInit {
     public pageSize = 15;
     public pageSizeOptions: number[] = [this.pageSize, 10, 20];
 
-    constructor(private testService: TestService) { }
+    constructor(private testService: TestService, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Tests - QuizTest');
+
         this.setTestsPage(this.currentPageIndex, this.pageSize);
     }
 

@@ -29,7 +29,7 @@ namespace QuizApp.Web.Controllers
         [HttpGet]
         public ActionResult<UrlsApiDto> Get(int page = 0, int amountUrlsPerPage = 10)
         {
-            return Ok(urlService.GetUrls(page, amountUrlsPerPage));
+            return Ok(urlService.GetUrls(page, amountUrlsPerPage, User.Identity.Name));
         }
 
         [HttpGet("{id}")]

@@ -4,8 +4,8 @@ using System.Text;
 using System.Linq;
 using AutoMapper;
 
-using QuizApp.BLL.Settings;
 using QuizApp.BLL.Dto.Authentication;
+using QuizApp.Entities;
 
 namespace QuizApp.BLL.MappingProfiles
 {
@@ -13,7 +13,9 @@ namespace QuizApp.BLL.MappingProfiles
     {
         public AuthenticationProfile()
         {
-            CreateMap<UserLogin, UserLoggedinDto>();
+            CreateMap<User, UserLoggedinDto>();
+            CreateMap<UserRegisterDto, User>();
+            CreateMap<User, UserRegisteredDto>();
         }
     }
 }

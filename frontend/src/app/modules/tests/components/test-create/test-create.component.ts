@@ -8,6 +8,8 @@ import { ValidControlMatcher } from 'src/app/core/error-state-matchers/valid-con
 import { Router } from '@angular/router';
 import { Error } from 'src/app/models/error/error';
 import { FormatTimeLimitValidator } from 'src/app/core/validators/format-time-limit-validator';
+import { UserService } from 'src/app/services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-test-create',
@@ -23,9 +25,13 @@ export class TestCreateComponent implements OnInit {
 
     public validControlMatcher = new ValidControlMatcher();
 
-    constructor(private testService: TestService, private formBuilder: FormBuilder, private router: Router) { }
+    constructor(private userService: UserService, private testService: TestService,
+        // tslint:disable-next-line: align
+        private formBuilder: FormBuilder, private router: Router, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Create test - QuizTest');
+
         this.testForm = this.formBuilder.group({
             title: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(64)]],
             description: ['', [Validators.minLength(4), Validators.maxLength(256)]],
@@ -46,7 +52,7 @@ export class TestCreateComponent implements OnInit {
     }
 
     public sendNewTest() {
-        this.newTest.authorId = 1;
+        this.newTest.authorId = this.userService.currentUser.id;
 
         this.testService.createTest(this.newTest).subscribe(createdTestResp => {
             this.clearTest();

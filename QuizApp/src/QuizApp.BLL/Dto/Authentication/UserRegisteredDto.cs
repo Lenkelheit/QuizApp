@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuizApp.BLL.Dto.Authentication
 {
-    public class UserLoggedinDto
+    public class UserRegisteredDto
     {
         public int Id { get; set; }
 

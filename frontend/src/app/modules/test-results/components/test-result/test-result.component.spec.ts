@@ -21,7 +21,7 @@ describe('TestResultComponent', () => {
     let component: TestResultComponent;
     let fixture: ComponentFixture<TestResultComponent>;
     const testResultServiceSpy = jasmine.createSpyObj('TestResultService', ['getTestResultById', 'getAnswersByResultId']);
-    const authenticationServiceSpy = jasmine.createSpyObj('AuthenticationService', ['checkUserAuthentication']);
+    const authenticationServiceSpy = jasmine.createSpyObj('AuthenticationService', ['getCurrentUser']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -47,7 +47,7 @@ describe('TestResultComponent', () => {
     });
 
     it('should create', () => {
-        authenticationServiceSpy.checkUserAuthentication.and.returnValue(of());
+        authenticationServiceSpy.getCurrentUser.and.returnValue(of());
         testResultServiceSpy.getTestResultById.and.returnValue(of());
 
         fixture.detectChanges();
@@ -56,7 +56,7 @@ describe('TestResultComponent', () => {
     });
 
     it('should set result answers page', () => {
-        authenticationServiceSpy.checkUserAuthentication.and.returnValue(of());
+        authenticationServiceSpy.getCurrentUser.and.returnValue(of());
         testResultServiceSpy.getTestResultById.and.returnValue(of());
         fixture.detectChanges();
         const testResultId = 1, pageIndex = 1, pageSize = 10;

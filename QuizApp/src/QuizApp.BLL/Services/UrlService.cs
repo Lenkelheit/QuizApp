@@ -38,14 +38,14 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public UrlsApiDto GetUrls(int page, int amountUrlsPerPage)
+        public UrlsApiDto GetUrls(int page, int amountUrlsPerPage, string userEmail)
         {
-            var urls = urlRepository.GetPageWithAmount(page: page, amountPerPage: amountUrlsPerPage);
+            var urls = urlRepository.GetPageWithAmount(filter: u => u.Test.Author.Email == userEmail, page: page, amountPerPage: amountUrlsPerPage);
 
             return new UrlsApiDto
             {
                 Urls = mapper.Map<List<UrlDto>>(urls),
-                TotalCount = urlRepository.Count()
+                TotalCount = urlRepository.Count(u => u.Test.Author.Email == userEmail)
             };
         }
 
