@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { ClipboardManager } from 'src/app/core/clipboard-manager';
 import { ClipboardSnackBarComponent } from 'src/app/shared/components/clipboard-snack-bar/clipboard-snack-bar.component';
 import { MatSnackBar } from '@angular/material';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-url-edit',
@@ -31,9 +32,11 @@ export class UrlEditComponent implements OnInit {
 
     constructor(private urlService: UrlService, private formBuilder: FormBuilder,
         // tslint:disable-next-line: align
-        private router: Router, private route: ActivatedRoute, public snackBar: MatSnackBar) { }
+        private router: Router, private route: ActivatedRoute, public snackBar: MatSnackBar, private titleService: Title) { }
 
     ngOnInit() {
+        this.titleService.setTitle('Edit url - QuizTest');
+
         this.urlForm = this.formBuilder.group({
             numberOfRuns: ['', [Validators.min(0)]],
             validFromTime: ['', [Validators.required]],

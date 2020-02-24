@@ -34,18 +34,20 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public TestResultsApiDto GetTestResults(string intervieweeNameFilter, int page, int amountResultsPerPage)
+        public TestResultsApiDto GetTestResults(string intervieweeNameFilter, int page, int amountResultsPerPage, string userEmail)
         {
             var results = !string.IsNullOrWhiteSpace(intervieweeNameFilter)
-                ? testResultRepository.GetPageWithAmount(filter: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase), page, amountResultsPerPage)
-                : testResultRepository.GetPageWithAmount(page: page, amountPerPage: amountResultsPerPage);
+                ? testResultRepository.GetPageWithAmount(filter: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase)
+                    && r.Url.Test.Author.Email == userEmail, page, amountResultsPerPage)
+                : testResultRepository.GetPageWithAmount(filter: r => r.Url.Test.Author.Email == userEmail, page: page, amountPerPage: amountResultsPerPage);
 
             return new TestResultsApiDto
             {
                 TestResults = mapper.Map<List<TestResultDto>>(results),
                 TotalCount = !string.IsNullOrWhiteSpace(intervieweeNameFilter)
-                    ? testResultRepository.Count(predicate: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase))
-                    : testResultRepository.Count()
+                    ? testResultRepository.Count(predicate: r => r.IntervieweeName.Contains(intervieweeNameFilter, StringComparison.OrdinalIgnoreCase)
+                        && r.Url.Test.Author.Email == userEmail)
+                    : testResultRepository.Count(r => r.Url.Test.Author.Email == userEmail)
             };
         }
 

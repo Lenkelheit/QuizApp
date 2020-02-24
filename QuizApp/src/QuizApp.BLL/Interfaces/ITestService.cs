@@ -12,7 +12,7 @@ namespace QuizApp.BLL.Interfaces
 {
     public interface ITestService
     {
-        TestsApiDto GetTests(int page, int amountTestsPerPage);
+        TestsApiDto GetTests(int page, int amountTestsPerPage, string userEmail);
 
         Task<TestDetailDto> GetTestById(int testId);
 

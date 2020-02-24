@@ -28,17 +28,17 @@ a:hover {
 
 button,
 form,
-.create-account-block {
+.login-block {
   margin: 8px;
   width: 30%;
 }
 
-.create-account-block {
+.login-block {
   text-align: center;
 }
 
 form,
-.create-account-block {
+.login-block {
   padding: 20px;
 }
 

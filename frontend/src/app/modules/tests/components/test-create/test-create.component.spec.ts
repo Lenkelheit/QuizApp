@@ -6,11 +6,13 @@ import { TestService } from 'src/app/services/test.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NewTestDto } from 'src/app/models/test/new-test-dto';
 import { of } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 describe('TestCreateComponent', () => {
     let component: TestCreateComponent;
     let fixture: ComponentFixture<TestCreateComponent>;
     const testServiceSpy = jasmine.createSpyObj('TestService', ['createTest']);
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['currentUser']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -21,7 +23,8 @@ describe('TestCreateComponent', () => {
                 SharedModule
             ],
             providers: [
-                { provide: TestService, useValue: testServiceSpy }
+                { provide: TestService, useValue: testServiceSpy },
+                { provide: UserService, useValue: userServiceSpy }
             ]
         }).compileComponents();
     }));
@@ -83,6 +86,7 @@ describe('TestCreateComponent', () => {
     it('should send new test', () => {
         component.newTest = {} as NewTestDto;
         testServiceSpy.createTest.and.returnValue(of());
+        userServiceSpy.currentUser.and.returnValue({ id: 1 });
 
         component.sendNewTest();
 

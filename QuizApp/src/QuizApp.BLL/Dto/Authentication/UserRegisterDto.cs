@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizApp.BLL.Settings
+namespace QuizApp.BLL.Dto.Authentication
 {
-    public class UserLogin
+    public class UserRegisterDto
     {
         public string Username { get; set; }
 

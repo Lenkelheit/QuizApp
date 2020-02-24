@@ -20,6 +20,8 @@ namespace QuizApp.BLL.Services
     {
         private readonly IUnitOfWork unitOfWork;
 
+        private readonly IUserRepository userRepository;
+
         private readonly ITestRepository testRepository;
 
         private readonly ITestQuestionRepository testQuestionRepository;
@@ -34,6 +36,7 @@ namespace QuizApp.BLL.Services
         public TestService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.userRepository = unitOfWork.GetRepository<User, IUserRepository>() ?? throw new NullReferenceException(nameof(userRepository));
             this.testRepository = unitOfWork.GetRepository<Test, ITestRepository>() ?? throw new NullReferenceException(nameof(testRepository));
             this.testQuestionRepository = unitOfWork.GetRepository<TestQuestion, ITestQuestionRepository>() ?? throw new NullReferenceException(nameof(testQuestionRepository));
             this.urlRepository = unitOfWork.GetRepository<Url, IUrlRepository>() ?? throw new NullReferenceException(nameof(urlRepository));
@@ -42,14 +45,14 @@ namespace QuizApp.BLL.Services
         }
 
 
-        public TestsApiDto GetTests(int page, int amountTestsPerPage)
+        public TestsApiDto GetTests(int page, int amountTestsPerPage, string userEmail)
         {
-            var tests = testRepository.GetPageWithAmount(page: page, amountPerPage: amountTestsPerPage);
+            var tests = testRepository.GetPageWithAmount(filter: t => t.Author.Email == userEmail, page: page, amountPerPage: amountTestsPerPage);
 
             return new TestsApiDto
             {
                 Tests = mapper.Map<List<TestDto>>(tests),
-                TotalCount = testRepository.Count()
+                TotalCount = testRepository.Count(t => t.Author.Email == userEmail)
             };
         }
 
