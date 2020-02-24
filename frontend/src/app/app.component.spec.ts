@@ -8,13 +8,17 @@ class TopBarStubComponent { }
 @Component({ selector: 'router-outlet', template: '' })
 class RouterOutletStubComponent { }
 
+@Component({ selector: 'app-footer', template: '' })
+class FooterStubComponent { }
+
 describe('AppComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
                 AppComponent,
                 TopBarStubComponent,
-                RouterOutletStubComponent
+                RouterOutletStubComponent,
+                FooterStubComponent
             ]
         }).compileComponents();
     }));
