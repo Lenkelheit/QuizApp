@@ -37,6 +37,8 @@ namespace QuizApp.Web.Extensions
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 options.ExpireTimeSpan = configuration.GetValue<TimeSpan>("CookieExpiration");
                 options.Events.OnRedirectToAccessDenied = ReplaceRedirector(HttpStatusCode.Forbidden);
                 options.Events.OnRedirectToLogin = ReplaceRedirector(HttpStatusCode.Unauthorized);

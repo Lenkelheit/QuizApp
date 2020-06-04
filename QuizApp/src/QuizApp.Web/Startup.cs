@@ -45,7 +45,20 @@ namespace QuizApp.Web
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddCustomServices();
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Default", policy =>
+                {
+                    var allowedOrigins = Configuration.GetSection("AllowedOrigins").Get<string[]>();
+                    if (allowedOrigins != null && allowedOrigins.Length > 0)
+                    {
+                        policy.WithOrigins(allowedOrigins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    }
+                });
+            });
 
             services.AddCustomAuthentication(Configuration);
 
@@ -63,7 +76,7 @@ namespace QuizApp.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200"));
+            app.UseCors("Default");
 
             app.UseAuthentication();
 
