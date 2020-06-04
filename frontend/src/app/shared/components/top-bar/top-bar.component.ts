@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
     styleUrls: ['./top-bar.component.css']
 })
 export class TopBarComponent {
-    constructor(private userService: UserService, private authenticationService: AuthenticationService, private router: Router) { }
+    constructor(public userService: UserService, private authenticationService: AuthenticationService, private router: Router) { }
 
     public logout() {
         this.authenticationService.logout().subscribe(() => {

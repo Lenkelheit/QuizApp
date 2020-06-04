@@ -69,6 +69,9 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# Azure deploy dependencies
+serviceDependencies*.json
+
 # StyleCop
 StyleCopReport.xml
 
